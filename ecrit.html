@@ -7,22 +7,22 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="text-slate-800 font-sans min-h-screen flex flex-col">
-    <header class="bg-blue-800 text-white p-6 shadow-md flex items-center justify-between">
-        <a href="index.html" class="text-white hover:text-blue-200 font-bold flex items-center text-lg nav-link">&larr; Accueil</a>
-        <h1 class="text-2xl font-black uppercase tracking-widest">L'Épreuve Écrite</h1>
-        <div class="w-20"></div>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+    <header class="bg-blue-800 text-white p-4 md:p-6 shadow-md flex flex-col md:flex-row items-center justify-between gap-4">
+        <a href="index.html" class="text-white hover:text-blue-200 font-bold flex items-center text-sm md:text-lg nav-link self-start md:self-auto">&larr; Accueil</a>
+        <h1 class="text-xl md:text-2xl font-black uppercase tracking-widest text-center">L'Épreuve Écrite</h1>
+        <div class="hidden md:block w-20"></div>
     </header>
 
-    <main class="flex-grow p-10 fade-in flex items-center justify-center">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl">
-            <a href="dissertation.html" class="bg-indigo-600 hover:bg-indigo-700 text-white p-16 rounded-2xl shadow-lg transition transform hover:scale-105 flex flex-col items-center justify-center text-center">
-                <h2 class="text-4xl font-black mb-4">Dissertation</h2>
-                <p class="text-indigo-100 text-lg">Révisions des 4 objets d'étude et des 12 œuvres au programme.</p>
+    <main class="flex-grow p-6 md:p-10 fade-in flex items-center justify-center">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 w-full max-w-6xl">
+            <a href="dissertation.html" class="bg-indigo-600 hover:bg-indigo-700 text-white p-10 md:p-16 rounded-3xl shadow-lg transition transform hover:scale-105 flex flex-col items-center justify-center text-center">
+                <h2 class="text-3xl md:text-4xl font-black mb-3 md:mb-4">Dissertation</h2>
+                <p class="text-indigo-100 text-sm md:text-lg px-4">Révisions des 4 objets d'étude et des 12 œuvres au programme.</p>
             </a>
-            <a href="commentaire.html" class="bg-purple-600 hover:bg-purple-700 text-white p-16 rounded-2xl shadow-lg transition transform hover:scale-105 flex flex-col items-center justify-center text-center">
-                <h2 class="text-4xl font-black mb-4">Commentaire de texte</h2>
-                <p class="text-purple-100 text-lg">Mouvements, auteurs, œuvres clés et procédés littéraires.</p>
+            <a href="commentaire.html" class="bg-purple-600 hover:bg-purple-700 text-white p-10 md:p-16 rounded-3xl shadow-lg transition transform hover:scale-105 flex flex-col items-center justify-center text-center">
+                <h2 class="text-3xl md:text-4xl font-black mb-3 md:mb-4">Commentaire</h2>
+                <p class="text-purple-100 text-sm md:text-lg px-4">Mouvements, Auteurs, Œuvres clés et Procédés littéraires.</p>
             </a>
         </div>
     </main>
