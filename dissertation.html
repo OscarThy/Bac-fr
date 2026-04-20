@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Dissertation - Bac de Français</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+    <header class="bg-indigo-800 text-white p-6 shadow-md flex items-center justify-between shrink-0">
+        <a href="ecrit.html" class="text-white hover:text-indigo-200 font-bold text-lg nav-link">&larr; Retour à l'écrit</a>
+        <h1 class="text-2xl font-black uppercase tracking-widest">Dissertation (Les 12 Œuvres)</h1>
+        <div class="w-32"></div>
+    </header>
+
+    <div class="flex flex-grow overflow-hidden">
+        <aside class="w-1/3 max-w-sm bg-white border-r border-gray-200 overflow-y-auto custom-scroll p-6 shadow-sm hidden md:block" id="sidebar-dissert">
+            <h2 class="font-black text-indigo-900 text-xl mb-4 border-b pb-2">Objets d'étude</h2>
+            <div id="menu-genres" class="space-y-2 mb-8">
+                <button onclick="chargerGenre('poesie')" class="w-full text-left p-3 rounded-lg hover:bg-indigo-50 font-bold text-gray-700 transition">1. La Poésie</button>
+                <button onclick="chargerGenre('theatre')" class="w-full text-left p-3 rounded-lg hover:bg-indigo-50 font-bold text-gray-700 transition">2. Le Théâtre</button>
+                <button onclick="chargerGenre('roman')" class="w-full text-left p-3 rounded-lg hover:bg-indigo-50 font-bold text-gray-700 transition">3. Le Roman</button>
+                <button onclick="chargerGenre('idees')" class="w-full text-left p-3 rounded-lg hover:bg-indigo-50 font-bold text-gray-700 transition">4. Littérature d'idées</button>
+            </div>
+            <h2 class="font-black text-indigo-900 text-xl mb-4 border-b pb-2" id="titre-oeuvres-dispo">Œuvres</h2>
+            <div id="liste-oeuvres-sidebar" class="space-y-3">
+                <p class="text-sm text-gray-500 italic">Sélectionne un objet d'étude ci-dessus.</p>
+            </div>
+        </aside>
+
+        <main class="flex-grow bg-white overflow-y-auto custom-scroll relative">
+            <div id="ecran-vide" class="absolute inset-0 flex flex-col items-center justify-center text-center p-10">
+                <span class="text-6xl mb-4">📚</span>
+                <h2 class="text-3xl font-black text-gray-300">Sélectionne une œuvre pour réviser</h2>
+            </div>
+
+            <div id="contenu-oeuvre" class="hidden p-8 md:p-12 fade-in max-w-5xl mx-auto">
+                <div class="mb-8 border-b-4 border-indigo-600 pb-6">
+                    <h2 id="titre-oeuvre" class="text-4xl font-black text-indigo-900 italic mb-2">Titre</h2>
+                    <p id="auteur-oeuvre" class="text-xl font-bold text-gray-600">Auteur</p>
+                    <p id="parcours-oeuvre" class="text-sm text-indigo-800 bg-indigo-100 inline-block px-4 py-2 rounded-full mt-4 font-semibold uppercase tracking-wide">Parcours</p>
+                </div>
+
+                <div class="flex border-b border-gray-200 mb-8 overflow-x-auto custom-scroll">
+                    <button onclick="changeTabOeuvre('resume')" id="tab-oeuvre-resume" class="py-3 px-6 font-black text-gray-500 hover:text-indigo-600 border-b-4 border-transparent transition-all tab-active">Analyse & Résumé</button>
+                    <button onclick="changeTabOeuvre('citations')" id="tab-oeuvre-citations" class="py-3 px-6 font-black text-gray-500 hover:text-indigo-600 border-b-4 border-transparent transition-all">Citations (30+)</button>
+                    <button onclick="changeTabOeuvre('docs')" id="tab-oeuvre-docs" class="py-3 px-6 font-black text-gray-500 hover:text-indigo-600 border-b-4 border-transparent transition-all">Docs Compl.</button>
+                    <button onclick="changeTabOeuvre('plans')" id="tab-oeuvre-plans" class="py-3 px-6 font-black text-gray-500 hover:text-indigo-600 border-b-4 border-transparent transition-all">Plans (Annales)</button>
+                </div>
+
+                <div id="detail-dynamique" class="space-y-8"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app-dissert.js"></script>
+</body>
+</html>
