@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EAF - Oral : Le Parti pris des choses de Francis Ponge</title>
+    <!-- Tailwind et Chart.js -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+
+        .chart-container { position: relative; width: 100%; max-width: 350px; margin: 0 auto; height: 300px; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
+
+        /* Styles pour les Flashcards (Motivations & Questions) */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .card-inner { transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
+        .flipped .card-inner { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- En-tête -->
+    <header class="bg-emerald-800 text-white p-6 shadow-md flex items-center justify-between shrink-0 sticky top-0 z-50">
+        <a href="../oral.html#cursive" class="text-white hover:text-emerald-200 font-bold text-lg transition-transform hover:-translate-x-1">&larr; Retour à l'Oral</a>
+        <div class="text-center">
+            <h1 class="text-2xl md:text-3xl font-black uppercase tracking-widest">Le Parti pris des choses <span class="font-normal italic text-emerald-300">de Ponge</span></h1>
+        </div>
+        <div class="hidden md:flex gap-3">
+            <span class="px-3 py-1 bg-emerald-900 rounded-full text-xs font-bold border border-emerald-700">⏱️ ~8 min</span>
+            <span class="px-3 py-1 bg-emerald-900 rounded-full text-xs font-bold border border-emerald-700">🔄 Lien : Cahier de Douai</span>
+        </div>
+    </header>
+
+    <!-- Navigation des Onglets -->
+    <div class="bg-white border-b-2 border-slate-200 px-6 shrink-0 sticky top-[88px] z-40 shadow-sm">
+        <div class="flex overflow-x-auto custom-scroll w-full max-w-6xl mx-auto">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex-1 py-4 px-4 font-black text-emerald-600 border-b-4 border-emerald-600 bg-emerald-50 text-sm uppercase tracking-tighter transition-all whitespace-nowrap">📊 Stratégie & Temps</button>
+            <button onclick="switchTab('resume')" id="nav-resume" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">📖 Structure du Recueil</button>
+            <button onclick="switchTab('oral')" id="nav-oral" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">🗣️ Mes Fiches Oral</button>
+            <button onclick="switchTab('questions')" id="nav-questions" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">❓ Questions du Jury</button>
+        </div>
+    </div>
+
+    <!-- Contenu Principal -->
+    <main class="flex-grow max-w-6xl mx-auto w-full p-6 md:p-10 pb-20">
+
+        <!-- ================= ONGLET 1: DASHBOARD ================= -->
+        <section id="dashboard" class="tab-content active">
+            <div class="mb-8 text-center">
+                <h2 class="text-3xl font-black text-emerald-900 mb-4 uppercase">La Stratégie de l'Oral</h2>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto">
+                    L'épreuve orale se divise en deux temps : votre exposé continu (environ 5 minutes), suivi de l'entretien avec le jury (environ 3 minutes). Cliquez sur les étapes ci-dessous pour accéder directement à vos fiches.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-slate-100">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-800 mb-6 border-l-8 border-emerald-500 pl-4">Répartition Chronométrique</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-presentation').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-slate-800 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Présentation (1 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'auteur, le contexte d'écriture et la révolution de l'objet.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-resume').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-emerald-400 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Résumé de l'œuvre (2 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'architecture du recueil et le parcours de lecture.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-motivations').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-emerald-700 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Motivations (2 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'analyse de 2 arguments forts et le lien avec Rimbaud.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('questions');">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-blue-500 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-blue-600 transition-colors">Questions du Jury (3 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'entretien réactif basé sur votre exposé.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="chart-container">
+                    <canvas id="timingChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ONGLET 2: RESUME DETAILLÉ ================= -->
+        <section id="resume" class="tab-content">
+            <div class="mb-8 bg-indigo-50 p-8 rounded-3xl border border-indigo-100 shadow-sm">
+                <h2 class="text-3xl font-black text-indigo-900 mb-4 uppercase tracking-wide">Structure des Cycles Poétiques</h2>
+                <p class="text-lg text-indigo-800 opacity-90">
+                    S'agissant d'un recueil de trente-deux poèmes en prose (publié en 1942), il n'y a pas d'intrigue classique. L'œuvre est structurée autour de l'observation minutieuse de différentes catégories d'objets ou d'éléments naturels. Cliquez sur chaque cycle pour en découvrir les enjeux.
+                </p>
+            </div>
+
+            <div class="space-y-4" id="accordion-container">
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie1')">
+                        <span>I. Le monde végétal et organique</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie1">+</span>
+                    </button>
+                    <div id="partie1" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-slate-50 rounded-xl border-l-4 border-slate-400">
+                            <strong>La lenteur et le silence végétal :</strong> Le recueil comporte de nombreux poèmes dédiés à la flore, comme L'Orange, La Mûre, Les Arbres ou Le Tronc de palmier. Ponge observe le monde végétal avec une précision chirurgicale, presque botanique. Il admire l'expression silencieuse des arbres qui, ne pouvant se déplacer ou crier, s'expriment uniquement par la lente poussée de leurs feuilles ou de leurs fruits au fil des saisons. C'est une méditation sur la patience absolue.
+                        </div>
+                        <div class="p-5 bg-emerald-50 rounded-xl border-l-4 border-emerald-500">
+                            <strong>La perfection des fruits :</strong> À travers des textes comme L'Orange, le poète explore la forme, la couleur et le goût avec une gourmandise linguistique étonnante. L'orange est comparée à une petite éponge qui doit faire le sacrifice de son jus pour exprimer sa vraie nature. Ponge cherche à épuiser l'objet, à en dire toutes les caractéristiques physiques pour révéler sa beauté intrinsèque et ignorée.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie2')">
+                        <span>II. Le quotidien manufacturé et trivial</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie2">+</span>
+                    </button>
+                    <div id="partie2" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-blue-50 rounded-xl border-l-4 border-blue-500">
+                            <strong>Le Cageot et La Bougie :</strong> Ponge s'attaque délibérément à des objets considérés comme totalement anti-poétiques ou invisibles par leur banalité. Le Cageot, un objet utilitaire fait de lattes de bois grossières, devient sous sa plume un objet d'admiration fugace, dont la durée de vie est aussi brève que celle des fruits qu'il transporte. La bougie est décrite avec une tendresse infinie, mourant lentement pour donner sa lumière.
+                        </div>
+                        <div class="p-5 bg-orange-50 rounded-xl border-l-4 border-orange-500">
+                            <strong>Le Pain et Le Morceau de viande :</strong> Dans Le Pain, Ponge décrit la croûte terrestre du pain cuit au four comme une véritable chaîne de montagnes majestueuse, offrant une vision cosmique à un simple aliment posé sur la table. Il montre ainsi que le banal, lorsqu'il est observé avec une attention extrême, contient une grandeur et une complexité équivalentes à celles des plus grands paysages romantiques.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie3')">
+                        <span>III. Les créatures muettes (Le bestiaire)</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie3">+</span>
+                    </button>
+                    <div id="partie3" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-purple-50 rounded-xl border-l-4 border-purple-500">
+                            <strong>L'Escargot et L'Huître :</strong> Le recueil n'oublie pas le monde animal, mais Ponge choisit délibérément des animaux dépourvus de la grandeur épique du lion ou de l'aigle. L'huître est décrite comme une petite forteresse opiniâtre, fermée sur elle-même, qui renferme en son cœur un trésor (la perle) comparable au mot juste trouvé par le poète.
+                        </div>
+                        <div class="p-5 bg-red-50 rounded-xl border-l-4 border-red-500">
+                            <strong>Le Papillon et La Crevette :</strong> L'escargot est glorifié pour son humilité et le fait qu'il porte sa propre maison avec lui, laissant une trace argentée brillante (la bave) qui s'apparente à la trace d'encre laissée par l'écrivain sur la page blanche. Ponge projette subtilement dans ces minuscules créatures une réflexion profonde sur le travail même de l'artiste.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie4')">
+                        <span>IV. L'apothéose minérale (Le Galet)</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie4">+</span>
+                    </button>
+                    <div id="partie4" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-gray-100 rounded-xl border-l-4 border-gray-600">
+                            <strong>Le poème testamentaire :</strong> Le recueil s'achève sur le plus long et le plus ambitieux de tous les textes, Le Galet. Ponge y livre une véritable leçon de philosophie matérialiste. Le galet, ce simple caillou poli par la mer, représente pour lui la perfection absolue de l'univers. Il est immuable, silencieux, indifférent aux drames humains, et il survivra à toutes nos civilisations.
+                        </div>
+                        <div class="p-5 bg-yellow-50 rounded-xl border-l-4 border-yellow-600">
+                            <strong>Une leçon d'humilité :</strong> Ce texte final agit comme un manifeste en soi. L'auteur invite l'humanité à cesser de se considérer comme le centre du monde et à prendre exemple sur la dignité muette et résistante des pierres. C'est une conclusion magistrale qui remet l'homme à sa juste et modeste place face à l'éternité minérale de la nature.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ONGLET 3: FICHES ORAL ================= -->
+        <section id="oral" class="tab-content">
+            
+            <!-- PRÉSENTATION -->
+            <div id="oral-presentation" class="mb-12 bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-8 border-b border-slate-100 pb-4">
+                    <span class="bg-slate-800 text-white font-black px-4 py-2 rounded-xl text-2xl">1</span>
+                    <h3 class="text-3xl font-black text-slate-800">Présentation <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">1 min</span></h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 1</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Je vais vous présenter Le parti pris des choses, un recueil poétique tout à fait révolutionnaire publié par Francis Ponge en 1942. Dans cette œuvre, l'auteur prend le contre-pied absolu de la poésie lyrique traditionnelle qui dominait depuis des siècles. Au lieu de chanter les souffrances du cœur, l'amour idéalisé ou les grands questionnements métaphysiques de l'humanité, Ponge décide de s'effacer totalement derrière son sujet. Il va s'atteler à décrire avec la précision maniaque d'un artisan les objets et les éléments les plus triviaux de notre quotidien, comme une bougie, un morceau de viande ou un simple cageot. J'ai choisi cette œuvre car elle nous prouve de manière magistrale que la beauté et la grande poésie ne résident pas dans la noblesse de l'objet regardé, mais exclusivement dans l'intensité et la justesse du regard que l'on pose sur lui.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 2</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Aujourd'hui, j'ai décidé de vous parler du Parti pris des choses, l'œuvre majeure de Francis Ponge, parue en pleine Seconde Guerre mondiale en 1942. Ce recueil est entièrement composé de poèmes en prose, une forme inventée au siècle précédent mais que Ponge pousse ici à son paroxysme de perfection. L'auteur y dresse un formidable inventaire du monde matériel qui nous entoure. Ce qui m'a profondément intéressé lors de ma lecture, c'est la véritable leçon d'humilité que Ponge nous donne. En choisissant de donner une voix littéraire à ce qu'il appelle le monde muet, il décentre totalement notre regard égocentrique d'humain. Il nous force à ralentir le rythme de nos vies, à nous arrêter sur un simple galet ou sur une huître, pour y découvrir une richesse architecturale et une complexité philosophique que nous ignorons superbement dans notre précipitation quotidienne.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 3</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Mon choix s'est porté sur Le parti pris des choses, un ouvrage de Francis Ponge publié en 1942. J'ai été fasciné par la démarche presque scientifique et lexicographique de cet auteur. Pour lui, le dictionnaire, et notamment le Littré, n'est pas un simple outil d'école, mais le plus grand livre de poésie du monde. Dans chacun des trente-deux poèmes de ce recueil, Ponge agit comme un orfèvre du langage. Il cherche obstinément à faire coïncider la forme physique des mots qu'il emploie, leurs sonorités et leur étymologie, avec la réalité matérielle de l'objet qu'il décrit. C'est une œuvre que je trouve essentielle parce qu'elle redonne au langage son épaisseur concrète et sa matérialité. Avec Ponge, les mots ne servent plus seulement à raconter de vagues histoires tristes, ils pèsent, ils accrochent, ils résistent sous la plume exactement comme la croûte d'un pain ou la coquille d'un escargot.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 4</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">L'œuvre que je souhaite vous présenter est Le parti pris des choses, écrite par Francis Ponge et éditée en 1942. Ce livre s'est imposé à moi car il constitue, dans l'histoire de la littérature française, l'un des actes fondateurs de l'anti-romantisme radical. Ponge y affirme que l'étalage des sentiments humains est devenu ennuyeux et stérile. Il préfère s'engager poétiquement en prenant véritablement le parti, c'est-à-dire la défense intellectuelle, des choses inanimées. En redonnant une dignité absolue aux éléments les plus banals comme l'eau, le feu, ou la végétation, il crée une nouvelle forme d'humanisme paradoxal. Ce recueil intemporel préfigure en grande partie les bouleversements littéraires qui surviendront quelques décennies plus tard avec le Nouveau Roman, en nous invitant à regarder le monde extérieur de manière froide, exacte et merveilleusement objective.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RÉSUMÉ EXPRESS -->
+            <div id="oral-resume" class="mb-12 bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-8 border-b border-slate-100 pb-4">
+                    <span class="bg-emerald-400 text-white font-black px-4 py-2 rounded-xl text-2xl">2</span>
+                    <h3 class="text-3xl font-black text-slate-800">Résumé Express <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">2 min</span></h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 1</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">Puisqu'il s'agit d'un recueil de trente-deux poèmes en prose autonomes, Le parti pris des choses ne possède ni début narratif, ni nœud dramatique, ni dénouement au sens romanesque du terme. Il se présente plutôt comme une promenade extrêmement attentive à travers notre univers matériel quotidien. Le recueil s'ouvre sur des observations lumineuses du monde aquatique et végétal, avec des textes comme La Pluie ou L'Orange, où le poète cherche à décrire les mécanismes physiques de ces éléments naturels en utilisant une langue riche et inattendue.<br><br>Très rapidement, l'œuvre glisse vers la célébration des objets fabriqués par la main de l'homme, des choses que nous utilisons tous les jours sans même y prêter attention. Ponge s'arrête sur Le Pain, dont il décrit la croûte cuite et craquante comme s'il observait une gigantesque cordillère de montagnes vue du ciel, ou encore sur Le Cageot, objet dérisoire et éphémère qui finit cassé dans les rues de la ville après avoir servi. Chaque poème est ainsi une tentative d'épuiser la définition de son sujet, de le circonscrire totalement par les mots.<br><br>Le parcours du recueil s'achève magistralement par une section dominée par le monde animal humble, avec L'Escargot, et surtout par le monde minéral, avec l'imposant poème final intitulé Le Galet. Ce dernier texte agit comme la clé de voûte philosophique de tout l'ouvrage. Ponge y livre une profonde leçon d'humilité matérialiste en affirmant que les pierres, immuables et silencieuses, survivront à toutes les vanités humaines, refermant le livre sur une magnifique impression d'éternité minérale.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 2</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">La structure de ce recueil publié en 1942 repose sur la succession d'études descriptives courtes, denses et brillantes. Ponge agit comme un entomologiste ou un scientifique armé de son dictionnaire, examinant le monde au microscope. Les premières séries de poèmes sont consacrées à l'observation émerveillée des phénomènes naturels ordinaires. L'auteur nous apprend par exemple à regarder La Pluie non pas comme un phénomène météorologique ennuyeux, mais comme une véritable horlogerie musicale, ou à comprendre le sacrifice intérieur que fait L'Orange lorsqu'elle se laisse presser.<br><br>Le cœur de l'ouvrage s'attache ensuite à redonner ses lettres de noblesse à des objets manufacturés perçus comme triviaux ou dégradants dans la poésie classique. Ponge consacre ainsi son talent à décrire Le Savon, qui s'épuise et fond dans nos mains pour nous rendre propres, ou La Bougie, qu'il transforme en une allégorie touchante du dévouement silencieux. C'est à chaque fois le même processus alchimique : l'auteur part d'une réalité banale pour en tirer des images saisissantes et inattendues par la seule magie de la justesse de son vocabulaire.<br><br>Le recueil trouve son apothéose dans sa dernière partie, qui nous ramène aux fondations brutes de la terre. Le long texte intitulé Le Galet clôture cette expérience littéraire inédite. Après s'être moqué de l'arrogance des hommes qui se croient supérieurs, Ponge invite le lecteur à contempler ce simple caillou poli par l'océan. Le galet y devient la perfection absolue, le symbole de la résilience matérielle face au temps destructeur. C'est une conclusion qui fige définitivement la poésie dans le réel tangible et rassurant.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 3</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">Le parti pris des choses est conçu comme une véritable petite encyclopédie poétique du monde muet. Il ne s'agit pas de raconter une histoire, mais de proposer trente-deux définitions poétiques et ludiques d'éléments familiers. L'expérience de lecture commence par un décentrement total. Dans des poèmes comme L'Huître ou L'Escargot, le poète s'efforce d'adopter le point de vue même de l'animal. Il nous décrit l'intérieur nacré et fermé de l'huître comme un monde en soi, une forteresse obstinée renfermant un trésor, traçant ainsi un subtil parallèle avec le poète qui travaille la perle de ses mots dans la solitude.<br><br>Ensuite, l'auteur s'attaque au monde végétal avec des pièces comme La Mûre ou Les Arbres. Ponge y célèbre la lenteur admirable des végétaux qui, prisonniers du sol, ne peuvent exprimer leur existence qu'à travers l'effort silencieux de la floraison ou de la poussée de leurs branches. Il oppose cette dignité patiente et pacifique de la nature à l'agitation bruyante et souvent destructrice des sociétés humaines, instaurant une réflexion morale sous couvert de simple description botanique.<br><br>L'œuvre se termine sur une dimension résolument minérale et métaphysique avec Le Galet. Après avoir parcouru la faune, la flore et les objets fabriqués, Ponge remonte à la genèse du monde. Il y décrit la fragmentation de la roche originelle jusqu'à la formation de cette pierre polie. En achevant son recueil sur cet élément indestructible, Ponge boucle sa révolution littéraire : il a définitivement réussi à remplacer le ciel abstrait et divin des anciens poètes par la beauté solide, complexe et concrète de la terre qui se trouve juste sous nos chaussures.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 4</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">L'architecture de ce recueil est celle d'un catalogue du merveilleux quotidien. Paru en 1942, en plein cœur du désastre de la Seconde Guerre mondiale, l'ouvrage de Ponge résonne comme une volonté farouche de s'accrocher aux réalités tangibles pour survivre au chaos de l'Histoire. Il débute en explorant la beauté simple et mécanique de choses comme Le Cageot ou Le Pain. Ponge force son lecteur à s'arrêter sur la texture alvéolée de la mie de pain ou sur les lattes de bois d'une cagette, prouvant que l'art poétique n'a pas besoin de grands drames pour exister, mais seulement d'une attention portée aux détails négligés.<br><br>La démarche s'approfondit au fil des pages, où l'humour et le jeu intellectuel se mêlent à l'observation stricte. Lorsqu'il étudie Le Feu ou L'Eau, Ponge s'amuse à démonter la logique des éléments. L'eau est décrite comme une substance ayant un vice fondamental, celui de ne jamais posséder sa propre forme et de s'effondrer systématiquement vers le bas. Derrière ces définitions qui peuvent sembler innocentes ou purement physiques, on perçoit constamment une ironie bienveillante et une formidable leçon sur la condition humaine et ses propres faiblesses.<br><br>Le voyage s'achève sur le poème magistral Le Galet. Ayant exploré la vulnérabilité du végétal et l'aspect éphémère de l'objet manufacturé, Ponge s'ancre dans la certitude de la pierre. Il fait l'éloge de ce fragment de roche qui a résisté à la destruction par la mer et les millénaires. En célébrant ce galet indifférent aux passions humaines, l'auteur clôt son recueil sur une note d'objectivité absolue, actant la victoire définitive de la matière souveraine sur l'angoisse et la vanité des hommes.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MOTIVATIONS -->
+            <div id="oral-motivations" class="mb-12">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="bg-emerald-700 text-white font-black px-4 py-2 rounded-xl text-2xl">3</span>
+                    <h3 class="text-3xl font-black text-slate-800">Mes 10 Arguments (Motivations) <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">2 min au total</span></h3>
+                </div>
+                <p class="text-sm text-slate-500 mb-8 font-bold">Cliquez sur les fiches pour les retourner et mémorisez l'analyse (2 fiches suffisent pour tenir les 2 minutes). Les 3 dernières fiches vous permettent de tisser le lien avec le « Cahier de Douai » de Rimbaud.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 perspective-1000">
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-emerald-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🚫</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 1</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">L'anti-romantisme radical</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-emerald-50 border border-emerald-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai été immédiatement frappé par le refus radical de l'auteur d'utiliser la poésie pour parler de ses propres sentiments. Pendant des siècles, le poète était celui qui pleurait sur ses amours perdues en utilisant la nature comme un simple miroir de ses larmes. Ponge décide de tuer le Moi majestueux du romantisme. Il s'efface totalement derrière son sujet. En déclarant la guerre à l'égocentrisme littéraire, il prouve que la véritable noblesse de l'écrivain est de prêter sa voix aux éléments matériels qui nous entourent et qui, eux, n'ont pas la capacité de s'exprimer.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-emerald-600 shadow-sm">
+                                    <strong>Le Parti pris des choses (Notes) :</strong><br>
+                                    Le monde muet est notre seule patrie.
+                                </div>
+                                <div class="bg-emerald-100 p-2 rounded-lg text-xs mt-2 font-medium text-emerald-900">
+                                    <strong>Analyse littéraire :</strong> L'antithèse saisissante entre l'adjectif "muet" (qui qualifie traditionnellement les choses inanimées) et le nom puissant de "patrie" (qui renvoie à la terre protectrice des hommes). Ponge élève la matière brute et silencieuse au rang d'unique repère philosophique fiable pour l'humanité, remplaçant ainsi les idéologies bavardes.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-red-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">📦</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 2</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">La beauté du trivial</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-red-50 border border-red-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Ce qui donne toute sa modernité à l'œuvre, c'est son traitement inédit de la laideur ou de la banalité absolue. En choisissant d'écrire un poème entier sur un objet aussi misérable et éphémère qu'un cageot en bois, Ponge opère un véritable renversement de toutes les valeurs esthétiques classiques. Il refuse les couchers de soleil ou les statues antiques pour s'agenouiller devant la poubelle du marché. Le choc poétique naît de ce décalage constant entre la haute précision d'un vocabulaire scientifique ou lyrique et la pauvreté assumée de la cible qu'il étudie.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-red-600 shadow-sm">
+                                    <strong>Le Cageot :</strong><br>
+                                    Cet objet est en somme des plus sympathiques – sur le sort duquel il convient toutefois de ne s'appesantir longuement.
+                                </div>
+                                <div class="bg-red-100 p-2 rounded-lg text-xs mt-2 font-medium text-red-900">
+                                    <strong>Analyse littéraire :</strong> L'ironie subtile et la personnification ("sympathique") s'opposent directement à la chute pragmatique et prosaique du poème. La litote finale ("ne pas s'appesantir") mime matériellement la courte durée de vie du cageot cassé, prouvant que la poésie doit aussi savoir s'arrêter quand son sujet disparaît.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-orange-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">📖</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 3</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le Poème en Prose</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-orange-50 border border-orange-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai été captivé par le choix formel exclusif du poème en prose tout au long du recueil. Ponge ne recourt jamais à l'alexandrin ou aux rimes contraignantes AABB. Il opte pour des paragraphes compacts, souvent structurés comme des définitions de dictionnaire qui déraperaient soudainement vers l'émotion. Ce choix formel n'est pas un refus de l'effort, c'est au contraire une volonté absolue d'adapter la forme du texte à la forme physique de l'objet. Le bloc de prose mime visuellement sur la page blanche la masse d'un pain, le contour d'un galet ou la structure d'un cageot.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-orange-500 shadow-sm">
+                                    <strong>Observation générale :</strong><br>
+                                    L'architecture rectangulaire et dense des textes justifiés.
+                                </div>
+                                <div class="bg-orange-100 p-2 rounded-lg text-xs mt-2 font-medium text-orange-900">
+                                    <strong>Analyse littéraire :</strong> En abandonnant la ligne brisée du vers classique, Ponge crée une analogie visuelle immédiate (un calligramme conceptuel). Le poème en prose devient un bloc typographique lourd et compact qui traduit physiquement le poids et la résistance de la matière qu'il observe.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-purple-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🦪</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 4</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le travail sur le langage</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-purple-50 border border-purple-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Une dimension passionnante de l'œuvre est l'obsession de Ponge pour l'étymologie et les sonorités rugueuses de la langue française. Pour lui, les mots ne sont pas que des étiquettes abstraites volantes, ce sont des objets matériels, solides et résistants. Dans son poème sur L'Huître, la dureté de l'écaille est immédiatement rendue par l'avalanche de consonnes rugueuses qu'il utilise. L'acte poétique devient ici un acte d'artisan ou de sculpteur, où le vocabulaire doit frotter, résister et crisser dans la bouche du lecteur pour lui faire ressentir le poids exact du réel.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-purple-600 shadow-sm">
+                                    <strong>L'Huître :</strong><br>
+                                    C'est un monde opiniâtrement clos. Pourtant on peut l'ouvrir : il faut alors la tenir au creux d'un torchon...
+                                </div>
+                                <div class="bg-purple-100 p-2 rounded-lg text-xs mt-2 font-medium text-purple-900">
+                                    <strong>Analyse littéraire :</strong> L'allitération puissante en [k] ("clos", "creux") et en [t] ("Pourtant", "tenir", "torchon") produit un rythme heurté et saccadé. Ces sonorités rocailleuses miment acoustiquement la difficulté physique de l'effraction, l'effort musculaire nécessaire pour forcer l'objet récalcitrant.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-yellow-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🥖</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 5</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">L'humour et la fantaisie d'observation</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-yellow-50 border border-yellow-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Malgré l'austérité de son titre, Le parti pris des choses est une œuvre d'une grande malice. J'ai beaucoup souri de voir avec quelle fantaisie inattendue Ponge transforme un aliment quotidien en une scène géologique grandiose. Dans Le Pain, la banalité absolue d'une miche posée sur la table de la cuisine est dynamitée par des métaphores géantes qui font de la croûte cuite au four les Alpes ou la cordillère des Andes. Cet humour philosophique nous rappelle que le regard d'un enfant qui découvre le monde est toujours plus riche que l'indifférence fatiguée de l'adulte.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-yellow-500 shadow-sm">
+                                    <strong>Le Pain :</strong><br>
+                                    La surface du pain est merveilleuse d'abord à cause de cette impression quasi panoramique qu'elle donne... comme si l'on avait à sa disposition sous la main les Alpes, le Taurus ou la Cordillère des Andes.
+                                </div>
+                                <div class="bg-yellow-100 p-2 rounded-lg text-xs mt-2 font-medium text-yellow-900">
+                                    <strong>Analyse littéraire :</strong> L'hyperbole absolue et la comparaison macrocosmique transforment radicalement l'échelle du texte. La croûte boursouflée de la miche (le microcosme) est hissée au niveau des plus hauts sommets du globe (macrocosme), créant un vertige visuel démesuré et joyeux.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-pink-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🪨</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 6</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">La philosophie de la résilience (Le Galet)</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-pink-50 border border-pink-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai été ébloui par la puissance testamentaire du poème final, Le Galet. Publié pendant le désastre et le chaos de la Seconde Guerre mondiale, ce texte prend une dimension politique et philosophique vertigineuse. Au milieu des ruines et des massacres humains, Ponge fait l'éloge de l'immobilité, de la dureté et de l'indifférence de la pierre face à l'usure du temps. C'est une grande leçon d'humilité qui remet la vanité de l'homme à sa place, tout en offrant le spectacle réconfortant d'une matière qui survivra éternellement à nos propres drames éphémères.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-pink-500 shadow-sm">
+                                    <strong>Le Galet :</strong><br>
+                                    Je suis heureux que ce soit la pierre qui soit si bien faite pour l'éternité et pour la résister à toute autre chose.
+                                </div>
+                                <div class="bg-pink-100 p-2 rounded-lg text-xs mt-2 font-medium text-pink-900">
+                                    <strong>Analyse littéraire :</strong> L'antithèse conceptuelle entre la brièveté de la vie de l'observateur (le "Je" heureux) et "l'éternité" indifférente de l'objet observé ("la pierre"). La structure de la phrase entérine l'infériorité philosophique consentie de l'humain face à l'intemporalité absolue de la nature minérale.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-gray-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🐌</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 7</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">L'humanisme caché (Allégorie)</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-gray-50 border border-gray-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Derrière l'apparente froideur et l'objectivité du recueil se cache une émotion vibrante. En réalité, en observant les animaux les plus humbles, Ponge dresse systématiquement des portraits en creux de la condition de l'artiste. Dans L'Escargot, par exemple, la description de la lenteur de la créature et de la traînée de bave brillante qu'elle laisse derrière elle devient une magnifique allégorie du travail de l'écrivain. L'auteur, tout comme le petit animal, évolue dans la solitude avec difficulté, mais il secrète une trace d'encre précieuse, la littérature, qui lui permet de transformer la boue en lumière.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-gray-600 shadow-sm">
+                                    <strong>L'Escargot :</strong><br>
+                                    C'est la bave de leur orgueil... la trace brillante de leur patience.
+                                </div>
+                                <div class="bg-gray-200 p-2 rounded-lg text-xs mt-2 font-medium text-gray-800">
+                                    <strong>Analyse littéraire :</strong> Le recours inattendu à l'anthropomorphisme. Ponge applique des sentiments moraux exclusivement humains ("orgueil", "patience") à un misérable gastéropode, prouvant que la description matérielle objective n'était qu'un alibi pour réinventer l'humanisme par un biais inattendu.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 8 (LIEN RIMBAUD) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🔗</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Rimbaud 1</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">Le rejet du lyrisme classique</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Il m'a semblé inévitable d'établir un lien très fort entre la démarche de Francis Ponge et celle de la jeunesse de Rimbaud dans le Cahier de Douai. Le point de rassemblement le plus frappant entre ces deux auteurs est leur volonté commune et féroce de détruire la figure du vieux poète larmoyant et bien-pensant. Rimbaud, par la satire agressive ("À la musique"), dynamite la morale bourgeoise du XIXe siècle pour imposer sa vision rebelle. Quelques décennies plus tard, Ponge prolonge cette rébellion en évacuant définitivement la plainte sentimentale au profit d'une poésie glaciale et clinique de la matière.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Rimbaud (Vénus Anadyomène) :</strong><br>
+                                    Et qui porte au nombril une plaie effrayante.
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> Comme Ponge qui refuse les envolées lyriques faciles, Rimbaud détruit de l'intérieur le mythe classique de la beauté parfaite (la naissance de Vénus) en l'assassinant par l'irruption brutale de la laideur physique et pathologique.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 9 (LIEN RIMBAUD) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">💥</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Rimbaud 2</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">L'introduction du laid et du trivial</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Les deux poètes bouleversent profondément les frontières de l'art en intégrant l'universel banal dans leurs vers. Ponge est célèbre pour écrire sur un cageot jetable ou un morceau de savon. Cette entreprise esthétique du trivial prend directement sa source chez Rimbaud. Dans le Cahier de Douai, l'adolescent consacre avec audace un poème entier à un vieux meuble rustique de campagne ("Le Buffet") ou ose poétiser la faim misérable de cinq petits enfants le nez collé à la vitrine d'un boulanger ("Les Effarés"). L'un comme l'autre prouvent que le laid et l'ordinaire sont les véritables foyers de la poésie moderne.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Rimbaud (Le Buffet) :</strong><br>
+                                    C’est un large buffet sculpté ; le chêne sombre, / Très vieux, a pris cet air si bon des vieilles gens...
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> Exactement comme Ponge face à son pain ou sa bougie, Rimbaud utilise l'anthropomorphisme de détail (attribuer un caractère humain au chêne) pour ennoblir et dramatiser un objet d'intérieur d'une absolue banalité rustique.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 10 (LIEN RIMBAUD) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">📜</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Rimbaud 3</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">L'émancipation formelle du vers</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">La révolution thématique de l'objet ou de la rue s'accompagne obligatoirement, chez Ponge comme chez Rimbaud, d'un bouleversement des formes poétiques. Francis Ponge abandonne définitivement le vers et la rime pour embrasser le poème en prose compact, épousant visuellement la forme solide de la matière qu'il observe. Rimbaud, quelques décennies plus tôt, avait déjà initié ce travail de destruction en malmenant les règles de la prosodie et en disloquant l'alexandrin classique par l'usage intensif d'enjambements et de rejets violents. Dans les deux cas, la forme de la phrase doit se dérégler ou muter pour survivre au XXe siècle.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Rimbaud (Ma Bohème) :</strong><br>
+                                    Je rimais, au milieu des ombres fantastiques, / Comme des lyres, je tirais les élastiques / De mes souliers blessés...
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> Par cette métaphore insolente, Rimbaud déchire les élastiques de ses bottes usées en guise d'instrument musical. Il profane la grande lyre d'Orphée, annonçant l'avènement d'une poésie matérielle et terrestre, exactement celle que Ponge bâtira avec ses cailloux.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= ONGLET 4: QUESTIONS DU JURY ================= -->
+        <section id="questions" class="tab-content">
+            
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-black text-blue-900 mb-4 uppercase">Entretien avec le Jury (3 min)</h2>
+                <p class="text-lg text-slate-600 max-w-4xl mx-auto">
+                    Voici 20 questions réactives (sous forme de flashcards) que le jury pourrait vous poser en fonction de l'exposé que vous venez de faire. Cliquez pour voir la réponse.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 perspective-1000">
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">1. Que signifie exactement le titre "Le parti pris des choses" ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            L'expression "prendre le parti de quelqu'un" signifie le défendre, être de son côté. Ponge joue sur ce sens pour annoncer qu'il se range du côté des objets inanimés, pour les réhabiliter et leur donner la voix que la littérature leur avait toujours refusée.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">2. Qu'est-ce qu'un poème en prose, et qui en a été le précurseur avant Ponge ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est un texte poétique sans vers, sans rimes et sans strophes, mais qui conserve la musicalité, les images et la densité de la poésie. Les précurseurs furent Aloysius Bertrand (Gaspard de la Nuit) et Baudelaire (Le Spleen de Paris), mais Ponge l'adapte à l'objet.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">3. Quel outil Ponge considère-t-il comme son principal instrument poétique ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Le dictionnaire, et tout particulièrement le Littré. Il se sert intensément de l'étymologie des mots pour explorer l'essence des choses, considérant que chaque lettre a un poids et une histoire.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">4. Vous avez dit qu'il rejetait le romantisme, pouvez-vous expliquer pourquoi ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Le romantisme repose sur l'exaltation du "Moi" et de la souffrance de l'auteur (Hugo, Musset). Ponge considère ce nombrilisme comme épuisé et vaniteux. Il veut faire disparaître le poète pour que seul le monde matériel existe sur la page.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">5. L'œuvre a été publiée en 1942. Quel écho particulier cela lui donne-t-il ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est la pleine Occupation allemande et la Seconde Guerre mondiale. Face aux discours de propagande haineux et à la destruction humaine, se tourner vers l'observation humble, obstinée et muette d'un simple caillou est une forme de résistance éthique et de retour à la vérité palpable.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">6. Comment Ponge parvient-il à rendre "Le Pain" majestueux ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Il utilise des hyperboles et une comparaison inattendue avec les plus grandes montagnes du monde (les Alpes, la cordillère des Andes). Ce changement total d'échelle transforme un objet banal de la cuisine en un paysage grandiose et vertigineux.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">7. Que représente "Le galet" à la fin du recueil d'un point de vue philosophique ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Le galet représente la résilience ultime de la matière face au temps et aux tempêtes. C'est l'accomplissement d'une philosophie matérialiste : l'impassibilité minérale vaincra toujours les passions éphémères et l'agitation dérisoire des humains.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">8. Vous dites que le poète s'efface. Pourtant on le devine toujours, non ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Oui, c'est le paradoxe de Ponge. Malgré sa volonté d'objectivité, sa malice, son humour et son choix de vocabulaire subjectif le trahissent sans cesse. L'effacement est un idéal, mais la voix et le regard de l'artisan créateur restent perceptibles.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">9. Ponge est-il un poète engagé politiquement ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Oui, il a été communiste et très actif dans la Résistance. S'agenouiller devant la classe des objets opprimés et ignorés (le cageot, les travailleurs muets) est aussi, de façon allégorique, une réhabilitation du prolétariat et des sans-voix.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">10. Pourquoi n'y a-t-il pas d'animaux nobles (lions, aigles) dans son bestiaire ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Ponge fuit systématiquement l'héroïsme romantique ou tragique. Il choisit l'huître, l'escargot ou la crevette parce que leur humilité silencieuse, leur bave ou leur coquille reflètent mieux le lent et modeste travail d'observation du poète-artisan.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">11. Si Ponge n'utilise pas de rimes, comment produit-il la musicalité du poème ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Il utilise massivement les assonances et les allitérations internes. Dans "L'Huître", l'avalanche des sons [k] ou [t] (clos, creux, torchon) imite le crissement de la coquille. La musique chez lui ne sert pas à charmer l'oreille, mais à singer la matière physique.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">12. Quelle est la différence entre l'objet chez Ponge et l'objet chez les surréalistes (comme Breton) ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Les surréalistes détournent l'objet pour explorer l'inconscient ou le rêve (la machine à coudre et le parapluie). Ponge reste strictement ancré dans la réalité physique objective ; il observe l'objet pour ce qu'il est, sans chercher le rêve.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">13. Pourquoi parlez-vous d'humanisme caché dans "Le parti pris des choses" ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Parce qu'en décrivant l'abnégation silencieuse des arbres ou l'orgueil baveux de l'escargot, Ponge donne discrètement de grandes leçons de morale aux hommes. Il nous invite à réviser nos valeurs en nous inspirant de la sagesse stoïque du monde muet.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">14. Quel lien exact faites-vous entre "Le Buffet" de Rimbaud et les objets de Ponge ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Rimbaud est le grand initiateur. En consacrant un sonnet entier à un simple vieux meuble campagnard pour y insuffler de la magie et de la nostalgie, il ouvre la porte à Ponge, qui théorisera cette poétisation systématique de la banalité quotidienne.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">15. Ponge utilise-t-il des figures de style traditionnelles malgré sa modernité ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Oui, en abondance. Il utilise la personnification pour animer les choses ("le cageot sympathique"), l'hyperbole ("le pain comme la Cordillère") et l'analogie. Sa rupture se trouve dans le sujet choisi et la forme prosaïque, pas dans l'abandon de l'arsenal rhétorique.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">16. Que veut dire concrètement "le monde muet est notre seule patrie" ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est une désillusion politique. Face aux idéologies bavardes et aux beaux discours qui ont mené au chaos au XXe siècle, Ponge déclare que seule la vérité physique et silencieuse du monde naturel (la pierre, l'arbre, l'eau) reste un asile spirituel fiable.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">17. En quoi Rimbaud et Ponge ont-ils la même démarche de "Voyant" ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Rimbaud voulait dérégler ses sens pour voir l'invisible derrière le réel. Ponge, lui, regarde le banal avec une fixité si maniaque qu'il finit par y découvrir des dimensions cachées (la montagne dans le pain). Tous deux hallucinent poétiquement le réel.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">18. La poésie de Ponge est-elle au final plutôt triste ou plutôt joyeuse ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Elle est éminemment joyeuse et ludique ! Malgré l'aspect parfois clinique des définitions, l'œuvre est pleine d'espièglerie, de jeux de mots et de trouvailles visuelles cocasses qui émerveillent le lecteur et désamorcent le tragique humain.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">19. Que symbolise la "bave" de l'escargot pour Ponge ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Elle symbolise la trace brillante et indélébile laissée par le poète (l'encre sur la page). L'animal, par sa lenteur laborieuse et son isolement, est l'allégorie de l'écrivain qui sublime la difficulté de son existence en produisant une œuvre d'art.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">20. Quel est l'impact de ce recueil sur la littérature qui a suivi, comme le Nouveau Roman ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            L'impact est colossal. En prouvant que la description minutieuse et "froide" des objets suffisait à tenir le lecteur en haleine sans recourir à l'introspection romantique, Ponge a ouvert la voie à Robbe-Grillet et Nathalie Sarraute dans les années 1950.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Scripts pour l'interactivité -->
+    <script>
+        // Gestion des Onglets
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('button[id^="nav-"]').forEach(btn => {
+                btn.classList.remove('border-emerald-600', 'text-emerald-600', 'bg-emerald-50');
+                btn.classList.add('border-transparent', 'text-slate-500');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            
+            const activeBtn = document.getElementById('nav-' + tabId);
+            activeBtn.classList.remove('border-transparent', 'text-slate-500');
+            activeBtn.classList.add('border-emerald-600', 'text-emerald-600', 'bg-emerald-50');
+        }
+
+        // Gestion de l'Accordéon du Résumé
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.innerText = '-';
+            } else {
+                content.classList.add('hidden');
+                icon.innerText = '+';
+            }
+        }
+
+        // Graphique Chart.js (Stratégie & Temps)
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('timingChart').getContext('2d');
+            const data = {
+                labels: ['Présentation (1 min)', 'Résumé (2 min)  ', 'Motivations & Arguments (2 min)', 'Entretien / Questions (3 min)'],
+                datasets: [{
+                    data: [1, 2, 2, 3],
+                    backgroundColor: [
+                        '#1e293b', // slate-800
+                        '#34d399', // emerald-400
+                        '#047857', // emerald-700
+                        '#3b82f6'  // blue-500
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    hoverOffset: 6
+                }]
+            };
+
+            const config = {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            align: 'start',
+                            labels: {
+                                font: { family: "sans-serif" },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) { label = label.split(' (')[0]; }
+                                    return label + ' : ~' + context.raw + ' min';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            };
+
+            new Chart(ctx, config);
+        });
+    </script>
+</body>
+</html>

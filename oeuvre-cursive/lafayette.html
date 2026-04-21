@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EAF - Oral : La Princesse de Clèves</title>
+    <!-- Tailwind et Chart.js -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+
+        .chart-container { position: relative; width: 100%; max-width: 350px; margin: 0 auto; height: 300px; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
+
+        /* Styles pour les Flashcards (Motivations & Questions) */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .card-inner { transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
+        .flipped .card-inner { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- En-tête -->
+    <header class="bg-emerald-800 text-white p-6 shadow-md flex items-center justify-between shrink-0 sticky top-0 z-50">
+        <a href="../oral.html#cursive" class="text-white hover:text-emerald-200 font-bold text-lg transition-transform hover:-translate-x-1">&larr; Retour à l'Oral</a>
+        <div class="text-center">
+            <h1 class="text-2xl md:text-3xl font-black uppercase tracking-widest">La Princesse de Clèves <span class="font-normal italic text-emerald-300">de Mme de Lafayette</span></h1>
+        </div>
+        <div class="hidden md:flex gap-3">
+            <span class="px-3 py-1 bg-emerald-900 rounded-full text-xs font-bold border border-emerald-700">⏱️ ~8 min</span>
+            <span class="px-3 py-1 bg-emerald-900 rounded-full text-xs font-bold border border-emerald-700">🔄 Lien : Manon Lescaut</span>
+        </div>
+    </header>
+
+    <!-- Navigation des Onglets -->
+    <div class="bg-white border-b-2 border-slate-200 px-6 shrink-0 sticky top-[88px] z-40 shadow-sm">
+        <div class="flex overflow-x-auto custom-scroll w-full max-w-6xl mx-auto">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex-1 py-4 px-4 font-black text-emerald-600 border-b-4 border-emerald-600 bg-emerald-50 text-sm uppercase tracking-tighter transition-all whitespace-nowrap">📊 Stratégie & Temps</button>
+            <button onclick="switchTab('resume')" id="nav-resume" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">📖 Résumé Détaillé</button>
+            <button onclick="switchTab('oral')" id="nav-oral" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">🗣️ Mes Fiches Oral</button>
+            <button onclick="switchTab('questions')" id="nav-questions" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">❓ Questions du Jury</button>
+        </div>
+    </div>
+
+    <!-- Contenu Principal -->
+    <main class="flex-grow max-w-6xl mx-auto w-full p-6 md:p-10 pb-20">
+
+        <!-- ================= ONGLET 1: DASHBOARD ================= -->
+        <section id="dashboard" class="tab-content active">
+            <div class="mb-8 text-center">
+                <h2 class="text-3xl font-black text-emerald-900 mb-4 uppercase">La Stratégie de l'Oral</h2>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto">
+                    L'épreuve orale se divise en deux temps : votre exposé continu (environ 5 minutes), suivi de l'entretien avec le jury (environ 3 minutes). Cliquez sur les étapes ci-dessous pour accéder directement à vos fiches.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-slate-100">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-800 mb-6 border-l-8 border-emerald-500 pl-4">Répartition Chronométrique</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-presentation').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-slate-800 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Présentation (1 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'auteur, le contexte d'écriture et l'invention du roman psychologique.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-resume').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-emerald-400 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Résumé de l'œuvre (2 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'intrigue, de l'arrivée à la cour jusqu'au renoncement final.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-motivations').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-emerald-700 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Motivations (2 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'analyse de 2 arguments forts et le lien avec Manon Lescaut.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('questions');">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-blue-500 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-blue-600 transition-colors">Questions du Jury (3 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'entretien réactif basé sur votre exposé.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="chart-container">
+                    <canvas id="timingChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ONGLET 2: RESUME DETAILLÉ ================= -->
+        <section id="resume" class="tab-content">
+            <div class="mb-8 bg-indigo-50 p-8 rounded-3xl border border-indigo-100 shadow-sm">
+                <h2 class="text-3xl font-black text-indigo-900 mb-4 uppercase tracking-wide">Résumé Tome par Tome</h2>
+                <p class="text-lg text-indigo-800 opacity-90">
+                    Pour briller à l'oral, vous devez connaître l'évolution psychologique de l'héroïne à travers les quatre parties du roman. Cliquez sur chaque Tome pour en découvrir les enjeux.
+                </p>
+            </div>
+
+            <div class="space-y-4" id="accordion-container">
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie1')">
+                        <span>Tome I : L'Arrivée à la Cour et le Coup de foudre</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie1">+</span>
+                    </button>
+                    <div id="partie1" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-slate-50 rounded-xl border-l-4 border-slate-400">
+                            <strong>Une éducation exceptionnelle :</strong> Le roman s'ouvre sur une peinture éblouissante de la cour du roi Henri II. Mademoiselle de Chartres fait son apparition. Elle a été élevée par sa mère, Madame de Chartres, loin de la cour, dans le culte absolu de la sincérité et de la vertu. Sa mère l'a mise en garde contre les dangers de l'amour et l'hypocrisie des hommes. Par soumission et par raison, la jeune fille accepte d'épouser le Prince de Clèves, un homme de grande valeur qui l'aime passionnément, mais pour qui elle n'éprouve qu'une simple estime.
+                        </div>
+                        <div class="p-5 bg-emerald-50 rounded-xl border-l-4 border-emerald-500">
+                            <strong>Le bal et la rencontre fatale :</strong> Lors d'un bal donné au Louvre, le roi ordonne à la nouvelle Princesse de Clèves de danser avec un homme qui vient d'arriver : c'est le Duc de Nemours, réputé pour être l'homme le plus brillant et séduisant de la cour. Bien qu'ils ne se soient jamais vus, ils dansent ensemble avec une telle perfection que la cour entière murmure d'admiration. C'est le coup de foudre immédiat, silencieux et foudroyant. Peu après, Madame de Chartres tombe gravement malade et, sur son lit de mort, devine la passion de sa fille. Elle lui lance un ultime avertissement glaçant, l'exhortant à fuir cet amour pour sauver son honneur.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie2')">
+                        <span>Tome II : La passion naissante et les dissimulations</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie2">+</span>
+                    </button>
+                    <div id="partie2" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-blue-50 rounded-xl border-l-4 border-blue-500">
+                            <strong>Le vol du portrait :</strong> La Princesse de Clèves tente de fuir la cour et la présence de Nemours, mais les obligations sociales l'y ramènent sans cesse. La passion s'installe par des regards et des silences. Un jour, Nemours dérobe secrètement un petit portrait de la Princesse. Celle-ci s'en aperçoit mais, troublée, décide de ne rien dire, devenant ainsi complice silencieuse de cet acte d'amour. Nemours, de son côté, renonce carrément à la couronne d'Angleterre pour rester près d'elle.
+                        </div>
+                        <div class="p-5 bg-orange-50 rounded-xl border-l-4 border-orange-500">
+                            <strong>L'épisode de la lettre perdue :</strong> Une lettre d'amour anonyme tombe des poches du Vidame de Chartres (l'oncle de la Princesse). La cour entière croit que cette lettre appartient à Nemours. La Princesse de Clèves est ravagée par une jalousie intense qu'elle découvre pour la première fois. Pour sauver la réputation du Vidame, Nemours et la Princesse doivent s'isoler ensemble pour réécrire la lettre de mémoire. Cette proximité agit comme un catalyseur : la Princesse prend conscience de l'ampleur effrayante de sa propre passion et réalise qu'elle ne maîtrise plus son cœur.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie3')">
+                        <span>Tome III : La Retraite et la scène de l'Aveu</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie3">+</span>
+                    </button>
+                    <div id="partie3" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-purple-50 rounded-xl border-l-4 border-purple-500">
+                            <strong>L'exil à Coulommiers :</strong> Terrifiée par sa propre faiblesse, la Princesse supplie son mari de la laisser vivre retirée à la campagne, dans leur domaine de Coulommiers. Monsieur de Clèves, qui ne comprend pas ce refus de la vie mondaine et qui souffre de ne pas être aimé passionnément par sa femme, insiste pour connaître la vérité et la presse de questions.
+                        </div>
+                        <div class="p-5 bg-red-50 rounded-xl border-l-4 border-red-500">
+                            <strong>L'Aveu héroïque :</strong> Poussée dans ses retranchements, la Princesse accomplit un acte inouï dans l'histoire de la littérature. S'agenouillant devant son mari, elle lui avoue qu'elle éprouve une passion insurmontable pour un autre homme, bien qu'elle n'ait jamais fauté en actes. Elle lui demande de la protéger contre elle-même en la gardant loin de la cour. Ce qu'ils ignorent, c'est que Nemours a suivi la Princesse en cachette et écoute toute la scène dissimulé derrière un palissade. Il comprend qu'il est cet homme aimé. M. de Clèves, d'abord admiratif de cette incroyable sincérité, est vite rattrapé par la torture de la jalousie et cherche frénétiquement à identifier son rival.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie4')">
+                        <span>Tome IV : La jalousie, la mort et le renoncement</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie4">+</span>
+                    </button>
+                    <div id="partie4" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-gray-100 rounded-xl border-l-4 border-gray-600">
+                            <strong>La mort de Monsieur de Clèves :</strong> Rongé par le doute, M. de Clèves envoie un espion surveiller Nemours. L'espion rapporte avoir vu Nemours s'introduire de nuit dans le parc de Coulommiers (bien que la Princesse ne l'ait pas vu et n'ait rien fait). Persuadé d'avoir été trahi par la femme qu'il idolâtre, Monsieur de Clèves tombe foudroyé par une fièvre mortelle. Sur son lit de mort, il accuse sa femme de l'avoir tué par sa trahison. La Princesse est anéantie par la culpabilité.
+                        </div>
+                        <div class="p-5 bg-yellow-50 rounded-xl border-l-4 border-yellow-600">
+                            <strong>L'entrevue finale et le repos :</strong> Devenue veuve, les obstacles sociaux ont disparu. Nemours et la Princesse ont enfin une longue entrevue secrète où ils peuvent s'avouer mutuellement leur amour. Nemours la presse de l'épouser. Mais contre toute attente, elle refuse catégoriquement. Ses raisons sont doubles : d'abord le devoir moral et la culpabilité (Nemours a causé la mort de son mari), mais surtout la lucidité psychologique. Elle sait que le mariage tue inévitablement la passion et elle refuse de subir les futures infidélités de Nemours. Pour préserver son "repos" intérieur et la pureté de son idéal, elle se retire définitivement dans un couvent, choisissant la mort sociale plutôt que la compromission de son âme.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ONGLET 3: FICHES ORAL ================= -->
+        <section id="oral" class="tab-content">
+            
+            <!-- PRÉSENTATION -->
+            <div id="oral-presentation" class="mb-12 bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-8 border-b border-slate-100 pb-4">
+                    <span class="bg-slate-800 text-white font-black px-4 py-2 rounded-xl text-2xl">1</span>
+                    <h3 class="text-3xl font-black text-slate-800">Présentation <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">1 min</span></h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 1</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Je vais vous présenter La Princesse de Clèves, un chef-d'œuvre de Madame de Lafayette publié anonymement en 1678. C'est une œuvre fondatrice puisqu'elle est considérée comme le tout premier roman d'analyse psychologique de la littérature française. Plongée au cœur du mouvement classique, l'auteure délaisse les longs récits d'aventures épiques et les batailles sanglantes de ses prédécesseurs pour se concentrer exclusivement sur les tourments intérieurs de l'âme humaine. J'ai choisi cette œuvre car elle dresse un portrait saisissant de la lutte entre la passion ravageuse et la volonté de contrôle rationnel. C'est l'histoire tragique d'une jeune femme d'une vertu absolue, jetée au milieu d'une cour royale hypocrite, qui va tenter désespérément de maîtriser son cœur face à un amour foudroyant qu'elle s'interdit de vivre.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 2</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Aujourd'hui, j'ai décidé de vous parler de La Princesse de Clèves, un roman écrit par Madame de Lafayette en 1678. Bien que l'intrigue soit placée historiquement sous le règne du roi Henri II, au seizième siècle, le roman est en réalité un miroir à peine voilé de la cour de Louis XIV que fréquentait l'auteure. Ce qui m'a profondément intéressé lors de ma lecture, c'est la critique féroce de cette société de cour. Madame de Lafayette nous décrit un monde brillant, élégant et poli en apparence, mais qui est fondamentalement gangrené par les cabales politiques, les mensonges, les secrets et la tromperie amoureuse érigée en système. C'est dans ce théâtre des apparences que l'héroïne va mener une quête absolue de vérité et d'authenticité, quitte à en mourir de chagrin.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 3</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Mon choix s'est porté sur La Princesse de Clèves de Madame de Lafayette, publié en 1678. J'ai été fasciné par ce roman car il peut se lire comme une revendication extrêmement audacieuse de l'indépendance féminine. L'héroïne passe son temps à résister aux injonctions des hommes qui l'entourent. Son mari veut qu'elle l'aime avec passion, son amant veut la posséder, et la société veut qu'elle se remarie à la fin. Pourtant, la Princesse de Clèves s'y refuse. Par son renoncement final exceptionnel, elle rejette le mythe du prince charmant. Elle comprend que se marier avec l'homme qu'elle aime la condamnerait à souffrir un jour de ses infidélités. Elle choisit donc la solitude et la retraite religieuse pour préserver sa tranquillité d'esprit, affirmant ainsi sa pleine souveraineté sur son propre destin.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 4</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">L'œuvre que je souhaite vous présenter est La Princesse de Clèves, écrite par Madame de Lafayette en 1678. Ce livre s'est imposé à moi car il fonctionne exactement comme une tragédie théâtrale classique de Racine, mais transposée sous la forme d'un roman en prose. Dès les premières pages, on ressent le poids étouffant de la fatalité. L'héroïne mène une lutte vaine et désespérée contre la passion amoureuse, perçue non pas comme un sentiment joyeux, mais comme une maladie destructrice. L'omniprésence de la mort rythme le récit : le décès de sa mère qui fixe l'interdit moral, puis la mort de son mari causée par la simple jalousie. C'est une œuvre d'une noirceur magnifique, fortement marquée par la vision janséniste de l'époque, qui montre que l'amour terrestre finit toujours par corrompre l'être humain.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RÉSUMÉ EXPRESS -->
+            <div id="oral-resume" class="mb-12 bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-8 border-b border-slate-100 pb-4">
+                    <span class="bg-emerald-400 text-white font-black px-4 py-2 rounded-xl text-2xl">2</span>
+                    <h3 class="text-3xl font-black text-slate-800">Résumé Express <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">2 min</span></h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 1</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">Le roman s'ouvre sur l'arrivée éblouissante de Mademoiselle de Chartres à la cour du roi Henri II. Élevée dans la vertu stricte par sa mère, elle épouse sans amour passionné mais par raison un homme d'une grande noblesse d'âme, le Prince de Clèves. L'élément déclencheur du drame survient peu après lors d'un bal magnifique : elle y danse pour la première fois avec le séduisant Duc de Nemours. C'est un véritable coup de foudre réciproque. Peu de temps après, la mère de l'héroïne meurt en la mettant solennellement en garde contre cette passion naissante et les dangers de la cour.<br><br>Dès lors, la Princesse mène une lutte intérieure acharnée pour fuir Nemours. Elle tente de s'isoler à la campagne, mais la cour les rapproche sans cesse, comme lors de l'épisode du vol de son portrait par le Duc. Arrivée à bout de forces, terrorisée à l'idée de fauter et de perdre sa vertu, elle prend une décision inouïe. Elle se jette aux pieds de son mari et lui avoue qu'elle éprouve une passion féroce pour un autre homme, le suppliant de la garder enfermée pour la protéger d'elle-même. Ce qu'elle ignore, c'est que Nemours était caché et a tout entendu.<br><br>Cet aveu, loin de la sauver, provoque la catastrophe. Monsieur de Clèves, torturé par l'incertitude et la jalousie, fait espionner sa femme. Croyant à tort qu'elle l'a trompé physiquement avec Nemours, il tombe gravement malade et meurt de chagrin, la laissant veuve. Libre de tout lien conjugal, la Princesse a une ultime explication avec Nemours. Elle lui avoue son amour mais refuse catégoriquement de l'épouser. Par devoir pour la mémoire de son mari dont Nemours a causé la perte, mais surtout pour protéger son propre repos intérieur face aux futures trahisons masculines, elle choisit de se retirer du monde et finit ses jours dans un couvent austère.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 2</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">L'architecture de l'œuvre repose entièrement sur la mécanique mortelle du triangle amoureux et de la culpabilité. D'un côté, nous avons Monsieur de Clèves, un époux hors du commun qui aime sa femme avec la fougue d'un amant jaloux et qui souffre atrocement de ne recevoir en retour qu'une simple estime amicale. De l'autre, le Duc de Nemours, un grand séducteur qui abandonne toutes ses autres conquêtes, et même un trône royal, pour se consacrer à la poursuite obsessionnelle de la Princesse. Et au centre, une jeune femme écrasée par la pression de ses principes moraux.<br><br>Le tournant psychologique du roman est la célèbre scène de l'Aveu dans le domaine de Coulommiers. C'est le paradoxe sublime de l'histoire : en voulant être totalement transparente et honnête avec son mari pour sauver la paix de son couple, la Princesse va indirectement le tuer. Le Prince de Clèves, incapable de supporter l'idée qu'un rival habite le cœur de sa femme, perd la raison. Il se transforme en enquêteur paranoïaque, envoyant des serviteurs épier Nemours la nuit dans le parc. Les apparences le trompant, il se laisse mourir de désespoir.<br><br>Le dénouement vient figer la dimension tragique du texte. Une fois les barrières légales et sociales détruites par le décès du mari, on attendrait le mariage heureux des amants. Mais Madame de Lafayette refuse cette facilité romanesque. La Princesse convoque Nemours pour lui signifier un refus définitif. Son analyse est glaciale : elle a vu mourir un mari dévoué à cause de l'amour, elle ne veut pas s'exposer à la souffrance de voir la passion de Nemours s'éteindre inévitablement avec les années. Elle s'enferme dans la religion, sacrifiant sa vie de femme pour obtenir la paix de l'âme.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 3</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">La Princesse de Clèves est un roman centré sur le poison du regard et la surveillance permanente au sein d'une société close. Tout commence par la scène du bal, où l'héroïne et le Duc de Nemours tombent amoureux sous le regard scrutateur du roi et de l'ensemble de la cour. Dès lors, le roman est une fuite en avant. La jeune femme essaie d'échapper à l'œil public, sachant pertinemment que dans ce microcosme hypocrite de l'aristocratie, tout ce qui est vu est immédiatement transformé en cabale, en calomnie ou en scandale politique.<br><br>L'intrigue avance par une série de violations de l'intimité. Nemours écoute aux portes, espionne les conversations, dérobe un portrait sans la permission de la Princesse, et va jusqu'à franchir les murs du domaine privé de Coulommiers la nuit pour l'observer en cachette alors qu'elle contemple un tableau de lui. Cette indiscrétion amoureuse constante de Nemours est le véritable moteur de la tragédie, car c'est cette présence rôdeuse qui va déclencher la jalousie funeste de Monsieur de Clèves.<br><br>Face à cette agression sociale et passionnelle, la trajectoire de l'héroïne est celle d'un retrait progressif, vers l'intérieur d'elle-même. Épuisée par le mensonge permanent qu'exige la vie à la cour, brisée par la mort de son mari dont elle se sent responsable, la Princesse comprend que l'amour ne lui apportera que des tourments et de l'agitation. Lors de sa dernière confrontation avec Nemours, elle choisit la tranquillité. L'héroïne disparaît progressivement de la cour pour s'enfermer dans un couvent à l'écart du monde, faisant le choix absolu du repos contre le tumulte des passions humaines.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 4</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">L'histoire que raconte Madame de Lafayette est celle de l'échec de la passion face au devoir moral et au souvenir maternel. Au début du récit, Mademoiselle de Chartres est presque une page blanche, entièrement modelée par l'éducation austère de sa mère. Sa mère lui a inculqué une peur panique du désir amoureux, le décrivant comme une force qui conduit inévitablement les femmes à leur perte et à la honte publique. C'est donc presque par obéissance qu'elle accepte d'épouser le Prince de Clèves, un homme sage.<br><br>Mais l'irruption du Duc de Nemours dans sa vie vient fracasser ce bel édifice rationnel. Le roman décrit le basculement lent et douloureux d'une conscience. La Princesse découvre les tourments de l'amour, et surtout la souffrance terrible de la jalousie lors de l'épisode de la lettre perdue du Vidame. Cherchant désespérément un appui moral après la mort de sa mère, elle n'en trouve aucun, et décide dans un acte de pure bravoure de demander de l'aide à son propre mari. Cet aveu extraordinaire, qui devait la sauver, se retourne contre elle et s'achève par le décès de Monsieur de Clèves, empoisonné par le doute.<br><br>Le roman se conclut sur la victoire finale du modèle maternel. Même libérée du mariage et face aux supplications de l'homme qu'elle aime depuis le premier jour, la Princesse refuse de céder. La morale stricte l'emporte sur l'épanchement du cœur. Elle préfère élever un mur infranchissable entre elle et le Duc, s'infligeant une peine atroce pour préserver son intégrité et sa réputation. Elle consacre les dernières années de sa courte vie à la pénitence religieuse, laissant derrière elle un exemple inoubliable de vertu absolue qui marquera l'histoire de la littérature.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MOTIVATIONS -->
+            <div id="oral-motivations" class="mb-12">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="bg-emerald-700 text-white font-black px-4 py-2 rounded-xl text-2xl">3</span>
+                    <h3 class="text-3xl font-black text-slate-800">Mes 10 Arguments (Motivations) <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">2 min au total</span></h3>
+                </div>
+                <p class="text-sm text-slate-500 mb-8 font-bold">Cliquez sur les fiches pour les retourner et mémorisez l'analyse (2 fiches suffisent pour tenir les 2 minutes). Les 3 dernières fiches vous permettent de tisser le lien avec « Manon Lescaut ».</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 perspective-1000">
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-emerald-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">⚡</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 1</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le coup de foudre au bal</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-emerald-50 border border-emerald-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai été subjugué par la scène de la rencontre au bal du Louvre. C'est l'un des moments fondateurs du mythe romanesque français. Madame de Lafayette chorégraphie un coup de foudre foudroyant et public. Alors qu'ils ne se connaissent pas, la Princesse et le Duc de Nemours sont physiquement attirés l'un vers l'autre comme par une force magnétique, au milieu de la foule de la cour. Cette rencontre prouve d'emblée la nature tragique de l'amour dans l'œuvre : la passion est un destin inévitable qui s'abat sur l'individu sans prévenir, défiant la raison et la volonté.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-emerald-600 shadow-sm">
+                                    <strong>Tome I (Le bal) :</strong><br>
+                                    M. de Nemours fut tellement surpris de sa beauté, que, lorsqu'il fut proche d'elle... il ne put s'empêcher de donner des marques de son admiration.
+                                </div>
+                                <div class="bg-emerald-100 p-2 rounded-lg text-xs mt-2 font-medium text-emerald-900">
+                                    <strong>Analyse littéraire :</strong> L'adverbe intensif "tellement" couplé au vocabulaire de la perte de contrôle ("ne put s'empêcher", "surpris") souligne la paralysie physique instantanée du grand séducteur face à la perfection esthétique de la Princesse. Le trouble intérieur brise immédiatement le masque de la politesse mondaine.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-red-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🗣️</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 2</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">L'héroïsme de l'Aveu</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-red-50 border border-red-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Le passage qui m'a le plus marqué est incontestablement la scène de l'aveu à Coulommiers. Au XVIIe siècle, c'est un acte d'une transgression sociale totale. Plutôt que de tromper son mari en cachette comme le font toutes les femmes de la cour, la Princesse accomplit un geste de sincérité suicidaire et héroïque en confessant sa tentation. En choisissant la vérité douloureuse plutôt que le mensonge protecteur, elle affirme sa grandeur morale mais enclenche en même temps la mécanique mortelle de la jalousie qui détruira son mari.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-red-600 shadow-sm">
+                                    <strong>Tome III (L'Aveu) :</strong><br>
+                                    Eh bien, monsieur... je vais vous faire un aveu que l'on n'a jamais fait à son mari.
+                                </div>
+                                <div class="bg-red-100 p-2 rounded-lg text-xs mt-2 font-medium text-red-900">
+                                    <strong>Analyse littéraire :</strong> L'interjection "Eh bien" marque la rupture d'un barrage psychologique, la bascule dans le vide. La tournure d'exceptionité ("que l'on n'a jamais fait") souligne l'extrême rareté et le danger de cette sincérité dans une société régie par l'hypocrisie et le secret.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-orange-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🎭</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 3</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">La cruauté de la Cour</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-orange-50 border border-orange-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">L'œuvre de Madame de Lafayette n'est pas qu'une romance, c'est aussi une critique féroce de la société aristocratique. Le cadre historique, la cour d'Henri II, sert de miroir à la cour de Versailles de Louis XIV. Ce monde, magnifique en apparence, est décrit comme un théâtre mortel de surveillance, de médisance et d'hypocrisie. Les personnages y passent leur temps à s'espionner, à déchiffrer les visages pour y trouver des secrets coupables. C'est cette atmosphère toxique qui étouffe l'héroïne et l'oblige à fuir, la sincérité y étant punie par la disgrâce ou la destruction sociale.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-orange-500 shadow-sm">
+                                    <strong>Tome I (Mme de Chartres) :</strong><br>
+                                    Si vous jugez sur les apparences en ce lieu-ci, vous serez souvent trompée : ce qui paraît n'est presque jamais la vérité.
+                                </div>
+                                <div class="bg-orange-100 p-2 rounded-lg text-xs mt-2 font-medium text-orange-900">
+                                    <strong>Analyse littéraire :</strong> L'antithèse absolue entre les termes verbaux de l'apparence ("paraît", "apparences") et le nom solennel ("la vérité"). La maxime de la mère fixe la loi du microcosme de la cour : c'est un royaume de l'illusion où le mensonge est la norme et la ruse un moyen de survie politique.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-purple-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">💔</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 4</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">La jalousie mortelle</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-purple-50 border border-purple-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai été très sensible à la trajectoire de Monsieur de Clèves. Cet homme, d'abord présenté comme l'incarnation de la raison et de la bienveillance protectrice, va être littéralement dévoré de l'intérieur. Son amour excessif pour sa femme le rend vulnérable à la pire des maladies classiques : la jalousie amoureuse. Le roman démontre que le doute et l'imagination sont plus douloureux que la trahison elle-même. La jalousie agit comme un cancer fulgurant qui le pousse à espionner sa femme et qui, en quelques jours à peine, le foudroie physiquement jusqu'à le tuer.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-purple-600 shadow-sm">
+                                    <strong>Tome III (M. de Clèves) :</strong><br>
+                                    Vous avez versé dans mon cœur un poison qui m'en empoisonne... et je ne me trouve plus digne de vous.
+                                </div>
+                                <div class="bg-purple-100 p-2 rounded-lg text-xs mt-2 font-medium text-purple-900">
+                                    <strong>Analyse littéraire :</strong> L'utilisation forte de la métaphore du "poison" (redoublée par le verbe "empoisonne" en polyptote) montre que la parole sincère de sa femme a agi comme une arme bio-chimique létale. L'aveu l'a tué moralement avant de le tuer physiquement, détruisant son estime de soi ("plus digne").
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-yellow-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">⏳</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 5</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">La peur de l'usure de l'amour</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-yellow-50 border border-yellow-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">La modernité psychologique du roman éclate véritablement dans le dénouement. La Princesse de Clèves rejette Nemours non seulement par devoir pour son mari décédé, mais aussi et surtout par une terrible lucidité sur la nature des hommes. Elle craint l'usure du temps. Elle a parfaitement compris que le mariage est le tombeau de la passion, et que l'obsession de Nemours s'éteindrait inévitablement une fois qu'il l'aurait épousée, la laissant bafouée et trompée comme les autres femmes de la cour. En refusant l'union, elle fige l'amour de Nemours dans une éternité idéale.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-yellow-500 shadow-sm">
+                                    <strong>Tome IV (L'entrevue finale) :</strong><br>
+                                    Les hommes sont-ils naturellement sujets à conserver la même passion dans ces liens éternels ?
+                                </div>
+                                <div class="bg-yellow-100 p-2 rounded-lg text-xs mt-2 font-medium text-yellow-900">
+                                    <strong>Analyse littéraire :</strong> La question rhétorique amère porte le sceau du pessimisme classique moraliste. L'adverbe "naturellement" pointe le déterminisme masculin volage, tandis que la périphrase "ces liens éternels" (le mariage) sonne ici non pas comme un idéal sacré, mais comme une chaîne mortifère qui tue le désir.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-pink-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🕊️</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 6</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">La quête absolue du Repos</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-pink-50 border border-pink-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Je trouve très puissant que l'objectif ultime de l'héroïne ne soit ni le bonheur terrestre ni la gloire sociale, mais le "repos". C'est un concept fondamental du XVIIe siècle sous l'influence du jansénisme : le repos désigne la paix de l'âme, le silence des passions tumultueuses qui déchirent l'être de l'intérieur. Face au chaos des sentiments et à l'épuisement mental causé par les perpétuels mensonges de la vie à la cour, la Princesse fait le choix assumé de l'ataraxie. L'isolement volontaire dans un couvent est son triomphe final : elle reprend le contrôle total de son destin en s'éloignant des tentations du monde pour sauver son âme.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-pink-500 shadow-sm">
+                                    <strong>Tome IV :</strong><br>
+                                    Les raisons qu'elle avait de ne point épouser M. de Nemours lui paraissaient fortes du côté de son devoir, et insurmontables du côté de son repos.
+                                </div>
+                                <div class="bg-pink-100 p-2 rounded-lg text-xs mt-2 font-medium text-pink-900">
+                                    <strong>Analyse littéraire :</strong> Le parallélisme de construction ("du côté de") oppose deux valeurs. Le "devoir" social envers le mari mort est jugé "fort", mais le besoin intime de "repos" psychologique est qualifié par l'adjectif intensif "insurmontables". La paix intérieure pèse donc plus lourd que la morale sociale publique.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-gray-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">⚖️</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 7</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">L'emprise maternelle post-mortem</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-gray-50 border border-gray-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Un ressort invisible mais puissant de la tragédie est l'influence écrasante de Madame de Chartres, la mère de l'héroïne. Son éducation stricte fondée sur la méfiance de l'amour a forgé le caractère d'acier de sa fille. Même après sa mort tragique au premier tome, la voix de la mère continue de résonner comme un surmoi sévère dans la conscience de la Princesse. Le dernier avertissement prononcé sur son lit de mort agit comme un véritable sortilège ou un interdit sacré que l'héroïne ne pourra jamais briser sans ressentir une culpabilité monstrueuse, ce qui condamne par avance toute chance de bonheur avec Nemours.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-gray-600 shadow-sm">
+                                    <strong>Tome I (La mort de Mme de Chartres) :</strong><br>
+                                    Vous êtes sur le bord du précipice : il faut de grands efforts et de grandes violences pour vous retenir.
+                                </div>
+                                <div class="bg-gray-200 p-2 rounded-lg text-xs mt-2 font-medium text-gray-800">
+                                    <strong>Analyse littéraire :</strong> La puissante métaphore spatiale du "précipice" traduit l'imminence de la chute morale (l'adultère, la passion). Le redoublement de l'adjectif ("grands efforts", "grandes violences") insiste sur la douleur presque physique exigée par la vertu classique pour résister à la nature humaine corrompue.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 8 (LIEN MANON LESCAUT) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🔗</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Manon Lescaut 1</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">La fatalité fulgurante du regard</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Il m'a semblé inévitable d'établir un lien très fort avec "Manon Lescaut" de l'Abbé Prévost, notamment concernant l'irruption de la passion. Dans les deux romans, la tragédie est amorcée par un "coup de foudre" visuel immédiat, public et dévastateur. À Amiens, le chevalier des Grieux est foudroyé sur la place publique par la simple vue de la beauté troublante de Manon descendant de la diligence, de la même manière que Nemours et la Princesse sont foudroyés l'un par l'autre au milieu du bal du Louvre. Dans les deux œuvres, ce premier regard est une maladie fatale qui vient subitement briser un destin jusqu'alors raisonnable et vertueux.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Prévost (Manon Lescaut) :</strong><br>
+                                    Elle me parut si charmante que moi... je me trouvai enflammé tout d'un coup jusqu'au transport.
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> Comme dans "Clèves", la surprise ("si charmante") anéantit la raison de l'honnête homme. La métaphore du feu ("enflammé") et l'expression de la soudaineté extrême ("tout d'un coup") prouvent que la passion, pour la génération classique comme pour celle des Lumières, reste une dépossession aliénante de soi-même.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 9 (LIEN MANON LESCAUT) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">⚖️</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Manon Lescaut 2</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">Le choix opposé face à la Vertu</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">La comparaison entre les deux œuvres prend tout son sens lorsque l'on observe la trajectoire diamétralement opposée des héros face à la tentation. Dans La Princesse de Clèves, l'héroïne est l'allégorie de la résistance janséniste : elle refuse de céder à l'adultère, fuit la cour mondaine, et sacrifie ses sentiments personnels sur l'autel de la vertu morale et de son honneur. À l'inverse total, Des Grieux, dans Manon Lescaut, est l'allégorie de la déchéance assumée. Dès que la passion le touche, il renonce instantanément à Dieu, à sa famille, à l'honneur de son rang social pour plonger volontairement dans l'escroquerie, la misère et le vice afin de satisfaire son désir et sa maîtresse vénale.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Prévost (Manon Lescaut) :</strong><br>
+                                    Je franchis les degrés de la honte sans m'en apercevoir. (Des Grieux)
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> L'antithèse philosophique absolue de la Princesse. Alors que l'héroïne de Lafayette déploie des "violences" inouïes pour s'éloigner du précipice de la honte, le chevalier de Prévost accepte la perte de l'estime de soi ("la honte") avec une glissade aveugle et insouciante ("sans m'en apercevoir").
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 10 (LIEN MANON LESCAUT) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">💀</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Manon Lescaut 3</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">Le Dénouement Tragique commun</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">La plus grande leçon que je tire de la confrontation de ces deux grands romans français, c'est l'universalité de leur conclusion profondément pessimiste sur la nature humaine. Que l'on choisisse la voie vertueuse et stoïque (La Princesse de Clèves) ou la voie transgressive du vice et du crime (Manon Lescaut), la passion d'amour absolu est toujours incompatible avec la vie sociale. Les deux héroïnes finissent écartées du monde brillant : la Princesse s'enferme volontairement dans un couvent et subit une mort sociale silencieuse pour sauver son âme, tandis que Manon meurt physiquement de misère dans les sables brûlants du désert américain pour expier ses fautes parisiennes. L'amour passionnel y est invariablement léthal.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Prévost (Manon Lescaut) :</strong><br>
+                                    Mon âme ne suivit pas la sienne. (Des Grieux)
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> Comme Nemours qui finit oublié et résigné face à la retraite de la Princesse, Des Grieux survit inutilement à la disparition de sa maîtresse. Dans les deux romans, la survie physique de l'amant endeuillé n'est qu'une litote tragique désignant une éternelle agonie morale dans la solitude.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= ONGLET 4: QUESTIONS DU JURY ================= -->
+        <section id="questions" class="tab-content">
+            
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-black text-blue-900 mb-4 uppercase">Entretien avec le Jury (3 min)</h2>
+                <p class="text-lg text-slate-600 max-w-4xl mx-auto">
+                    Voici 20 questions réactives (sous forme de flashcards) que le jury pourrait vous poser en fonction de l'exposé que vous venez de faire. Cliquez pour voir la réponse.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 perspective-1000">
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">1. Pourquoi le roman a-t-il été publié anonymement en 1678 ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            À l'époque classique, il était jugé inconvenant, vulgaire et contraire à la pudeur pour une femme de la haute noblesse (Madame de Lafayette) d'afficher son nom sur la couverture d'un roman, un genre littéraire alors considéré comme peu sérieux et inférieur à la tragédie ou la poésie.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">2. L'intrigue se passe sous Henri II, mais de quelle époque parle vraiment l'auteure ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Elle décrit officiellement le XVIe siècle (Henri II), mais c'est un miroir grossissant de son propre siècle, la cour du Roi-Soleil, Louis XIV. Elle y critique l'hypocrisie, les cabales politiques constantes et le culte de l'apparence des nobles de Versailles sous un déguisement historique.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">3. Pourquoi considère-t-on que c'est le premier roman "psychologique" ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Avant ce roman, les œuvres (comme L'Astrée) étaient d'interminables récits d'aventures avec des combats, des rapts de princesses et des corsaires. Lafayette supprime les épées : l'action, l'angoisse et le champ de bataille se déroulent exclusivement à l'intérieur de l'esprit et de la conscience de l'héroïne.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">4. Vous avez mentionné le Jansénisme. Comment ce courant religieux influence-t-il le récit ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Le jansénisme (très présent dans l'entourage de l'auteure, lié à Port-Royal) est une vision très pessimiste de la nature humaine, perçue comme irrémédiablement corrompue et faible. Le roman illustre cette idée : l'amour terrestre humain est fondamentalement destructeur, coupable et finit toujours par mener à la mort ou au péché.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">5. Pourquoi la scène de l'Aveu a-t-elle créé un immense scandale littéraire à sa parution ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            L'écrivain Bussy-Rabutin et les lecteurs de l'époque jugeaient cette scène totalement irréaliste et "invraisemblable". Au XVIIe siècle, une femme d'honneur trompait son mari en secret ; il était impensable et choquant qu'une épouse prenne le risque social inouï d'avouer elle-même sa passion à son époux.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">6. De quoi Monsieur de Clèves meurt-il exactement ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            D'un point de vue clinique, d'une grosse fièvre. Mais symboliquement, il meurt foudroyé par la douleur aiguë de la jalousie et la conviction intolérable (quoique fausse) d'avoir été physiquement trahi et déshonoré par la femme de sa vie. C'est l'orgueil et le cœur blessés qui l'assassinent.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">7. Quel rôle narratif joue le vol du portrait (le petit tableau) par le Duc de Nemours ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est un passage à l'acte, la première faute tangible. En voyant Nemours voler l'objet et en faisant le choix conscient de ne pas le dénoncer pour éviter un esclandre public, la Princesse devient silencieusement complice et accepte implicitement l'existence de cette liaison.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">8. Peut-on qualifier la Princesse de Clèves d'héroïne "féministe" avant l'heure ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            En un sens, oui. Par son renoncement final, elle refuse le destin de femme mariée trompée ou soumise, l'unique destin réservé aux femmes de l'époque. Elle choisit sa solitude, sa fierté, et devient le propre maître de son existence, préférant s'appartenir à elle-même plutôt qu'à un homme inconstant.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">9. Quelle est la différence fondamentale entre "l'inclination" (Nemours) et "l'estime" (Clèves) au XVIIe siècle ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            L'estime est un sentiment rationnel, noble, basé sur le respect des grandes valeurs morales et l'habitude (ce qu'elle éprouve pour son mari). L'inclination est la passion irrationnelle, viscérale, charnelle et incontrôlable qui échappe à la volonté (le coup de foudre pour Nemours). L'héroïne est écartelée entre les deux.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">10. Pourquoi la réécriture de la lettre perdue du Vidame est-elle si importante pour les deux amants ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            La réécriture à quatre mains les oblige à s'isoler ensemble pour la première fois. Ils se comportent de manière complice, presque comme un couple uni s'amusant. C'est un moment d'intimité rare qui fait prendre conscience à l'héroïne qu'elle est en train de basculer irrémédiablement vers l'adultère du cœur.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">11. Le Duc de Nemours est-il vraiment l'amant parfait dont on devrait rêver ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Non. Malgré son immense charme physique, il est souvent égoïste, imprudent et orgueilleux. Il écoute aux portes de manière voyeuse lors de la scène de l'aveu, et commet la grave erreur de raconter l'histoire (en voulant briller auprès de son ami le vidame), ce qui déclenche le scandale mondain à la cour.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">12. Vous opposez la retraite au couvent (Clèves) à la mort dans le désert (Manon). Que représentent ces deux lieux ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Le couvent classique est un lieu de sanctification, un choix spirituel et rationnel où la Princesse s'enferme volontairement pour purifier son âme de la rumeur publique. Le désert américain des Lumières est, lui, un lieu de damnation sauvage et d'exil forcé, le bout de la chute géographique et sociale provoquée par le vice.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">13. Qu'est-ce que "le Repos" au XVIIe siècle, terme omniprésent dans le roman ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Le repos désigne l'ataraxie : l'absence totale de trouble intérieur, la paix absolue de la conscience. C'est l'idéal stoïcien et chrétien de l'honnête homme ou de la femme vertueuse, qui souhaite vivre loin du "tumulte" angoissant des jalousies, des mensonges et des passions dévorantes.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">14. En quoi les mères jouent-elles un rôle central dans l'éducation des deux héroïnes (Clèves vs Manon) ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Madame de Chartres est omniprésente : elle sculpte la vertu de sa fille par la morale et ses avertissements survivent à sa mort. À l'inverse totale, Manon Lescaut est orpheline de mère (ou du moins sans figure maternelle guide). Cette absence de boussole parentale explique sa dérive amoureuse et son rapport compulsif et instinctif à l'argent et au luxe.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">15. Madame de Lafayette utilise-t-elle de longues descriptions pour présenter la beauté de ses personnages ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Non, contrairement à Balzac plus tard, l'esthétique classique refuse le portrait physique hyperréaliste. Lafayette utilise des termes abstraits, absolus et hyperboliques (la grâce, la majesté, une beauté parfaite, un chef-d'œuvre de la nature), laissant l'imagination du lecteur forger la perfection des traits.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">16. Comment la jalousie est-elle décrite physiquement par l'auteure ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est un véritable mal clinique et fulgurant. Que ce soit chez la Princesse (qui a l'impression d'étouffer) ou chez M. de Clèves, la jalousie foudroie littéralement le corps. Elle provoque des fièvres, des insomnies, altère le jugement et devient un poison matériel qui terrasse les organismes de l'intérieur.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">17. Y a-t-il un lien de classe dans l'approche morale de La Princesse et de Des Grieux ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Oui. La Princesse appartient à la toute haute noblesse, son honneur public est une loi infranchissable, garante de la stabilité de l'État. Des Grieux, jeune chevalier de la petite noblesse du siècle suivant, sacrifie beaucoup plus facilement cet "honneur de caste" pour la bourgeoisie financière et les tricheries dans les bas-fonds de Paris.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">18. La Princesse de Clèves est-elle une œuvre théâtrale en prose ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Absolument. La concentration extrême de l'intrigue, les lourds monologues de délibération intérieure (pour choisir entre le devoir et l'amour), l'importance de la fatalité qui broie les héros, et même le nombre d'actes (4 tomes/actes) en font la stricte jumelle romanesque d'une tragédie cornélienne ou racinienne.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">19. Pourquoi le Duc de Nemours se rend-il en secret dans le parc de Coulommiers de nuit ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Poussé par la fiévreuse curiosité de voir celle qu'il aime en secret, il franchit le mur. Il la voit tresser des rubans autour d'une canne lui appartenant, se comportant comme une véritable amoureuse lorsqu'elle se croit seule. Cette transgression de l'intimité, bien qu'idyllique, est le point de départ de l'erreur fatale de M. de Clèves (via son espion).
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">20. Quelle leçon globale tirez-vous de ces deux héroïnes, la Princesse et Manon ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Elles prouvent que pour les écrivains de ces époques, la passion absolue est une déviance impossible à domestiquer dans le monde civilisé. Que la femme lutte de toutes ses forces morales (La Princesse) ou qu'elle s'y livre avec une légèreté amorale (Manon), le résultat est identique : l'exil et la destruction de la vie terrestre. L'amour est un drame irrémédiable.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Scripts pour l'interactivité -->
+    <script>
+        // Gestion des Onglets
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('button[id^="nav-"]').forEach(btn => {
+                btn.classList.remove('border-emerald-600', 'text-emerald-600', 'bg-emerald-50');
+                btn.classList.add('border-transparent', 'text-slate-500');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            
+            const activeBtn = document.getElementById('nav-' + tabId);
+            activeBtn.classList.remove('border-transparent', 'text-slate-500');
+            activeBtn.classList.add('border-emerald-600', 'text-emerald-600', 'bg-emerald-50');
+        }
+
+        // Gestion de l'Accordéon du Résumé
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.innerText = '-';
+            } else {
+                content.classList.add('hidden');
+                icon.innerText = '+';
+            }
+        }
+
+        // Graphique Chart.js (Stratégie & Temps)
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('timingChart').getContext('2d');
+            const data = {
+                labels: ['Présentation (1 min)', 'Résumé (2 min)  ', 'Motivations & Arguments (2 min)', 'Entretien / Questions (3 min)'],
+                datasets: [{
+                    data: [1, 2, 2, 3],
+                    backgroundColor: [
+                        '#1e293b', // slate-800
+                        '#34d399', // emerald-400
+                        '#047857', // emerald-700
+                        '#3b82f6'  // blue-500
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    hoverOffset: 6
+                }]
+            };
+
+            const config = {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            align: 'start',
+                            labels: {
+                                font: { family: "sans-serif" },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) { label = label.split(' (')[0]; }
+                                    return label + ' : ~' + context.raw + ' min';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            };
+
+            new Chart(ctx, config);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EAF - Oral : Carmen de Mérimée</title>
+    <!-- Tailwind et Chart.js -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+
+        .chart-container { position: relative; width: 100%; max-width: 350px; margin: 0 auto; height: 300px; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
+
+        /* Styles pour les Flashcards (Motivations & Questions) */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .card-inner { transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
+        .flipped .card-inner { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- En-tête -->
+    <header class="bg-emerald-800 text-white p-6 shadow-md flex items-center justify-between shrink-0 sticky top-0 z-50">
+        <a href="../oral.html#cursive" class="text-white hover:text-emerald-200 font-bold text-lg transition-transform hover:-translate-x-1">&larr; Retour à l'Oral</a>
+        <div class="text-center">
+            <h1 class="text-2xl md:text-3xl font-black uppercase tracking-widest">Carmen <span class="font-normal italic text-emerald-300">de Mérimée</span></h1>
+        </div>
+        <div class="hidden md:flex gap-3">
+            <span class="px-3 py-1 bg-emerald-900 rounded-full text-xs font-bold border border-emerald-700">⏱️ ~8 min</span>
+            <span class="px-3 py-1 bg-emerald-900 rounded-full text-xs font-bold border border-emerald-700">🔄 Lien : Manon Lescaut</span>
+        </div>
+    </header>
+
+    <!-- Navigation des Onglets -->
+    <div class="bg-white border-b-2 border-slate-200 px-6 shrink-0 sticky top-[88px] z-40 shadow-sm">
+        <div class="flex overflow-x-auto custom-scroll w-full max-w-6xl mx-auto">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex-1 py-4 px-4 font-black text-emerald-600 border-b-4 border-emerald-600 bg-emerald-50 text-sm uppercase tracking-tighter transition-all whitespace-nowrap">📊 Stratégie & Temps</button>
+            <button onclick="switchTab('resume')" id="nav-resume" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">📖 Résumé Détaillé</button>
+            <button onclick="switchTab('oral')" id="nav-oral" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">🗣️ Mes Fiches Oral</button>
+            <button onclick="switchTab('questions')" id="nav-questions" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">❓ Questions du Jury</button>
+        </div>
+    </div>
+
+    <!-- Contenu Principal -->
+    <main class="flex-grow max-w-6xl mx-auto w-full p-6 md:p-10 pb-20">
+
+        <!-- ================= ONGLET 1: DASHBOARD ================= -->
+        <section id="dashboard" class="tab-content active">
+            <div class="mb-8 text-center">
+                <h2 class="text-3xl font-black text-emerald-900 mb-4 uppercase">La Stratégie de l'Oral</h2>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto">
+                    L'épreuve orale se divise en deux temps : votre exposé continu (environ 5 minutes), suivi de l'entretien avec le jury (environ 3 minutes). Cliquez sur les étapes ci-dessous pour accéder directement à vos fiches.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-slate-100">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-800 mb-6 border-l-8 border-emerald-500 pl-4">Répartition Chronométrique</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-presentation').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-slate-800 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Présentation (1 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'auteur, le contexte d'écriture et le mythe de la femme fatale.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-resume').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-emerald-400 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Résumé de l'œuvre (2 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">Le récit enchâssé, la passion de Don José, le banditisme et le meurtre final.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-motivations').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-emerald-700 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Motivations (2 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'analyse de 2 arguments forts et le lien avec Manon Lescaut.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('questions');">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-blue-500 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-blue-600 transition-colors">Questions du Jury (3 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'entretien réactif basé sur votre exposé.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="chart-container">
+                    <canvas id="timingChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ONGLET 2: RESUME DETAILLÉ ================= -->
+        <section id="resume" class="tab-content">
+            <div class="mb-8 bg-indigo-50 p-8 rounded-3xl border border-indigo-100 shadow-sm">
+                <h2 class="text-3xl font-black text-indigo-900 mb-4 uppercase tracking-wide">Résumé Partie par Partie</h2>
+                <p class="text-lg text-indigo-800 opacity-90">
+                    La nouvelle est constituée de 4 chapitres, dont la structure en récits enchâssés donne toute sa force réaliste au mythe. Cliquez sur chaque Partie pour en découvrir les enjeux.
+                </p>
+            </div>
+
+            <div class="space-y-4" id="accordion-container">
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie1')">
+                        <span>Chapitre I : L'archéologue et le bandit</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie1">+</span>
+                    </button>
+                    <div id="partie1" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-slate-50 rounded-xl border-l-4 border-slate-400">
+                            <strong>Une rencontre tendue en Andalousie :</strong> L'histoire débute en 1830. Le narrateur est un archéologue français en voyage scientifique dans le sud de l'Espagne pour chercher les ruines de l'antique bataille de Munda. Accablé par la chaleur, il s'arrête pour se reposer près d'une source et tombe nez à nez avec un homme farouche, armé d'un tromblon, dont l'allure est intimidante. Malgré la peur de son guide Antonio, le narrateur, poussé par la curiosité et son flegme, partage un cigare et de la nourriture avec cet inconnu.
+                        </div>
+                        <div class="p-5 bg-emerald-50 rounded-xl border-l-4 border-emerald-500">
+                            <strong>Le pacte d'hospitalité :</strong> L'inconnu n'est autre que Don José Navarro, un redoutable chef de brigands dont la tête est mise à prix dans toute la région. La nuit tombée, dans une auberge de fortune, le guide Antonio tente de filer discrètement pour dénoncer le bandit aux lanciers et toucher la prime. Le narrateur, respectant la loi sacrée de l'hospitalité partagée, réveille Don José à temps pour lui permettre de fuir. Cet acte crée un lien de gratitude indéfectible entre l'érudit français et le dangereux criminel espagnol.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie2')">
+                        <span>Chapitre II : L'envoûtement à Cordoue</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie2">+</span>
+                    </button>
+                    <div id="partie2" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-blue-50 rounded-xl border-l-4 border-blue-500">
+                            <strong>La découverte de Carmen :</strong> Quelques mois plus tard, le narrateur mène des recherches dans la bibliothèque de Cordoue. À la tombée de la nuit, sur les quais du fleuve, il est accosté par une jeune bohémienne d'une beauté sauvage et insolente. C'est Carmen. Elle fume, porte une fleur de cassie dans les cheveux, et dégage une aura de liberté troublante. Attiré par son exotisme et croyant tenir un sujet d'étude sur la sorcellerie, le narrateur la suit dans une maison louche pour qu'elle lui lise son avenir.
+                        </div>
+                        <div class="p-5 bg-orange-50 rounded-xl border-l-4 border-orange-500">
+                            <strong>L'intervention salvatrice :</strong> Alors que Carmen commence ses incantations diaboliques pour prédire l'avenir, la porte s'ouvre brutalement sur un homme drapé dans son manteau, fou de rage et prêt à égorger le Français. Cet homme est Don José. Reconnaissant celui qui lui a autrefois sauvé la vie, José retient son couteau, malgré les hurlements de Carmen (qui s'exprime en langue romani) lui ordonnant de tuer et de détrousser le touriste. Le narrateur s'enfuit sain et sauf mais se rend compte que Carmen lui a volé sa luxueuse montre à répétition, scellant ainsi l'image de la femme à la fois tentatrice et criminelle.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie3')">
+                        <span>Chapitre III : La Chute de Don José (Le Récit Central)</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie3">+</span>
+                    </button>
+                    <div id="partie3" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-purple-50 rounded-xl border-l-4 border-purple-500">
+                            <strong>La rencontre initiale et la désertion :</strong> Des mois plus tard, le narrateur apprend que Don José a été arrêté et sera exécuté le lendemain. Il va le visiter dans sa cellule. José lui raconte alors son histoire. Basque d'origine noble, brigadier à Séville, il menait une vie militaire exemplaire. Un jour, il est chargé d'escorter Carmen en prison après qu'elle a balafré une ouvrière de la manufacture de cigares. Sur le chemin, Carmen utilise ses charmes et prétend être de la même région que lui pour le manipuler. José cède, la laisse s'échapper, et finit rétrogradé et emprisonné à sa place. C'est la première étape de sa chute.
+                        </div>
+                        <div class="p-5 bg-red-50 rounded-xl border-l-4 border-red-500">
+                            <strong>Le basculement dans le crime et la mort de Carmen :</strong> Rendu fou par la passion, José tue son supérieur, le lieutenant qui courtisait Carmen. Il devient déserteur, s'enfonce dans le banditisme et la contrebande pour la suivre. Il découvre qu'elle a un mari, le terrible bandit Garcia le Borgne, qu'il finit par égorger dans une crise de jalousie. Mais Carmen se lasse de José et s'éprend d'un jeune toréador, Lucas. Ravagé par une jalousie destructrice et incapable de la posséder, José l'emmène dans une gorge isolée et la supplie une dernière fois de le suivre en Amérique pour recommencer une vie pure. Carmen, fidèle à sa nature sauvage, refuse catégoriquement l'enfermement : "Carmen sera toujours libre". Face à cet amour impossible, José la poignarde à mort, l'enterre avec la petite bague qu'il lui avait offerte, et va se livrer aux autorités.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie4')">
+                        <span>Chapitre IV : La Digression Ethnographique</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie4">+</span>
+                    </button>
+                    <div id="partie4" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-gray-100 rounded-xl border-l-4 border-gray-600">
+                            <strong>Une prise de recul scientifique :</strong> Après l'intensité sanglante et pathétique de la confession de Don José, le roman se clôt surprendra sur un dernier chapitre aux allures d'essai scientifique. Le narrateur reprend la parole pour livrer au lecteur ses observations d'érudit sur les peuples bohémiens d'Espagne, sur leur histoire, leur mode de vie, leurs superstitions et surtout leur langue, le romani. 
+                        </div>
+                        <div class="p-5 bg-yellow-50 rounded-xl border-l-4 border-yellow-600">
+                            <strong>Le retour au réel :</strong> Ce chapitre a souvent dérouté les lecteurs, mais il a une fonction littéraire majeure. Il agit comme un sas de décompression. Mérimée rappelle ainsi que cette histoire n'est pas un conte romantique exagéré, mais une plongée réaliste et documentée dans une culture marginale. Cette distance scientifique refroidit la passion tragique du chapitre précédent et inscrit définitivement le mythe de la bohémienne fatale dans la réalité du XIXe siècle.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ONGLET 3: FICHES ORAL ================= -->
+        <section id="oral" class="tab-content">
+            
+            <!-- PRÉSENTATION -->
+            <div id="oral-presentation" class="mb-12 bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-8 border-b border-slate-100 pb-4">
+                    <span class="bg-slate-800 text-white font-black px-4 py-2 rounded-xl text-2xl">1</span>
+                    <h3 class="text-3xl font-black text-slate-800">Présentation <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">1 min</span></h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 1</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Je vais vous présenter Carmen, une nouvelle de Prosper Mérimée publiée en 1845. Cette œuvre est un joyau de la littérature du dix-neuvième siècle, à la croisée parfaite entre le mouvement romantique, par son goût de l'exotisme et des passions tragiques dévastatrices, et le mouvement réaliste, par son ton presque documentaire et la crudité de ses descriptions. Bien qu'elle soit mondialement connue aujourd'hui grâce à l'opéra de Georges Bizet, la nouvelle originale est beaucoup plus sombre et violente. J'ai choisi cette œuvre car elle a fondé l'un des mythes les plus puissants de notre culture : celui de la femme fatale. Mérimée nous y conte la chute vertigineuse d'un jeune homme promis à un avenir brillant, broyé par une passion charnelle toxique et absolue pour une bohémienne qui place sa propre liberté au-dessus de sa propre vie.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 2</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Aujourd'hui, j'ai décidé de vous parler de Carmen, écrite par Prosper Mérimée en 1845. Ce texte court et intense est une illustration parfaite de l'engouement de l'époque pour le voyage et le dépaysement. L'intrigue nous plonge dans les paysages brûlants de l'Andalousie espagnole, loin des salons parisiens étouffants de la monarchie de Juillet. Ce qui m'a profondément captivé dans cette lecture, c'est l'affrontement frontal entre deux visions du monde totalement irréconciliables. D'un côté, nous avons Don José, un militaire basque élevé dans le culte de l'honneur, de la fidélité, de la religion et du devoir de l'homme honnête. De l'autre, nous avons Carmen, une gitane marginale qui ne connaît aucune règle sociale, aucun Dieu, et qui vit dans une amoralité revendiquée. C'est ce choc des cultures, où l'ordre institutionnel se fait vampiriser par la sauvagerie instinctuelle, qui donne à l'œuvre toute sa dimension tragique.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 3</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Mon choix s'est porté sur Carmen de Prosper Mérimée, un chef-d'œuvre paru en 1845. J'ai été fasciné par la construction narrative extrêmement habile de cette nouvelle. Mérimée ne nous livre pas l'histoire de la bohémienne directement. Il utilise le procédé du récit enchâssé. L'histoire principale est encadrée par le récit d'un narrateur français, un archéologue froid et objectif qui ressemble beaucoup à Mérimée lui-même. C'est seulement plus tard, dans le couloir de la mort d'une prison, que le criminel Don José prend la parole pour livrer son ultime confession à ce savant. Cette structure crée un contraste saisissant : la folie meurtrière, le banditisme et les passions sanglantes de l'Espagne profonde sont filtrés par la raison, le vocabulaire policé et l'œil presque clinique d'un intellectuel parisien, ce qui empêche le récit de sombrer dans le mélodrame larmoyant.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 4</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">L'œuvre que je souhaite vous présenter est Carmen de Prosper Mérimée, publiée en 1845. Ce livre s'est imposé à moi car il constitue une véritable anatomie de l'aliénation amoureuse. Bien avant les grandes études psychologiques contemporaines, Mérimée nous démontre que la passion n'est ni un conte de fées ni une quête d'élévation spirituelle. L'amour que porte Don José à Carmen est décrit comme une maladie, un envoûtement diabolique, une véritable dépossession de soi. Le héros perd toute dignité, tout honneur et tout statut social. Il trahit l'armée, tue ses collègues, accepte de partager la femme qu'il aime avec d'autres hommes par pure faiblesse, avant que sa jalousie ne le transforme finalement en bête féroce. C'est un roman d'une noirceur absolue sur la façon dont l'obsession de posséder l'autre mène inévitablement à la destruction physique et morale des deux amants.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RÉSUMÉ EXPRESS -->
+            <div id="oral-resume" class="mb-12 bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-8 border-b border-slate-100 pb-4">
+                    <span class="bg-emerald-400 text-white font-black px-4 py-2 rounded-xl text-2xl">2</span>
+                    <h3 class="text-3xl font-black text-slate-800">Résumé Express <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">2 min</span></h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 1</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">Le récit s'ouvre de manière indirecte en 1830. Un archéologue français en voyage scientifique en Andalousie se lie d'amitié avec un dangereux bandit recherché, Don José, à qui il permet d'échapper aux autorités. Quelques mois plus tard, à Cordoue, ce même narrateur est séduit par Carmen, une gitane d'une beauté sauvage. Alors qu'elle s'apprête à le détrousser dans une ruelle sombre, Don José surgit et sauve le savant français, remboursant ainsi sa dette. <br><br>Ce n'est que dans la troisième partie que le véritable drame est raconté. Le narrateur retrouve Don José, condamné à mort, dans sa cellule. Le bandit confesse alors toute sa tragédie. D'origine noble et promis à un bel avenir comme brigadier dans l'armée, il a tout perdu le jour où il a été chargé d'escorter Carmen en prison après une bagarre sanglante. Usant de ses charmes, elle l'a envoûté et il l'a laissée s'enfuir. <br><br>C'est le début d'une longue et inexorable descente aux enfers. Pour les beaux yeux de la gitane, José devient déserteur, assassin de ses officiers, puis contrebandier dans les montagnes. Rongé par une jalousie maladive face à l'inconstance cruelle de Carmen, qui revendique sa liberté sexuelle absolue, il finit par assassiner le mari de celle-ci. Mais Carmen s'éprend d'un autre homme, le toréador Lucas. Désespéré, José la supplie de s'enfuir avec lui en Amérique pour changer de vie. Face à son refus catégorique et son désir farouche d'indépendance, il la poignarde mortellement dans une gorge isolée avant de se livrer à la justice, achevant ainsi sa confession.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 2</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">L'architecture de l'œuvre repose sur le procédé de la confession d'un condamné. La nouvelle débute avec l'aventure d'un archéologue français qui, au hasard de ses recherches en Espagne, croise la route d'un criminel de grand chemin, Don José, puis de la sulfureuse gitane Carmen. Cette introduction permet d'installer une atmosphère d'exotisme et de danger. Le basculement tragique s'opère lorsque le narrateur rend visite à Don José la veille de son exécution à Séville, recueillant le récit de la chute pathétique de cet homme autrefois honorable.<br><br>José y explique comment sa vie a été détruite par un seul regard. Brigadier rigide et vertueux, sa rencontre avec Carmen, l'ouvrière insoumise de la manufacture de cigares, est fatale. Envoûté par cette femme manipulatrice, il sacrifie son grade pour lui éviter la prison. Cette première faiblesse entraîne un effet domino terrifiant. Poussé par la passion et la jalousie, le noble Basque se transforme en criminel, égorgeant ses rivaux et rejoignant une bande de contrebandiers sans foi ni loi pour pouvoir vivre avec elle.<br><br>Le dénouement cristallise la tragédie de l'incompatibilité amoureuse. Don José rêve d'une vie rangée, de possession exclusive et d'un amour traditionnel. Mais Carmen est l'allégorie même de la liberté farouche, refusant d'appartenir à quiconque. Lorsqu'elle tombe amoureuse d'un picador et rejette les dernières supplications de José, elle accepte calmement son destin dicté par les cartes. José la tue froidement de deux coups de couteau. Il enterre le cadavre de la femme qu'il idolâtre et court dénoncer son meurtre, soldant ainsi une passion où l'amour et la mort sont intimement confondus.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 3</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">Carmen est l'histoire d'une contamination psychologique. Le livre s'ouvre sur les notes de voyage d'un intellectuel parisien qui explore l'Andalousie pittoresque des années 1830. Par un concours de circonstances, il se retrouve protégé par le grand bandit Don José, juste avant de faire la connaissance troublante de Carmen, une sorcière bohémienne voleuse. Le cœur du roman est constitué par le retour en arrière narré par José depuis la prison où il attend son exécution par le garrot.<br><br>José relate comment sa carrière militaire brillante a été foudroyée par une passion irrationnelle pour Carmen. Celle-ci joue avec lui avec une cruauté féline. Après qu'il l'a laissée fuir par faiblesse charnelle, elle le récompense par quelques heures de passion volées, puis le rejette dans les abîmes de la jalousie en batifolant avec ses officiers. Perdant toute boussole morale, José devient un hors-la-loi. Il tue par colère, déserte et devient un meurtrier endurci uniquement pour obtenir le droit de rester dans le sillage de cette femme vénéneuse.<br><br>La fin de l'œuvre scelle le drame de la fatalité. Carmen, qui est très superstitieuse, a lu dans les cartes qu'ils mourraient tous les deux tragiquement. Lassée de la possessivité étouffante de José, elle l'écarte pour un nouvel amant, Lucas. Dans une confrontation finale haletante dans la montagne, José lui offre un dernier choix : le suivre en exil au bout du monde, ou mourir. Affirmant avec un orgueil immense que son libre arbitre vaut plus que sa propre vie corporelle, Carmen jette sa bague au visage de José. Fou de douleur, il l'assassine, la transformant en mythe éternel. Le livre se clôt surprenamment sur un essai linguistique concernant les gitans, redonnant une distance froide à cette histoire de sang.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 4</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">L'œuvre de Prosper Mérimée est une autopsie de la passion destructrice, encadrée par un récit de voyage très réaliste. L'auteur nous présente d'abord un archéologue français, un esprit rationnel, qui fait la découverte du folklore espagnol brutal à travers les figures de Don José et de Carmen. Le roman prend toute sa dimension dramatique dans le troisième chapitre, lorsque le narrateur écoute la confession poignante de Don José, la veille de sa mise à mort.<br><br>José confesse avoir été un soldat loyal, originaire des montagnes basques. Sa rencontre avec Carmen, ouvrière effrontée, le désarme totalement. Envoûté par un charme presque magique, il choisit de la libérer plutôt que de faire son devoir. Dès cet instant, il est happé dans une spirale criminelle. Chaque tentative pour posséder le cœur de Carmen le pousse à commettre un acte de plus en plus grave. Il tue par jalousie, devient chef de bande, et vit comme une bête sauvage, supportant toutes les trahisons et les humiliations infligées par une gitane qui se joue de ses sentiments avec un mépris total.<br><br>Le dernier acte est celui du meurtre inévitable. Comprenant que Carmen ne lui appartiendra jamais vraiment et qu'elle s'est offerte à un toréador, José tente de forcer le destin. Il l'emmène dans un ravin désert et l'implore de fuir en Amérique pour laver son honneur. Carmen lui oppose un refus tranchant, crachant sur ses menaces de mort et revendiquant fièrement son indépendance sauvage. Impuissant face à une volonté plus forte que la sienne, José la tue de ses propres mains, la couvrant de larmes. Après avoir enterré le cadavre, il court se rendre à un poste de garde. Le roman fige ainsi l'image de la femme libérée et de l'homme brisé par son incapacité à la dompter.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MOTIVATIONS -->
+            <div id="oral-motivations" class="mb-12">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="bg-emerald-700 text-white font-black px-4 py-2 rounded-xl text-2xl">3</span>
+                    <h3 class="text-3xl font-black text-slate-800">Mes 10 Arguments (Motivations) <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">2 min au total</span></h3>
+                </div>
+                <p class="text-sm text-slate-500 mb-8 font-bold">Cliquez sur les fiches pour les retourner et mémorisez l'analyse (2 fiches suffisent pour tenir les 2 minutes). Les 3 dernières fiches vous permettent de tisser le lien avec « Manon Lescaut ».</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 perspective-1000">
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-emerald-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🕊️</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 1</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">L'héroïne tragique et libre</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-emerald-50 border border-emerald-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Ce qui m'a profondément fasciné, c'est l'incroyable modernité du personnage de Carmen. Loin des héroïnes romantiques fragiles et larmoyantes du dix-neuvième siècle, Carmen est une femme qui érige son indépendance absolue comme la seule valeur suprême de son existence. Face aux menaces de mort de José, elle refuse la moindre soumission. Son acte final, où elle rejette la possibilité de s'enfuir et de vivre cachée en Amérique en échange de son obéissance, est d'une immense grandeur tragique. Elle choisit volontairement l'anéantissement physique plutôt que d'accepter l'aliénation de son libre arbitre féminin.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-emerald-600 shadow-sm">
+                                    <strong>Chapitre III (Scène finale) :</strong><br>
+                                    T'aimer encore, c'est impossible. Vivre avec toi, je ne le veux pas. [...] libre elle est née, et libre elle mourra.
+                                </div>
+                                <div class="bg-emerald-100 p-2 rounded-lg text-xs mt-2 font-medium text-emerald-900">
+                                    <strong>Analyse littéraire :</strong> L'utilisation forte de la parataxe (phrases courtes sans lien logique) marque la dureté et l'irrévocabilité de sa décision. Le chiasme final autour de l'adjectif "libre" (libre née / libre mourra) encadre toute son existence, transformant cette gitane marginale en une véritable allégorie philosophique de la liberté existentielle.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-red-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🩸</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 2</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">La Chute Inéluctable</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-red-50 border border-red-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai été très sensible à la trajectoire de déchéance de Don José. L'auteur nous décrit la lente et terrible décomposition morale d'un homme qui était initialement pétri de valeurs nobles, de religion et de respect militaire. Mérimée nous montre avec une précision clinique comment un seul sentiment, s'il n'est pas maîtrisé, suffit à ravager une vie entière. L'amour n'est pas présenté ici comme un élan positif, mais comme un poison, un venin qui force un homme droit à accumuler les crimes (désertion, meurtre, contrebande) jusqu'à se transformer en un monstre sanguinaire qui finit par détruire l'objet même de son adoration.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-red-600 shadow-sm">
+                                    <strong>Chapitre III :</strong><br>
+                                    Je pensais aux bons moments que j'avais passés [...] et je voyais à présent que je n'étais qu'un voleur, un assassin.
+                                </div>
+                                <div class="bg-red-100 p-2 rounded-lg text-xs mt-2 font-medium text-red-900">
+                                    <strong>Analyse littéraire :</strong> L'antithèse brutale entre le champ lexical du bonheur passé ("bons moments") et la réalité écrasante des substantifs péjoratifs du présent ("voleur", "assassin"). La structure restrictive "ne... que" scelle le désespoir lucide du personnage qui constate l'anéantissement total de son identité d'origine et de son honneur basque.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-orange-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">📖</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 3</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le Récit Enchâssé</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-orange-50 border border-orange-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">La technique narrative choisie par Mérimée est d'une grande intelligence pour éviter les lourdeurs du romantisme. En utilisant la technique du récit enchâssé (une histoire à l'intérieur d'une autre histoire), l'auteur crée une puissante distance ironique et protectrice. La passion sanglante, chaotique et irrationnelle de José n'est pas décrite en direct, elle est rapportée avec un filtre de froideur par un narrateur archéologue parisien aux manières policées. Ce cadre rationnel et savant vient encercler le désordre des pulsions criminelles andalouses, donnant au mythe une crédibilité presque historique et documentaire qui frappe le lecteur avec d'autant plus de force.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-orange-500 shadow-sm">
+                                    <strong>Structure narrative :</strong><br>
+                                    Le passage permanent du "Je" du savant flegmatique du début au "Je" passionné et meurtrier de Don José dans la cellule du condamné.
+                                </div>
+                                <div class="bg-orange-100 p-2 rounded-lg text-xs mt-2 font-medium text-orange-900">
+                                    <strong>Analyse littéraire :</strong> Cette rupture des points de vue s'appelle la polyphonie narrative. Le contraste entre le registre soutenu et académique du narrateur primaire et le lyrisme sec et désespéré du criminel accentue la fascination pour le monde des marges (le banditisme, la culture gitane) incompréhensible pour la société bourgeoise française.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-purple-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">⚡</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 4</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le Choc des Cultures</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-purple-50 border border-purple-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Une grande dimension du récit réside dans l'étude sociologique des contraires. La nouvelle n'est pas qu'une simple histoire d'amour, c'est la confrontation violente et insoluble de deux visions du monde. D'un côté, la civilisation et l'ordre patriarcal : Don José, le militaire basque, façonné par les règles strictes, l'honneur familial, la foi religieuse et le concept de la propriété exclusive (vouloir que l'autre lui appartienne). De l'autre côté, l'état de nature sauvage : Carmen, la bohémienne, qui se rit des frontières, du travail, de l'Église, et qui considère l'amour comme un jeu éphémère. Le drame naît fatalement de cette incompréhension linguistique et culturelle totale entre les deux amants.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-purple-600 shadow-sm">
+                                    <strong>Chapitre III :</strong><br>
+                                    C'était une coutume de son pays, et de moi, bon Navarrais, elle faisait un Andalou.
+                                </div>
+                                <div class="bg-purple-100 p-2 rounded-lg text-xs mt-2 font-medium text-purple-900">
+                                    <strong>Analyse littéraire :</strong> L'ironie amère de la phrase repose sur le déracinement identitaire. La force de l'aliénation amoureuse est si forte qu'elle détruit la matrice originelle de l'homme : le Basque rigide (Navarrais) est littéralement muté en un être qu'il méprisait (l'Andalou volage et criminel).
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-yellow-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🔮</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 5</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le Fatalisme et la Superstition</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-yellow-50 border border-yellow-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai été fasciné par la présence obsédante de la mort et du destin scellé, qui donne à cette nouvelle romantique des allures de véritable tragédie antique. Dès les premières pages, le mauvais œil et la superstition planent sur les héros. Carmen passe son temps à consulter les cartes, qui lui annoncent invariablement sa propre fin violente aux mains de José. Le plus terrifiant, c'est l'acceptation stoïque de ce destin par l'héroïne. Elle ne cherche jamais à fuir ou à éviter la mort, considérant qu'il est absolument inutile de lutter contre les arrêts de la fatalité. Cette soumission sereine au destin participe énormément à l'aura mythologique de la femme fatale.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-yellow-500 shadow-sm">
+                                    <strong>Chapitre III :</strong><br>
+                                    J’ai toujours pensé que tu me tuerais... C’est écrit, mais tu ne me feras pas céder.
+                                </div>
+                                <div class="bg-yellow-100 p-2 rounded-lg text-xs mt-2 font-medium text-yellow-900">
+                                    <strong>Analyse littéraire :</strong> L'utilisation du verbe "écrit" fait directement référence au concept oriental du Mektoub (le destin inaltérable). L'antithèse magistrale entre l'acceptation physique de l'assassinat ("tu me tuerais") et la rébellion spirituelle farouche ("tu ne me feras pas céder") sacralise la volonté inébranlable du personnage.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-pink-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🔍</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 6</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le réalisme documentaire</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-pink-50 border border-pink-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Une caractéristique inattendue de l'œuvre est son acharnement à peindre la réalité la plus crue pour équilibrer le romantisme de l'histoire. L'étrange chapitre IV, qui se présente comme un véritable dictionnaire ethnographique sur le langage (le romani), les croyances et l'hygiène des peuples gitans, n'est pas une simple erreur de l'auteur. Mérimée veut ancrer son mythe dans le réel tangible du dix-neuvième siècle. De la même manière, les scènes de la manufacture de cigares ou de la vie des contrebandiers dans les sierras rocailleuses sont décrites avec un réalisme minutieux et sans fard, s'éloignant des idéalisations poétiques traditionnelles de l'Espagne.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-pink-500 shadow-sm">
+                                    <strong>Chapitre IV (Digression) :</strong><br>
+                                    L'abondance des notes de bas de page et des traductions directes de la langue romani (Callo) pour expliquer les coutumes.
+                                </div>
+                                <div class="bg-pink-100 p-2 rounded-lg text-xs mt-2 font-medium text-pink-900">
+                                    <strong>Analyse littéraire :</strong> Ce procédé relève de l'illusion référentielle (typique du Réalisme naissant). En inondant le texte de preuves scientifiques, de notes de bas de page érudites et de mots étrangers vérifiables, l'auteur contraint le lecteur à suspendre son incrédulité et à accepter la véracité brute du crime passionnel.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-gray-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🔪</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 7</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">La cruauté de la possession passionnelle</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-gray-50 border border-gray-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Ce qui m'a dérangé et passionné à la fois, c'est la déconstruction de l'idée même de l'amour. Dans Carmen, l'amour n'est jamais synonyme de bonté ou d'élévation, c'est une obsession malsaine et égoïste basée sur le besoin de propriété. José ne veut pas voir Carmen heureuse, il veut simplement qu'elle n'appartienne qu'à lui, la considérant comme un bien exclusif. Lorsqu'il comprend qu'il ne pourra jamais emprisonner l'esprit volatile de la jeune femme dans les schémas du mariage bourgeois, sa passion se transforme logiquement en haine pure. Le meurtre final n'est donc pas un "crime passionnel" excusable, c'est l'exécution froide d'une possession contrariée.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-gray-600 shadow-sm">
+                                    <strong>Chapitre III :</strong><br>
+                                    Je fus sur le point de me jeter sur elle et de l'étrangler... Je voulais m'assurer d'elle pour toujours.
+                                </div>
+                                <div class="bg-gray-200 p-2 rounded-lg text-xs mt-2 font-medium text-gray-800">
+                                    <strong>Analyse littéraire :</strong> L'emploi du verbe "s'assurer" est issu du lexique financier ou matériel (comme on s'assure d'une marchandise). Cela révèle la vision profondément possessive et machiste de l'amant romantique, pour qui la destruction (le meurtre) est la seule alternative acceptable à l'évasion de l'objet aimé.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 8 (LIEN MANON LESCAUT) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🔗</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Manon Lescaut 1</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">La figure de la Femme Fatale</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Il m'a semblé absolument inévitable d'établir un lien direct entre Carmen et le chef-d'œuvre de l'Abbé Prévost, Manon Lescaut. Les deux héroïnes sont les figures fondatrices du mythe de la "Femme Fatale" dans la littérature française. Elles partagent ce pouvoir mystérieux et irrésistible qui détruit méthodiquement la droiture des hommes. Toutes deux sont issues de milieux marginaux, vivent dans l'immoralité ou la transgression sociale (le vol et le mensonge pour l'une, la prostitution et le luxe pour l'autre), et se refusent systématiquement à la fidélité bourgeoise ou religieuse, menant leurs amants respectifs à la ruine, à l'infamie, et à l'exil.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Prévost (Manon Lescaut) :</strong><br>
+                                    L'amour est une passion innocente ; comment s'est-il changé, pour moi, en une source de misères et de désordres ?
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> Comme Don José, le Chevalier des Grieux est incapable de comprendre comment l'émerveillement de la première rencontre (l'Éden idéalisé) a pu se métamorphoser en une malédiction diabolique, blâmant naïvement le sort plutôt que la force manipulatrice féminine à laquelle il a aveuglément succombé.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 9 (LIEN MANON LESCAUT) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">⚖️</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Manon Lescaut 2</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">La confession du coupable</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Une autre similitude structurelle et psychologique frappante entre les deux œuvres est l'utilisation du récit rétrospectif. Dans les deux cas, le drame nous est raconté a posteriori par l'homme brisé. Le Chevalier des Grieux livre sa confession larmoyante à un noble (M. de Renoncourt) de passage dans une auberge, tout comme Don José vide sa conscience auprès de l'archéologue dans sa cellule de condamné à mort. Cette confession à un représentant de l'ordre moral supérieur est une ultime tentative désespérée de ces assassins déchus pour susciter la pitié du lecteur, pour justifier leurs fautes morales, et pour plaider l'excuse absolutoire de la passion aveugle.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Prévost (Manon Lescaut) :</strong><br>
+                                    Je franchis les degrés de la honte sans m'en apercevoir. (Des Grieux)
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> Exactement comme le militaire basque Don José qui glisse de l'honneur vers l'assassinat en croyant protéger son amour, Des Grieux tente d'excuser la dégradation de son honneur (la honte, la triche) en invoquant l'aveuglement pathologique ("sans m'en apercevoir") induit par l'amour, qui absoudrait sa responsabilité.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 10 (LIEN MANON LESCAUT) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">💀</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Manon Lescaut 3</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">Le Dénouement Tragique de l'Héroïne</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Enfin, l'issue fatale des deux héroïnes démontre qu'à ces époques de la littérature, la grande passion transgressive est fatalement condamnée à mort. Manon comme Carmen finissent par trouver la mort dans un lieu hostile, aride et désertique, loin de la civilisation (le désert américain pour Manon, la gorge isolée des montagnes andalouses pour Carmen). Cependant, la leçon diffère légèrement. Manon meurt de fatigue et de misère, punie indirectement par la société bourgeoise pour sa vénalité passée. Carmen, en revanche, ne meurt pas d'une cause naturelle extérieure : elle est activement assassinée par son propre amant parce qu'elle revendique, jusqu'à son ultime souffle, sa liberté existentielle absolue.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Prévost (Manon Lescaut) :</strong><br>
+                                    Je rompis mon épée, pour m'en servir à creuser...
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> Comme l'enterrement désespéré et primitif de Manon creusé à la force des mains par des Grieux pour effacer sa faute, José creuse une fosse dans le bois pour y cacher le corps de Carmen et la petite bague. L'enterrement secret scelle la futilité totale et tragique de leurs combats contre la norme.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= ONGLET 4: QUESTIONS DU JURY ================= -->
+        <section id="questions" class="tab-content">
+            
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-black text-blue-900 mb-4 uppercase">Entretien avec le Jury (3 min)</h2>
+                <p class="text-lg text-slate-600 max-w-4xl mx-auto">
+                    Voici 20 questions réactives (sous forme de flashcards) que le jury pourrait vous poser en fonction de l'exposé que vous venez de faire. Cliquez pour voir la réponse.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 perspective-1000">
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">1. Quelle est la différence littéraire entre un roman et une nouvelle comme Carmen ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Une nouvelle est un récit bref, concentré sur très peu de personnages et une action resserrée. Elle se caractérise par une intensité dramatique forte et se termine généralement par une "chute" soudaine et souvent tragique, contrairement au roman qui développe longuement des destins et des ramifications sociales.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">2. Pourquoi Mérimée a-t-il ajouté ce curieux chapitre 4 sur l'ethnologie des Gitans ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est un procédé de réalisme. Après la violence émotionnelle du meurtre racontée par José au chapitre 3, le narrateur savant reprend la parole pour "refroidir" le texte. Il donne à l'œuvre une crédibilité documentaire et empêche le récit de sombrer dans le mélodrame romantique pur.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">3. Qu'est-ce qu'un "récit enchâssé" et pourquoi l'utiliser ici ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est le principe des poupées russes : une histoire (celle de José) racontée à l'intérieur d'une autre histoire principale (celle de l'archéologue). Cela permet d'avoir deux points de vue très différents (l'émotion brûlante de l'assassin et l'observation froide et distante du Parisien).
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">4. Vous parlez du choc des cultures. Qui représente quoi exactement ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Don José représente la noblesse provinciale (le pays Basque), l'ordre, la religion, l'armée, le devoir et l'idée bourgeoise de fidélité et de possession. Carmen représente l'anarchie bohème, le refus de s'attacher, le mépris des lois, le vol et une liberté de mouvement et de mœurs absolue.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">5. Dans l'opéra très célèbre de Georges Bizet, l'histoire est-elle identique ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            L'opéra a édulcoré la noirceur de la nouvelle originelle. Bizet a ajouté des personnages purs (comme Micaëla, fiancée de José, qui n'existe pas dans le livre) pour créer un contraste romantique. Le livre est beaucoup plus cru, José y est un meurtrier en série, égorgeant plusieurs hommes sans pitié.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">6. Comment s'exprime l'exotisme dans l'œuvre de Mérimée ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Par le "couleur locale". Mérimée utilise de nombreux mots en espagnol et en romani (la langue gitane), détaille minutieusement les costumes (les mantilles, les éventails), décrit la fureur de la corrida et les paysages arides et inhospitaliers des montagnes andalouses pour fasciner le lecteur parisien.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">7. Pourquoi Carmen refuse-t-elle de fuir en Amérique avec José à la toute fin ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Elle ne veut pas d'une vie rangée sous l'autorité constante d'un mari possessif. L'Amérique symbolise pour José le rachat et le mariage bourgeois, mais pour Carmen, cela signifierait l'enfermement, le reniement de son identité de femme libre et de gitane sans attaches.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">8. Que nous révèle la scène de sorcellerie (lorsque Carmen lit l'avenir du narrateur) ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Elle sert à installer l'idée de la fatalité. Carmen et son peuple croient profondément au destin magique et inaltérable. Si elle accepte la mort à la fin sans chercher à fuir, c'est parce qu'elle "savait" que les cartes avaient déjà annoncé qu'elle mourrait des mains de cet homme.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">9. Dans la comparaison avec "Manon Lescaut", diriez-vous que Carmen aime l'argent comme Manon ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Non, la vénalité est différente. Manon Lescaut adore le grand luxe, l'opéra, la soie et les bijoux parisiens, elle se prostitue pour la richesse. Carmen, elle, vole par pur atavisme, par jeu, pour survivre et narguer l'autorité des nobles (les "payllos"), mais elle se contente d'une vie misérable dans la montagne.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">10. Pourquoi Don José tue-t-il Carmen ? Est-ce par jalousie envers Lucas le toréador ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            La jalousie est le déclencheur immédiat, mais ce n'est pas la cause profonde. José la tue par impuissance : il réalise qu'il ne pourra jamais dompter son âme. Le meurtre est l'acte final d'un homme voulant posséder absolument un objet rebelle, détruisant ce qu'il ne peut pas maîtriser.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">11. Quel rôle joue l'honneur dans la psychologie de Don José ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est le cœur de sa tragédie intime. Issu de Navarre (Pays basque), il place l'honneur militaire et moral au-dessus de tout. Chaque faute commise pour Carmen est perçue par lui comme une dégradation atroce. L'obsession pour la gitane s'accompagne donc d'une immense haine de soi d'avoir sali son rang.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">12. Mérimée juge-t-il moralement le meurtre de Carmen par José ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Il se garde de juger explicitement, ce qui est caractéristique du réalisme. Le narrateur (l'archéologue) écoute la confession de José sans le condamner religieusement, le laissant seul face à l'énigme de la passion humaine, qui est décrite davantage comme une maladie pathologique que comme un péché volontaire.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">13. Carmen n'est-elle qu'une simple manipulatrice cynique ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Non. Bien qu'elle mente, vole et pousse José au crime, elle possède sa propre "morale de bohémienne". Elle rembourse ses dettes, elle soigne José blessé, et surtout, elle est d'une honnêteté brutale à la fin sur le fait qu'elle ne l'aime plus, refusant de lui mentir pour sauver sa propre vie.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">14. En quoi ce texte est-il typique du Romantisme de la première moitié du XIXe siècle ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Par sa célébration des marginaux (le hors-la-loi, la bohémienne) érigés en héros rebelles luttant contre la société bourgeoise étouffante. La mort tragique liée à l'impossibilité de la passion pure et le goût des décors grandioses et sauvages sont l'essence du mouvement.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">15. Quel est le sens de la scène de la manufacture de cigares où l'on découvre Carmen ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est une scène inaugurale très crue. Carmen y est décrite transpirante, les épaules dénudées, ayant balafré le visage d'une collègue avec un couteau. Cela détruit le mythe de la princesse précieuse : c'est une héroïne très charnelle, dangereuse, animale et ancrée dans le prolétariat féroce.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">16. Pourquoi le mari de Carmen, Garcia le Borgne, devait-il mourir dans l'intrigue ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est une étape cruciale de la dégradation de José. Au début, José tue ses officiers presque par "honneur" outragé ou accidentellement. Mais il prémédite et égorge froidement Garcia dans le dos pour le rayer de la carte et posséder Carmen. Il devient là un assassin cynique et monstrueux, tombant au niveau des pires bandits.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">17. Y a-t-il un message politique sur la place de la femme dans cette nouvelle ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Mérimée a créé un véritable modèle d'insoumission féministe. Carmen revendique avec fierté le droit de choisir ses amants et de les quitter, refusant l'obéissance domestique imposée par la société du XIXe siècle aux épouses, quitte à en mourir en martyr de l'indépendance.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">18. La prison est-elle un lieu métaphorique dans le texte ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Oui, la thématique de l'enfermement est partout. La vraie prison n'est pas le cachot de José à Séville, mais la passion aliénante. José est prisonnier de son obsession pour Carmen, tandis que Carmen lutte en permanence pour échapper à toutes les prisons, qu'elles soient légales, maritales ou amoureuses.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">19. Peut-on dire que José s'adresse à nous, lecteurs, lors de sa confession ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Indirectement, oui. La confession a une fonction justificatrice : le héros plaide coupable mais demande notre clémence. C'est l'essence du mythe du bandit d'honneur : il cherche à prouver que le Destin (le mauvais œil de la femme) est le vrai criminel, ce qui provoque la catharsis.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">20. Que retenez-vous personnellement de la lecture de cette œuvre pour votre culture littéraire ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Elle m'a appris comment la littérature construit des mythes intemporels. Par sa concision et son refus de l'idéalisation niaise, Mérimée a fixé pour des siècles l'archétype de la femme fatale fascinante, montrant que l'amour ne se réduit pas à un sentiment noble, mais qu'il cache toujours une dimension destructrice et mortelle.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Scripts pour l'interactivité -->
+    <script>
+        // Gestion des Onglets
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('button[id^="nav-"]').forEach(btn => {
+                btn.classList.remove('border-emerald-600', 'text-emerald-600', 'bg-emerald-50');
+                btn.classList.add('border-transparent', 'text-slate-500');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            
+            const activeBtn = document.getElementById('nav-' + tabId);
+            activeBtn.classList.remove('border-transparent', 'text-slate-500');
+            activeBtn.classList.add('border-emerald-600', 'text-emerald-600', 'bg-emerald-50');
+        }
+
+        // Gestion de l'Accordéon du Résumé
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.innerText = '-';
+            } else {
+                content.classList.add('hidden');
+                icon.innerText = '+';
+            }
+        }
+
+        // Graphique Chart.js (Stratégie & Temps)
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('timingChart').getContext('2d');
+            const data = {
+                labels: ['Présentation (1 min)', 'Résumé (2 min)', 'Motivations & Arguments (2 min)', 'Entretien / Questions (3 min)'],
+                datasets: [{
+                    data: [1, 2, 2, 3],
+                    backgroundColor: [
+                        '#1e293b', // slate-800
+                        '#34d399', // emerald-400
+                        '#047857', // emerald-700
+                        '#3b82f6'  // blue-500
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    hoverOffset: 6
+                }]
+            };
+
+            const config = {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            align: 'start',
+                            labels: {
+                                font: { family: "sans-serif" },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) { label = label.split(' (')[0]; }
+                                    return label + ' : ~' + context.raw + ' min';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            };
+
+            new Chart(ctx, config);
+        });
+    </script>
+</body>
+</html>

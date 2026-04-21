@@ -2,23 +2,65 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>L'Oral - Bac de Français</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="text-slate-800 font-sans min-h-screen flex flex-col">
-    <header class="bg-emerald-800 text-white p-6 shadow-md flex items-center justify-between">
-        <a href="index.html" class="text-white hover:text-emerald-200 font-bold text-lg nav-link">&larr; Accueil</a>
-        <h1 class="text-2xl font-black uppercase tracking-widest">L'Épreuve Orale</h1>
-        <div class="w-20"></div>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+    <!-- En-tête -->
+    <header class="bg-emerald-800 text-white p-4 md:p-6 shadow-md flex items-center justify-between shrink-0">
+        <a href="index.html" class="text-white hover:text-emerald-200 font-bold text-sm md:text-lg nav-link">&larr; Accueil</a>
+        <h1 class="text-xl md:text-2xl font-black uppercase tracking-widest text-center">L'Épreuve Orale</h1>
+        <div class="w-16 md:w-32"></div>
     </header>
 
-    <main class="flex-grow flex items-center justify-center p-10 fade-in text-center">
-        <div>
-            <span class="text-6xl block mb-6">🚧</span>
-            <h2 class="text-4xl font-black text-emerald-900 mb-4">Espace en construction</h2>
-            <p class="text-xl text-gray-600">L'onglet pour les lectures linéaires et la présentation de l'œuvre arrivera bientôt.</p>
+    <main class="flex-grow p-4 md:p-10 relative flex flex-col">
+        
+        <!-- Menu Principal de l'Oral -->
+        <div id="oral-menu" class="max-w-5xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 fade-in flex-grow content-center mt-6 md:mt-12">
+            <button onclick="afficherPartie(1)" class="bg-teal-600 hover:bg-teal-700 text-white p-10 md:p-16 rounded-3xl shadow-lg transition transform hover:scale-105 flex flex-col items-center justify-center text-center">
+                <span class="text-5xl md:text-6xl mb-4">📖</span>
+                <h2 class="text-2xl md:text-4xl font-black mb-3">1ère Partie</h2>
+                <p class="text-teal-100 text-sm md:text-lg px-4">Exposé sur l'œuvre et Lecture Linéaire (4 objets d'étude).</p>
+            </button>
+            <button onclick="afficherPartie(2)" class="bg-emerald-600 hover:bg-emerald-700 text-white p-10 md:p-16 rounded-3xl shadow-lg transition transform hover:scale-105 flex flex-col items-center justify-center text-center">
+                <span class="text-5xl md:text-6xl mb-4">💬</span>
+                <h2 class="text-2xl md:text-4xl font-black mb-3">2ème Partie</h2>
+                <p class="text-emerald-100 text-sm md:text-lg px-4">Entretien et présentation de l'œuvre (Lecture cursive).</p>
+            </button>
         </div>
+
+        <!-- Partie 1 (En construction pour le moment) -->
+        <div id="oral-partie1" class="hidden max-w-5xl mx-auto w-full fade-in flex-grow flex flex-col">
+            <div class="mb-8">
+                <button onclick="retourMenuOral()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-lg transition shadow-sm">&larr; Retour au menu</button>
+            </div>
+            <div class="text-center flex-grow flex flex-col items-center justify-center pb-20">
+                <span class="text-6xl md:text-8xl block mb-6">🚧</span>
+                <h2 class="text-3xl md:text-4xl font-black text-teal-900 mb-4">Espace en construction</h2>
+                <p class="text-lg md:text-xl text-gray-500">L'onglet pour les lectures linéaires arrivera très bientôt.</p>
+            </div>
+        </div>
+
+        <!-- Partie 2 (Grille des Lectures Cursives) -->
+        <div id="oral-partie2" class="hidden max-w-6xl mx-auto w-full fade-in">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6 md:mb-10 gap-4">
+                <button onclick="retourMenuOral()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-lg transition shadow-sm self-start md:self-auto">&larr; Retour</button>
+                <h2 class="text-2xl md:text-4xl font-black text-emerald-900 uppercase tracking-wide text-center">La Lecture Cursive</h2>
+                <div class="hidden md:block w-24"></div>
+            </div>
+            
+            
+            <!-- La grille qui contiendra les images -->
+            <div id="grille-livres" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 pb-10">
+                <!-- Les livres seront injectés ici par JavaScript -->
+            </div>
+        </div>
+
     </main>
+
+    <!-- On charge le nouveau script pour l'oral -->
+    <script src="app-oral.js"></script>
 </body>
 </html>

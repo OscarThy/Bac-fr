@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EAF - Oral : Les Fausses Confidences de Marivaux</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+
+        .chart-container { position: relative; width: 100%; max-width: 350px; margin: 0 auto; height: 300px; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
+
+        /* Styles pour les Flashcards (Motivations & Questions) */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .card-inner { transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
+        .flipped .card-inner { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <header class="bg-emerald-800 text-white p-6 shadow-md flex items-center justify-between shrink-0 sticky top-0 z-50">
+        <a href="../oral.html#cursive" class="text-white hover:text-emerald-200 font-bold text-lg transition-transform hover:-translate-x-1">&larr; Retour à la Lecture Cursive</a>
+        <div class="text-center">
+            <h1 class="text-2xl md:text-3xl font-black uppercase tracking-widest">Les Fausses Confidences <span class="font-normal italic text-emerald-300">de Marivaux</span></h1>
+        </div>
+        <div class="hidden md:flex gap-3">
+            <span class="px-3 py-1 bg-emerald-900 rounded-full text-xs font-bold border border-emerald-700">⏱️ ~8 min</span>
+            <span class="px-3 py-1 bg-emerald-900 rounded-full text-xs font-bold border border-emerald-700">🔄 Lien : Musset</span>
+        </div>
+    </header>
+
+    <div class="bg-white border-b-2 border-slate-200 px-6 shrink-0 sticky top-[88px] z-40 shadow-sm">
+        <div class="flex overflow-x-auto custom-scroll w-full max-w-6xl mx-auto">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex-1 py-4 px-4 font-black text-emerald-600 border-b-4 border-emerald-600 bg-emerald-50 text-sm uppercase tracking-tighter transition-all whitespace-nowrap">📊 Stratégie & Temps</button>
+            <button onclick="switchTab('resume')" id="nav-resume" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">📖 Résumé Détaillé</button>
+            <button onclick="switchTab('oral')" id="nav-oral" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">🗣️ Mes Fiches Oral</button>
+            <button onclick="switchTab('questions')" id="nav-questions" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">❓ Questions du Jury</button>
+        </div>
+    </div>
+
+    <main class="flex-grow max-w-6xl mx-auto w-full p-6 md:p-10 pb-20">
+
+        <section id="dashboard" class="tab-content active">
+            <div class="mb-8 text-center">
+                <h2 class="text-3xl font-black text-emerald-900 mb-4 uppercase">La Stratégie de l'Oral</h2>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto">
+                    L'épreuve orale se divise en deux temps : votre exposé continu (environ 5 minutes), suivi de l'entretien avec le jury (environ 3 minutes). Cliquez sur les étapes ci-dessous pour accéder directement à vos fiches.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-slate-100">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-800 mb-6 border-l-8 border-emerald-500 pl-4">Répartition Chronométrique</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-presentation').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-slate-800 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Présentation (1 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'auteur, le contexte d'écriture et le genre littéraire.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-resume').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-emerald-400 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Résumé (2 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'intrigue, l'élément perturbateur et le dénouement.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-motivations').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-emerald-700 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Motivations (2 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'analyse de 2 arguments forts et le lien avec l'œuvre au programme.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('questions');">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-blue-500 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-blue-600 transition-colors">Questions du Jury (3 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'entretien réactif basé sur votre exposé.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="chart-container">
+                    <canvas id="timingChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="resume" class="tab-content">
+            <div class="mb-8 bg-indigo-50 p-8 rounded-3xl border border-indigo-100 shadow-sm">
+                <h2 class="text-3xl font-black text-indigo-900 mb-4 uppercase tracking-wide">Résumé Scène par Scène</h2>
+                <p class="text-lg text-indigo-800 opacity-90">
+                    Pour briller à l'oral et répondre aux questions du jury, vous devez connaître la mécanique exacte de l'œuvre. Cliquez sur chaque Acte pour dérouler son contenu approfondi.
+                </p>
+            </div>
+
+            <div class="space-y-4" id="accordion-container">
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('acte1')">
+                        <span>ACTE I : L'Élaboration du stratagème</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-acte1">+</span>
+                    </button>
+                    <div id="acte1" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-slate-50 rounded-xl border-l-4 border-slate-400">
+                            <strong>Scènes 1 à 6 :</strong> La pièce s'ouvre sur les confidences entre Dorante, un jeune noble ruiné mais de belle apparence, et son ancien valet Dubois, qui travaille désormais au service d'Araminte, une riche et ravissante veuve bourgeoise. Dorante avoue aimer passionnément Araminte, mais son manque d'argent lui interdit tout espoir. Dubois, agissant comme un véritable metteur en scène, le rassure et orchestre un plan machiavélique. Il fait d'abord engager Dorante comme intendant chez Araminte, grâce à l'aide de Monsieur Rémy, l'oncle de Dorante. Monsieur Rémy, ignorant tout du plan, souhaite marier Dorante à Marton, la suivante d'Araminte, ce qui va créer de profonds malentendus.
+                        </div>
+                        <div class="p-5 bg-blue-50 rounded-xl border-l-4 border-blue-500">
+                            <strong>Scènes 7 à 13 :</strong> Araminte accepte les services de Dorante. Cependant, sa mère, l'autoritaire Madame Argante, s'y oppose fermement. Madame Argante souhaite forcer sa fille à épouser le Comte Dorimont, un noble avec qui Araminte a un litige financier important, afin d'élever leur statut social. Elle exige que Dorante examine le dossier juridique en défaveur d'Araminte pour précipiter ce mariage d'intérêt, mais Dorante, épris de justice et d'Araminte, refuse catégoriquement, ce qui lui attire les faveres de la veuve.
+                        </div>
+                        <div class="p-5 bg-red-50 rounded-xl border-l-4 border-red-500">
+                            <strong>Scène 14 (Cruciale) :</strong> C'est le cœur de la machination. Dubois sollicite un entretien privé avec Araminte et lui fait une "fausse confidence". Il lui affirme avec gravité que son nouvel intendant, Dorante, est atteint d'une folie furieuse : il est désespérément amoureux d'elle depuis plus de six mois. Dubois invente que Dorante se rend malade, qu'il la suit partout secrètement, et qu'il n'a accepté ce poste que pour avoir le bonheur de la regarder chaque jour. Cette révélation choque Araminte, mais flatte immensément son ego de femme. Refusant de le renvoyer, elle décide de le garder près d'elle sous prétexte de vouloir le "guérir" de son amour, scellant ainsi son propre destin.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('acte2')">
+                        <span>ACTE II : Le Trouble et l'Illusion</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-acte2">+</span>
+                    </button>
+                    <div id="acte2" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-emerald-50 rounded-xl border-l-4 border-emerald-500">
+                            <strong>Scènes 1 à 8 :</strong> Le stratagème porte ses fruits. Araminte est de plus en plus troublée par la présence de Dorante et se surprend à l'observer. Dubois continue de manipuler tout son monde. Il pousse Dorante à paraître mélancolique et fait croire à Madame Argante et au Comte que l'intendant est incompétent. Le Comte, un homme raisonnable et poli, tente de charmer Araminte, mais celle-ci se montre de plus en plus distante, son esprit étant accaparé par son intendant. Pendant ce temps, Monsieur Rémy insiste lourdement pour que Dorante épouse Marton, augmentant la tension dramatique.
+                        </div>
+                        <div class="p-5 bg-orange-50 rounded-xl border-l-4 border-orange-600">
+                            <strong>Scènes 9 à 12 (Le portrait) :</strong> Dubois met en place un nouvel artifice théâtral. Un mystérieux paquet est livré chez Araminte. Marton, persuadée que Dorante l'aime, pense qu'il s'agit d'un cadeau pour elle. Mais lorsqu'Araminte fait ouvrir la boîte par le valet balourd Arlequin, on découvre qu'elle contient un magnifique portrait d'Araminte elle-même. Dubois fait immédiatement courir le bruit que Dorante a peint ce portrait en secret dans un accès de passion fiévreuse. Cet objet agit comme un révélateur physique de l'amour de l'intendant.
+                        </div>
+                        <div class="p-5 bg-purple-50 rounded-xl border-l-4 border-purple-500">
+                            <strong>Scènes 13 à 15 :</strong> L'étau se resserre sur Araminte. Sa mère, Madame Argante, furieuse de voir sa fille ignorer le Comte, exige le renvoi immédiat de Dorante en invoquant la hiérarchie sociale et le manque de noblesse de l'intendant. Araminte, piquée au vif et désormais sous l'emprise totale de la passion naissante, s'insurge. Elle défend farouchement Dorante contre sa mère et le Comte, déclarant une phrase révolutionnaire pour l'époque : "Le mérite vaut bien la naissance". Elle ordonne que Dorante reste à son service, prouvant que l'amour a déjà vaincu les préjugés de classe en elle.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('acte3')">
+                        <span>ACTE III : La Crise, l'Aveu et le Pardon</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-acte3">+</span>
+                    </button>
+                    <div id="acte3" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-red-100 rounded-xl border-l-4 border-red-600">
+                            <strong>Scènes 1 à 8 (La lettre interceptée) :</strong> Dubois veut provoquer la crise finale pour forcer l'aveu mutuel. Il s'arrange pour qu'une lettre confidentielle écrite par Dorante soit interceptée. Dans cette lettre, Dorante confie à un ami son amour absolu pour Araminte et son intention de fuir Paris de désespoir. La lettre tombe entre les mains de Madame Argante et du Comte. En pleine assemblée, la lettre est lue publiquement. Marton découvre avec amertume qu'elle n'a jamais été aimée. Araminte subit une humiliation mondaine terrible devant toute sa famille et le Comte. Tremblante de colère et de honte, elle reste seule avec Dorante.
+                        </div>
+                        <div class="p-5 bg-yellow-50 rounded-xl border-l-4 border-yellow-500">
+                            <strong>Scènes 9 à 12 (L'Aveu) :</strong> C'est l'acmé de la pièce. Araminte, blessée dans son amour-propre, confronte Dorante avec sévérité, s'apprêtant à le renvoyer définitivement. Dorante, sincèrement désespéré, s'effondre. Il lui jure que son amour est pur et qu'il n'a pas voulu cette humiliation publique. Devant les larmes réelles de l'homme qu'elle aime, les barrières sociales et l'orgueil d'Araminte cèdent brutalement. Dans un murmure bouleversant, elle craque et confesse son propre amour : "Et voilà pourtant ce qui m'arrive... Il faut que je m'en justifie". L'amour est enfin dit.
+                        </div>
+                        <div class="p-5 bg-emerald-100 rounded-xl border-l-4 border-emerald-600">
+                            <strong>Scènes 13 & 14 (La Révélation et le Dénouement) :</strong> Dorante, par noblesse d'âme, refuse de construire son mariage sur un mensonge. Immédiatement après l'aveu d'Araminte, il s'agenouille et confesse la vérité : l'histoire de la folie, la fausse confidence, le portrait, la lettre... tout n'était qu'un vaste stratagème imaginé par Dubois. Araminte est d'abord stupéfaite, mais face à la loyauté de cet ultime aveu, elle lui pardonne entièrement, car si la méthode était fausse, le sentiment, lui, était vrai. Le Comte, en galant homme, s'incline. Madame Argante hurle à la trahison de sa classe, mais Araminte épouse Dorante, ruiné mais méritant, consacrant le triomphe de Dubois qui conclut la pièce : "Ouf ! Ma tâche est finie".
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="oral" class="tab-content">
+            
+            <div id="oral-presentation" class="mb-12 bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-8 border-b border-slate-100 pb-4">
+                    <span class="bg-slate-800 text-white font-black px-4 py-2 rounded-xl text-2xl">1</span>
+                    <h3 class="text-3xl font-black text-slate-800">Présentation <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">1 min</span></h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 1</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Je vais vous présenter Les Fausses Confidences, la comédie la plus célèbre de Pierre de Marivaux, représentée pour la première fois en 1737. Cette œuvre s'inscrit pleinement dans le mouvement des Lumières, une époque de bouillonnement intellectuel où l'on commence à remettre en question les dogmes et la stricte hiérarchie des classes sociales. Marivaux y déploie son style si particulier, le fameux marivaudage, où le langage devient l'outil central de la séduction et de la manipulation psychologique. J'ai choisi cette pièce car elle modernise complètement la comédie classique. Ici, le véritable obstacle à l'amour n'est plus un père tyrannique qui s'oppose au mariage, mais bien l'obstacle intérieur : l'orgueil, les préjugés sociaux et la difficulté vertigineuse qu'ont les personnages à avouer la vérité de leurs propres sentiments, préférant se cacher derrière les mots.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 2</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Aujourd'hui, j'ai décidé de vous parler des Fausses Confidences, une comédie en prose écrite par Marivaux en 1737. Cette pièce est une œuvre charnière du dix-huitième siècle, car derrière la légèreté apparente de l'intrigue amoureuse, elle dresse le portrait subtil d'une société en pleine mutation. Elle met en scène un jeune noble totalement ruiné, Dorante, qui tente par l'intermédiaire de son valet de séduire une riche veuve issue de la bourgeoisie, Araminte. Ce qui m'a profondément intéressé dans cette lecture, c'est la dimension presque politique de l'intrigue. Le valet Dubois y agit comme un véritable metteur en scène, tirant les ficelles et dominant intellectuellement ses maîtres. Le triomphe final de Dorante, fondé sur son mérite personnel plutôt que sur son argent, annonce déjà les grands bouleversements sociaux de la Révolution française à venir.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 3</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Je vais vous présenter la comédie Les Fausses Confidences de Marivaux, datant de 1737. Mon choix s'est porté sur cette œuvre car elle constitue une réflexion magistrale et vertigineuse sur le pouvoir du langage et de l'illusion au théâtre. Marivaux nous y montre comment un valet machiavélique, Dubois, parvient littéralement à faire naître l'amour dans le cœur d'une femme froide et raisonnable en utilisant uniquement la force des mots et des mensonges calculés. La pièce entière fonctionne sur le principe du théâtre dans le théâtre. Les personnages se manipulent, créent des fausses preuves comme des portraits ou des lettres interceptées, pour forcer la vérité à éclore. C'est une œuvre fascinante parce qu'elle démontre que paradoxalement, c'est au cœur de la fausseté, de l'artifice et de la ruse que les personnages parviennent finalement à découvrir la sincérité la plus absolue de leurs émotions.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 4</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">L'œuvre dont je souhaite vous parler est Les Fausses Confidences, de Marivaux, parue en 1737. J'ai été captivé par la justesse psychologique exceptionnelle dont fait preuve l'auteur. Contrairement aux comédies bouffonnes de ses prédécesseurs, Marivaux explore la mécanique intime du cœur humain. Il nous donne à voir l'évolution microscopique de la jeune veuve Araminte, qui passe de l'indifférence calme à une curiosité flattée, puis au trouble amoureux, avant de céder totalement à la passion. La pièce nous montre avec une grande finesse que l'être humain est souvent le dernier à comprendre ses propres sentiments, et que notre amour-propre nous pousse à construire des murs invisibles que seules des crises majeures ou des chocs émotionnels permettent de briser. C'est cette autopsie de l'âme humaine dissimulée sous l'élégance de la conversation mondaine qui fait la force de cette pièce.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="oral-resume" class="mb-12 bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-8 border-b border-slate-100 pb-4">
+                    <span class="bg-emerald-400 text-white font-black px-4 py-2 rounded-xl text-2xl">2</span>
+                    <h3 class="text-3xl font-black text-slate-800">Résumé Express <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">2 min</span></h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 1</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">L'histoire commence chez Araminte, une veuve très riche. Dorante, un jeune aristocrate noble de cœur mais totalement ruiné, en est tombé secrètement amoureux. Son ancien valet, le rusé Dubois, qui travaille désormais pour Araminte, décide de prendre les choses en main. Il élabore un plan audacieux et fait engager Dorante comme intendant de la maison. L'élément perturbateur moteur de la pièce est la "fausse confidence" que Dubois va susurrer à Araminte : il lui révèle, soi-disant en secret, que Dorante est atteint d'une folie amoureuse incurable et qu'il n'est venu travailler ici que pour l'admirer en silence.<br><br>Ce mensonge pique immédiatement la curiosité féminine d'Araminte, qui refuse de le renvoyer, arguant qu'elle veut le guérir. Le stratagème de Dubois se déploie ensuite à travers une série de manipulations diaboliques. Il utilise les personnages secondaires à son avantage, notamment Madame Argante, la mère d'Araminte qui méprise l'intendant, et le Comte Dorimont, le prétendant officiel. Dubois fait livrer un portrait pour faire éclater l'amour de Dorante au grand jour, poussant Araminte à le défendre publiquement contre sa propre famille.<br><br>L'acmé de la pièce survient lorsque Dubois intercepte délibérément une lettre de Dorante et la fait lire devant tout le monde, humiliant Araminte en révélant publiquement la passion de l'intendant. Restée seule avec lui, elle tente de le chasser par orgueil, mais face au désespoir sincère du jeune homme, ses défenses s'effondrent. Elle avoue enfin son amour. La résolution morale intervient immédiatement après : Dorante, incapable de mentir à la femme qu'il aime, confesse que tout ce complot a été orchestré par Dubois. Araminte, touchée par la sincérité de cet ultime aveu, lui pardonne l'artifice, défie les règles de sa classe sociale et décide de l'épouser.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 2</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">La pièce de Marivaux s'articule entièrement autour d'un piège psychologique tendu par un serviteur surdoué, Dubois. Son ancien maître, le ruiné Dorante, aime Araminte, une veuve bourgeoise et opulente. Pour forcer le destin, Dubois orchestre une vaste entreprise de manipulation émotionnelle. Le point de départ du complot est une révélation fabriquée de toutes pièces : Dubois fait croire à Araminte que Dorante est secrètement fou d'elle, bouleversant ainsi la tranquillité d'esprit de la jeune femme. Flattée dans sa vanité, elle décide de conserver ce nouvel intendant sous son toit, sans se douter qu'elle vient de refermer le piège sur elle-même.<br><br>Au fil des actes, Dubois va multiplier les incidents théâtraux pour accélérer la cristallisation du sentiment amoureux. Il joue sur la jalousie en laissant croire que la suivante Marton pourrait épouser Dorante, et il manipule l'hostilité de la mère d'Araminte, la despotique Madame Argante, pour forcer la jeune veuve à prendre la défense de son intendant. Le conflit s'intensifie jusqu'à l'humiliation suprême de l'héroïne, provoquée par la lecture publique d'une lettre confidentielle de Dorante que Dubois a volontairement fait intercepter. Acculée par les convenances de la société, Araminte se retrouve piégée devant le Comte et sa famille.<br><br>C'est ce traumatisme public qui provoque le dénouement. Seule face à Dorante qui fond en larmes, l'armure d'Araminte cède. Son cœur l'emporte sur la raison mondaine, et elle murmure son aveu. Le coup de génie final de la pièce réside dans la confession de Dorante : voulant fonder leur union sur la vérité, il dénonce le plan machiavélique de Dubois. Cette honnêteté in extremis permet à Araminte de pardonner la manipulation. Elle rejette les impératifs financiers de son entourage et choisit d'épouser l'homme qu'elle aime, offrant ainsi la victoire absolue au génie manipulateur de Dubois.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 3</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">Les Fausses Confidences racontent l'ingénierie d'une séduction forcée. Dorante est un jeune homme noble mais sans ressources. Il convoite la main de la riche Araminte, chez qui il vient d'entrer au service en tant qu'intendant. Conscient que la différence de fortune rend ce mariage inenvisageable dans la société de l'époque, il s'en remet totalement à son valet Dubois. Ce dernier, qui maîtrise parfaitement la psychologie féminine, déploie l'élément déclencheur du drame : il informe hypocritement Araminte que son nouvel intendant a perdu la raison à cause d'une passion dévorante et secrète qu'il voue à sa maîtresse. Ce mensonge initial ébranle immédiatement la froideur rationnelle d'Araminte.<br><br>Dès lors, la pièce prend la forme d'un affrontement indirect. D'un côté, la mère d'Araminte et son prétendant, le Comte Dorimont, cherchent par tous les moyens à renvoyer ce domestique gênant et trop séduisant. De l'autre, Dubois s'ingénie à provoquer des scènes de crise pour forcer Araminte à s'attacher à Dorante, notamment en faisant livrer publiquement un portrait d'elle que Dorante aurait peint en secret. Prise entre les pressions sociales de son milieu et le trouble naissant de son cœur, Araminte défend systématiquement Dorante contre l'avis de tous, scellant sans le vouloir sa propre défaite amoureuse.<br><br>Le dernier acte précipite la crise à travers l'interception d'une lettre, ultime fausse confidence organisée par Dubois. Exposée au scandale et humiliée, Araminte se sent obligée de licencier Dorante pour sauver les apparences. Mais face à la souffrance du jeune homme, l'amour-propre abdique. Elle lui avoue son amour avec une pudeur bouleversante. Le retournement final s'opère quand Dorante, repentant, avoue que toute la trame amoureuse a été artificiellement construite par Dubois. Rassurée par cette transparence et par la pureté de ses intentions, elle lui accorde son pardon et sa main, bravant définitivement l'ordre établi et le pouvoir de l'argent.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 4</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">L'œuvre se structure autour d'une guerre psychologique souterraine. Le décor est le salon mondain de la fortunée Araminte. Son nouvel intendant, Dorante, l'aime éperdument mais est paralysé par sa propre pauvreté, qui interdit une telle alliance. C'est son serviteur, Dubois, véritable dramaturge de l'ombre, qui initie l'action. Il confie faussement à Araminte le secret de Dorante, décrivant une folie passionnelle si puissante qu'elle flatte instantanément l'orgueil de la veuve. Sous prétexte d'empathie et de vouloir guérir ce cœur malade, elle décide de conserver Dorante à ses côtés, initiant le fatal mécanisme du marivaudage.<br><br>L'intrigue s'accélère grâce aux nombreux obstacles placés sur la route des amants. Madame Argante, figure de l'autorité maternelle arrogante, exige un mariage de convenance avec le Comte pour asseoir le prestige familial. Dubois utilise cette hostilité sociale comme un levier pour rapprocher Araminte de son intendant. Il orchestre des rumeurs, fait circuler un portrait compromettant et manipule la suivante Marton. Ces stratagèmes exacerbent la tension émotionnelle de l'héroïne, qui lutte désespérément pour maintenir la face tout en étant de plus en plus captivée par la noblesse d'âme et la mélancolie de Dorante.<br><br>L'effondrement des défenses d'Araminte a lieu lors du climax de la pièce, suite au scandale provoqué par la lecture d'une lettre interceptée qui expose la passion de Dorante aux yeux de tous. Ce choc psychologique brutal dissipe les derniers doutes. En tête-à-tête, les mots se libèrent de leurs masques et Araminte concède sa défaite amoureuse. La rédemption morale du héros intervient aussitôt : Dorante choisit la voie de la vérité et dénonce l'imposture de Dubois. C'est cette ultime preuve de sincérité qui convainc Araminte de la profondeur de ses sentiments. Elle lui pardonne le complot et l'épouse, signant la victoire de l'amour véritable sur les calculs sociaux et la froideur de la raison.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="oral-motivations" class="mb-12">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="bg-emerald-700 text-white font-black px-4 py-2 rounded-xl text-2xl">3</span>
+                    <h3 class="text-3xl font-black text-slate-800">Mes 10 Arguments (Motivations) <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">2 min au total</span></h3>
+                </div>
+                <p class="text-sm text-slate-500 mb-8 font-bold">Cliquez sur les fiches pour les retourner et mémorisez l'analyse (2 fiches suffisent pour tenir les 2 minutes). Les 3 dernières fiches vous permettent de tisser le lien avec « On ne badine pas avec l'amour » de Musset.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 perspective-1000">
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-emerald-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🎭</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 1</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le Valet Démiurge</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-emerald-50 border border-emerald-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Ce qui m'a immédiatement fasciné dans cette pièce, c'est le renversement total du pouvoir. Dubois n'est pas un simple serviteur comique comme on en trouve chez Molière. Il agit comme un véritable metteur en scène, un démiurge (un dieu créateur) qui manipule les aristocrates comme de simples marionnettes. Par sa seule intelligence psychologique et sa maîtrise du verbe, il écrit l'intrigue en temps réel et prévoit avec une exactitude mathématique les réactions émotionnelles de sa maîtresse. Ce triomphe de l'intelligence roturière sur l'inertie de la noblesse est jubilatoire et très moderne pour le XVIIIe siècle.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-emerald-600 shadow-sm">
+                                    <strong>Acte I, scène 2 :</strong><br>
+                                    L'amour et moi nous ferons le reste... Je vous la donne, elle est à vous. (Dubois à Dorante)
+                                </div>
+                                <div class="bg-emerald-100 p-2 rounded-lg text-xs mt-2 font-medium text-emerald-900">
+                                    <strong>Analyse :</strong> La personnification de l'Amour qui devient l'associé direct du valet. L'utilisation du futur prophétique ("nous ferons") et le verbe de don ("Je vous la donne") montrent l'hubris (orgueil) de Dubois qui s'approprie Araminte comme un simple objet de transaction qu'il contrôle totalement.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-red-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🗣️</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 2</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le mensonge révélateur</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-red-50 border border-red-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai compris à travers le mécanisme des "fausses confidences" toute la subtilité de la philosophie de Marivaux. Le paradoxe de l'œuvre est vertigineux : pour faire éclater la vérité la plus pure (l'amour sincère entre deux êtres), il est absolument nécessaire de passer par le vice du mensonge. Le mensonge n'est pas utilisé ici pour nuire, mais comme un réactif chimique, un choc psychologique indispensable pour faire tomber les masques sociaux et la bienséance bourgeoise d'Araminte, qui refusait de voir ce que son cœur ressentait déjà secrètement.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-red-600 shadow-sm">
+                                    <strong>Acte I, scène 14 :</strong><br>
+                                    Il est bon de jeter dans tous les esprits les soupçons dont nous avons besoin. (Dubois)
+                                </div>
+                                <div class="bg-red-100 p-2 rounded-lg text-xs mt-2 font-medium text-red-900">
+                                    <strong>Analyse :</strong> L'emploi du terme "soupçons" révèle la technique de l'infiltration mentale. Dubois fonctionne comme un stratège militaire : il implante une idée fausse (comme une graine vénéneuse) dans l'esprit de sa victime, sachant que la curiosité naturelle fera germer cette idée jusqu'à la transformer en vérité absolue.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-orange-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🛡️</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 3</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">L'Obstacle de l'Amour-Propre</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-orange-50 border border-orange-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Ce qui différencie profondément Marivaux des comédies traditionnelles, c'est la nature de l'obstacle. Chez Molière, les amants luttent contre un père tyrannique. Ici, l'obstacle est purement intérieur : c'est l'amour-propre d'Araminte, son orgueil de veuve riche et respectable. Araminte lutte contre elle-même tout au long de la pièce, terrorisée à l'idée de déchoir en aimant son inférieur social. Son aveu final est magnifique car il n'est pas une simple déclaration romantique, mais la capitulation douloureuse et humiliante d'une femme vaincue par la force de ses propres émotions.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-orange-500 shadow-sm">
+                                    <strong>Acte III, scène 12 :</strong><br>
+                                    Et voilà pourtant ce qui m'arrive... Il faut que je m'en justifie. (Araminte)
+                                </div>
+                                <div class="bg-orange-100 p-2 rounded-lg text-xs mt-2 font-medium text-orange-900">
+                                    <strong>Analyse :</strong> L'aveu est formulé sur le ton du constat d'échec amer ("Et voilà pourtant"). L'utilisation de l'obligation ("Il faut") et du verbe juridique ("me justifier") montre que même au moment de l'abandon passionnel, la culpabilité sociale est encore présente. L'amour est vécu comme une infraction à la loi de la raison.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-purple-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">💰</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 4</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le poids de l'Argent et des Classes</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-purple-50 border border-purple-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai été très sensible à la toile de fond économique de la pièce. Derrière le marivaudage gracieux se cache une réalité féroce du XVIIIe siècle : la guerre des classes. Le mépris affiché par Madame Argante envers Dorante, qu'elle qualifie d'"homme de rien" parce qu'il n'a pas de fortune, est glaçant. Le choix final d'Araminte est donc un acte d'une immense rébellion politique. En épousant un intendant ruiné au nom de ses seules qualités de cœur, elle annonce directement l'esprit des Lumières : c'est la valeur individuelle de l'homme qui compte, et non son compte en banque ou son rang de naissance.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-purple-600 shadow-sm">
+                                    <strong>Acte II, scène 15 :</strong><br>
+                                    S'il n'est pas riche, le mérite vaut bien la naissance. (Araminte à sa mère)
+                                </div>
+                                <div class="bg-purple-100 p-2 rounded-lg text-xs mt-2 font-medium text-purple-900">
+                                    <strong>Analyse :</strong> Cette maxime a une portée révolutionnaire. L'antithèse conceptuelle entre "le mérite" (acquis par l'individu, l'effort moral) et "la naissance" (l'héritage aveugle) fustige les privilèges immérités de l'aristocratie décadente. C'est l'affirmation de la bourgeoise éclairée contre l'ancien monde.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-yellow-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🖼️</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 5</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le Théâtre dans le Théâtre</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-yellow-50 border border-yellow-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai particulièrement apprécié l'utilisation récurrente du "théâtre dans le théâtre", c'est-à-dire la manière dont les personnages créent de faux événements pour faire avancer l'action, comme s'ils étaient eux-mêmes des auteurs. Les objets jouent un rôle central dans cette mise en abyme de l'illusion : le portrait mystérieux, les fausses lettres interceptées. Ces accessoires matériels, manipulés par Dubois, agissent comme des preuves fabriquées (des "fake news") pour rendre le mensonge concret et forcer les réactions physiques et émotionnelles des personnages, abolissant la frontière entre la réalité et la fiction.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-yellow-500 shadow-sm">
+                                    <strong>Acte II, scène 13 :</strong><br>
+                                    C'est une machine que j'ai montée... Ah ! le fourbe ! (Dubois puis Araminte)
+                                </div>
+                                <div class="bg-yellow-100 p-2 rounded-lg text-xs mt-2 font-medium text-yellow-900">
+                                    <strong>Analyse :</strong> La métaphore de la "machine" déshumanise l'intrigue galante pour la révéler comme une mécanique implacable et calculée, typique du siècle des ingénieurs. L'exclamation admirative d'Araminte ("le fourbe !") prouve sa complicité coupable avec l'illusion théâtrale : elle aime être trompée.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-pink-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🕊️</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 6</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">La sincérité salvatrice de Dorante</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-pink-50 border border-pink-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Le moment le plus touchant de la pièce est pour moi l'extrême fin. On aurait pu s'attendre à ce que Dorante savoure sa victoire en silence et profite de la fortune d'Araminte, devenant ainsi un simple arriviste cynique. Mais Marivaux sauve la noblesse de son héros par un ultime coup d'éclat éthique. Incapable de fonder son mariage sur la duperie, Dorante avoue publiquement qu'il n'était qu'un imposteur guidé par Dubois. Cette confession finale est magistrale car c'est cette vérité douloureuse qui prouve la pureté absolue de son cœur, permettant à Araminte de lui accorder un pardon total et lumineux, effaçant ainsi tous les mensonges précédents.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-pink-500 shadow-sm">
+                                    <strong>Acte III, scène 12 :</strong><br>
+                                    Dans tout ce qui s'est passé chez vous, il n'y a rien de vrai que ma passion.
+                                </div>
+                                <div class="bg-pink-100 p-2 rounded-lg text-xs mt-2 font-medium text-pink-900">
+                                    <strong>Analyse :</strong> L'antithèse absolue de la pièce formulée en une seule phrase : l'opposition stricte entre "ce qui s'est passé" (le tissu de manipulations extérieures, le jeu théâtral) et "ma passion" (la vérité inaltérable du cœur intérieur). Le faux a servi d'écrin au vrai.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-gray-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">💔</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 7</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le sacrifice des personnages secondaires</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-gray-50 border border-gray-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Une dimension souvent oubliée, mais qui ajoute une cruauté subtile à la comédie, est le sort réservé aux personnages secondaires comme Marton et le Comte. Marton est l'outil aveugle du stratagème : on la manipule grossièrement en lui faisant croire que Dorante l'aime pour attiser la jalousie d'Araminte. Lorsqu'elle découvre publiquement la supercherie (la fausse lettre d'amour), son humiliation est totale. De même, le Comte, pourtant raisonnable et respectueux, est balayé avec froideur. Marivaux nous montre ici que le triomphe de la passion égoïste des héros se construit toujours, inévitablement, sur les larmes et la destruction sociale de ceux qui n'étaient que des dommages collatéraux.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-gray-600 shadow-sm">
+                                    <strong>Acte III, scène 9 :</strong><br>
+                                    Ah, madame ! Vous avez joué mon cœur bien cruellement. (Marton)
+                                </div>
+                                <div class="bg-gray-200 p-2 rounded-lg text-xs mt-2 font-medium text-gray-800">
+                                    <strong>Analyse :</strong> Le terme "joué" souligne la perversion du marivaudage. Le cœur de la suivante n'a pas été respecté comme une entité humaine, mais instrumentalisé comme un simple accessoire de comédie (une carte à abattre) dans le jeu des élites.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🔗</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Musset 1</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">Le Valet utile face à l'Entourage nuisible</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">La comparaison du rôle de l'entourage entre les deux pièces est frappante et montre l'évolution du théâtre. Dans la comédie de Marivaux, le valet Dubois est l'artisan suprême de l'union heureuse : son ingéniosité, bien que malhonnête, a pour but final la création du bonheur amoureux et la suppression des préjugés sociaux. À l'inverse, dans le drame romantique de Musset ("On ne badine pas avec l'amour"), l'entourage est représenté par un clergé et une vieille génération (Blazius, Dame Pluche, Sœur Louise) totalement bêtes, aigris ou dogmatiques, dont les conseils toxiques ne font qu'entraver l'amour et semer le malheur, illustrant la perte d'espoir de la génération du XIXe siècle.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Marivaux (Acte I, sc. 2) :</strong><br>
+                                    L'amour et moi, nous ferons le reste.
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> Dubois incarne l'optimisme rationaliste et conquérant des Lumières. Chez Musset, la solitude des personnages principaux face à des guides aveugles préfigure le vide existentiel et la catastrophe inévitable.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🎭</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Musset 2</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">Le stratagème et la Jalousie</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Les deux pièces exploitent exactement les mêmes rouages psychologiques toxiques, mais avec des intentions diamétralement opposées. Dubois utilise le sentiment de la jalousie en fabriquant de faux espoirs pour Marton, afin de forcer Araminte à prendre conscience de sa possessivité envers Dorante (le stratagème est curatif). Chez Musset, c'est le héros lui-même, Perdican, qui instrumentalise cyniquement la jeune paysanne innocente Rosette, en lui promettant le mariage uniquement pour rendre Camille folle de jalousie par orgueil blessé. Dans un cas, la manipulation unit ; dans l'autre, elle relève du pur sadisme et détruit l'innocence.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Musset (Acte III, sc. 7) :</strong><br>
+                                    Tu m'as trompée, Perdican ! (Rosette)
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> La jalousie artificielle de Marivaux est un jeu de miroirs intellectuel (marivaudage) sans grande conséquence charnelle, tandis que la jalousie chez Musset est une arme émotionnelle féroce qui mène directement à l'assassinat psychologique.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">💬</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Musset 3</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">L'issue de la crise (Comédie vs Tragédie)</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">La grande leçon que je tire de la confrontation de ces deux œuvres réside dans la résolution de la crise du langage. Chez Marivaux, lorsque la vérité du cœur éclate enfin derrière les masques ("Je vous aime"), la crise est résolue par le pardon : Dorante avoue son imposture, Araminte accepte l'humilité, et l'union devient lumineuse et possible. La comédie des Lumières croit en la réparation par la raison. À l'inverse, chez Musset, la vérité s'exprime trop tard ("C'est moi, Perdican, qui t'aime"). Le badinage prolongé par orgueil a eu le temps de tuer physiquement la paysanne Rosette. La révélation de l'amour, souillée par le sang, précipite la rupture éternelle et la malédiction, signant la noirceur du drame romantique.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Musset (Acte III, sc. 8) :</strong><br>
+                                    On ne badine pas avec l'amour.
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> La rédemption classique face au châtiment romantique. L'amour est une récompense chez Marivaux après l'épreuve de la vérité, alors qu'il devient une maladie mortelle chez Musset si l'on a osé profaner sa dimension sacrée par le jeu.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <section id="questions" class="tab-content">
+            
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-black text-blue-900 mb-4 uppercase">Entretien avec le Jury (3 min)</h2>
+                <p class="text-lg text-slate-600 max-w-4xl mx-auto">
+                    Voici 20 questions réactives (sous forme de flashcards) que le jury pourrait vous poser en fonction de l'exposé que vous venez de faire. Cliquez pour voir la réponse.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 perspective-1000">
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">1. Vous avez employé le mot "marivaudage". Quelle en est votre définition exacte ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Le marivaudage désigne l'art d'utiliser une conversation raffinée, subtile et souvent précieuse pour séduire. Les personnages cherchent à connaître les sentiments de l'autre tout en masquant les leurs, utilisant le sous-entendu et la cruauté verbale élégante.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">2. Pourquoi le titre "Les Fausses Confidences" est-il au pluriel ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Parce que la première fausse confidence (Dubois avouant la folie d'amour de Dorante à Araminte) n'est que la première d'une longue série. Il y a le faux aveu à Marton, la fausse origine du portrait, la lettre interceptée... C'est un système généralisé.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">3. Vous décrivez Dubois comme un "démiurge". Qu'est-ce qui le différencie d'un Scapin chez Molière ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Scapin utilise la ruse physique (la bastonnade, les sacs) pour régler des problèmes financiers et sauver les jeunes de l'avarice des pères. Dubois utilise exclusivement la psychologie et la rhétorique (le langage) pour forcer la naissance même d'un sentiment complexe.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">4. Araminte est-elle vraiment naïve et victime de bout en bout ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Pas du tout. Très vite, son amour-propre l'aveugle volontairement. L'exclamation "le fourbe !" lorsqu'elle devine une partie du stratagème montre qu'elle est complaisante : elle désire intimement être trompée pour avoir une excuse sociale d'aimer son inférieur.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">5. En quoi l'aveu final de Dorante à l'Acte III ("rien n'est vrai que ma passion") sauve-t-il la morale de la pièce ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            S'il n'avait rien dit, Dorante serait resté un simple coureur de dot, un escroc cynique. Cet aveu spontané qui risque de tout lui faire perdre in extremis prouve que son amour pour elle est supérieur à son désir de richesse. Il redevient noble.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">6. Quel rôle joue Madame Argante, la mère d'Araminte ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Elle est l'allégorie de la rigidité sociale de l'Ancien Régime. Elle est obsédée par le titre nobiliaire que lui apporterait le Comte. Son opposition hystérique sert paradoxalement de catalyseur : par esprit de contradiction, Araminte va prendre parti pour Dorante.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">7. Comment s'incarne le thème de "l'argent" dans la pièce ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            L'argent est le véritable obstacle originel, avant même la psychologie. Dorante est ruiné, Araminte est richissime. Tous les personnages calculent : le Comte veut épouser pour éviter un long procès financier, Monsieur Rémy parle en termes de rentes.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">8. Vous comparez cette pièce aux Lumières. En quoi est-elle pré-révolutionnaire ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Araminte affirme explicitement : "Le mérite vaut bien la naissance." Le fait qu'une bourgeoise fortunée décide de son propre chef d'élever un homme ruiné uniquement pour ses qualités individuelles, au mépris des ordres de l'aristocratie (le Comte), est politiquement très audacieux pour 1737.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">9. Quel est le sens du portrait intercepté à l'Acte II ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Le portrait sert de preuve irréfutable et matérielle de l'amour de Dorante. Il rend concrète et visible à tous la rumeur lancée par Dubois. Il humilie Marton qui croyait l'avoir inspiré, et force Araminte à reconnaître publiquement l'audace passionnelle de son intendant.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">10. Pourquoi Dubois agit-il ainsi ? Quelle est sa véritable motivation ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Dubois agit par fierté professionnelle et amour de l'art ("pour la gloire de mon intelligence"). Il veut prouver sa supériorité absolue sur ses anciens et nouveaux maîtres. En enrichissant Dorante, il s'assure aussi la protection et la gratitude éternelle de celui qu'il a couronné.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">11. Avez-vous de l'empathie pour le personnage de Marton ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Oui, Marton est la grande victime innocente de la pièce. Manipulée par Dubois et Monsieur Rémy, elle est persuadée que Dorante veut l'épouser. Sa découverte brutale de la supercherie lors de l'épisode du portrait et de la lettre l'humilie publiquement sans qu'elle n'ait commis de faute.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">12. Expliquez la notion de "théâtre dans le théâtre" que vous avez soulevée.</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Dubois est comme un auteur à l'intérieur de l'histoire. Il écrit un scénario (l'amour de Dorante), donne des rôles à jouer (demande à Dorante d'avoir l'air mélancolique), utilise des accessoires truqués (le portrait, la lettre) et manipule le public (Araminte) pour obtenir la réaction émotionnelle voulue.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">13. Qu'est-ce qui rend la déclaration d'Araminte ("Il faut que je m'en justifie") si émouvante ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Elle ne dit pas "Je t'aime" de manière triomphale et romantique. Elle l'avoue comme une faiblesse, presque comme une honte ou une excuse ("se justifier") face à sa propre raison qu'elle vient de trahir. C'est la capitulation douloureuse de l'orgueil social.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">14. Vous opposez la fin de Marivaux à celle de Musset. Pouvez-vous développer ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Marivaux est un homme des Lumières, il croit à la raison et au pardon : la crise (le mensonge dévoilé) permet de reconstruire sur la vérité, l'amour triomphe gaiement. Musset est un Romantique déçu : le mensonge souille irrémédiablement, il provoque la mort (Rosette) et mène à une séparation tragique absolue.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">15. Dorante est-il vraiment sincère tout au long de la pièce ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            L'amour de Dorante est réel dès la première scène, ce qui justifie moralement la pièce. Cependant, sa passivité est frappante : il n'agit presque jamais par lui-même, se contentant de pleurer ou d'obéir aux injonctions immorales de son valet, ce qui le rend parfois un peu lâche.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">16. Que critique Marivaux à travers le personnage de Monsieur Rémy (l'oncle de Dorante) ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Il incarne le cynisme financier de la bourgeoisie de l'époque. Il tente de forcer Dorante à épouser des femmes qu'il n'aime pas (d'abord Marton pour un poste, puis une autre femme plus riche âgée). Pour lui, le mariage n'est qu'une transaction boursière chiffrée.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">17. Comment Araminte justifie-t-elle de garder Dorante malgré son "problème" mental supposé ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Elle utilise un prétexte de fausse charité bien-pensante : elle déclare vouloir le "guérir" en le gardant près d'elle et en l'accoutumant à la voir. C'est évidemment un mensonge qu'elle se fait à elle-même pour justifier son désir secret de le côtoyer quotidiennement.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">18. Le Comte Dorimont est-il un personnage odieux ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Non, et c'est la subtilité de Marivaux. Contrairement à la figure classique du barbon ridicule, le Comte est raisonnable, poli et digne. Lorsqu'il comprend à la fin qu'Araminte aime l'intendant, il accepte la défaite avec une grande élégance aristocratique, sans faire de scandale.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">19. Quelle est l'importance de l'épisode de la lettre interceptée ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est l'électrochoc final qui rend le mensonge public. La lecture de la lettre de Dorante devant toute la cour d'Araminte provoque un scandale social insupportable qui accule l'héroïne dans ses retranchements, la forçant à prendre une décision radicale dans l'urgence.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">20. Pourquoi Dubois s'écrie-t-il "Ouf ! ma tâche est finie" à la dernière seconde de la pièce ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Cette interjection prosaïque souligne qu'il considère cette immense manipulation sentimentale comme un simple travail laborieux. Il salue la fin de son œuvre comme le ferait l'auteur dramatique (Marivaux) une fois que le rideau s'apprête à tomber sur l'happy-end.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        // Gestion des Onglets
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('button[id^="nav-"]').forEach(btn => {
+                btn.classList.remove('border-emerald-600', 'text-emerald-600', 'bg-emerald-50');
+                btn.classList.add('border-transparent', 'text-slate-500');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            
+            const activeBtn = document.getElementById('nav-' + tabId);
+            activeBtn.classList.remove('border-transparent', 'text-slate-500');
+            activeBtn.classList.add('border-emerald-600', 'text-emerald-600', 'bg-emerald-50');
+        }
+
+        // Gestion de l'Accordéon du Résumé
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.innerText = '-';
+            } else {
+                content.classList.add('hidden');
+                icon.innerText = '+';
+            }
+        }
+
+        // Graphique Chart.js (Stratégie & Temps)
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('timingChart').getContext('2d');
+            const data = {
+                labels: ['Présentation (1 min)', 'Résumé (2 min)  ', 'Motivations & Arguments (2 min)', 'Entretien / Questions (3 min)'],
+                datasets: [{
+                    data: [1, 2, 2, 3],
+                    backgroundColor: [
+                        '#1e293b', // slate-800
+                        '#34d399', // emerald-400
+                        '#047857', // emerald-700
+                        '#3b82f6'  // blue-500
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    hoverOffset: 6
+                }]
+            };
+
+            const config = {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            align: 'start',
+                            labels: {
+                                font: { family: "sans-serif" },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) { label = label.split(' (')[0]; }
+                                    return label + ' : ~' + context.raw + ' min';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            };
+
+            new Chart(ctx, config);
+        });
+    </script>
+</body>
+</html>

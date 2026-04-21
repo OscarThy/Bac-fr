@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EAF - Oral : Chanson douce de Leïla Slimani</title>
+    <!-- Tailwind et Chart.js -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+
+        .chart-container { position: relative; width: 100%; max-width: 350px; margin: 0 auto; height: 300px; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
+
+        /* Styles pour les Flashcards (Motivations & Questions) */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .card-inner { transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
+        .flipped .card-inner { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- En-tête -->
+    <header class="bg-emerald-800 text-white p-6 shadow-md flex items-center justify-between shrink-0 sticky top-0 z-50">
+        <a href="../oral.html#cursive" class="text-white hover:text-emerald-200 font-bold text-lg transition-transform hover:-translate-x-1">&larr; Retour à l'Oral</a>
+        <div class="text-center">
+            <h1 class="text-2xl md:text-3xl font-black uppercase tracking-widest">Chanson douce <span class="font-normal italic text-emerald-300">de L. Slimani</span></h1>
+        </div>
+        <div class="hidden md:flex gap-3">
+            <span class="px-3 py-1 bg-emerald-900 rounded-full text-xs font-bold border border-emerald-700">⏱️ ~8 min</span>
+            <span class="px-3 py-1 bg-emerald-900 rounded-full text-xs font-bold border border-emerald-700">🔄 Lien : Manon Lescaut</span>
+        </div>
+    </header>
+
+    <!-- Navigation des Onglets -->
+    <div class="bg-white border-b-2 border-slate-200 px-6 shrink-0 sticky top-[88px] z-40 shadow-sm">
+        <div class="flex overflow-x-auto custom-scroll w-full max-w-6xl mx-auto">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex-1 py-4 px-4 font-black text-emerald-600 border-b-4 border-emerald-600 bg-emerald-50 text-sm uppercase tracking-tighter transition-all whitespace-nowrap">📊 Stratégie & Temps</button>
+            <button onclick="switchTab('resume')" id="nav-resume" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">📖 Résumé Détaillé</button>
+            <button onclick="switchTab('oral')" id="nav-oral" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">🗣️ Mes Fiches Oral</button>
+            <button onclick="switchTab('questions')" id="nav-questions" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">❓ Questions du Jury</button>
+        </div>
+    </div>
+
+    <!-- Contenu Principal -->
+    <main class="flex-grow max-w-6xl mx-auto w-full p-6 md:p-10 pb-20">
+
+        <!-- ================= ONGLET 1: DASHBOARD ================= -->
+        <section id="dashboard" class="tab-content active">
+            <div class="mb-8 text-center">
+                <h2 class="text-3xl font-black text-emerald-900 mb-4 uppercase">La Stratégie de l'Oral</h2>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto">
+                    L'épreuve orale se divise en deux temps : votre exposé continu (environ 5 minutes), suivi de l'entretien avec le jury (environ 3 minutes). Cliquez sur les étapes ci-dessous pour accéder directement à vos fiches.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-slate-100">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-800 mb-6 border-l-8 border-emerald-500 pl-4">Répartition Chronométrique</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-presentation').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-slate-800 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Présentation (1 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'auteur, le Prix Goncourt et le thriller psychologique social.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-resume').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-emerald-400 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Résumé de l'œuvre (2 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'embauche de Louise, l'aliénation, la folie et le meurtre.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-motivations').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-emerald-700 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Motivations (2 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'analyse de 2 arguments forts et le lien avec Manon Lescaut.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('questions');">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-blue-500 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-blue-600 transition-colors">Questions du Jury (3 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'entretien réactif basé sur votre exposé.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="chart-container">
+                    <canvas id="timingChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ONGLET 2: RESUME DETAILLÉ ================= -->
+        <section id="resume" class="tab-content">
+            <div class="mb-8 bg-indigo-50 p-8 rounded-3xl border border-indigo-100 shadow-sm">
+                <h2 class="text-3xl font-black text-indigo-900 mb-4 uppercase tracking-wide">Résumé Partie par Partie</h2>
+                <p class="text-lg text-indigo-800 opacity-90">
+                    Le roman est construit sur une analepse (un flashback géant). Après le choc du crime initial, le récit remonte le temps pour expliquer la lente dégradation psychologique. Cliquez sur chaque Partie pour en découvrir les enjeux.
+                </p>
+            </div>
+
+            <div class="space-y-4" id="accordion-container">
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie1')">
+                        <span>Partie I : Le crime initial et la scène d'ouverture</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie1">+</span>
+                    </button>
+                    <div id="partie1" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-slate-50 rounded-xl border-l-4 border-slate-400">
+                            <strong>Un incipit foudroyant :</strong> Le roman s'ouvre sur l'une des phrases les plus célèbres de la littérature contemporaine : Le bébé est mort. La première scène plonge directement le lecteur dans l'horreur absolue de la scène de crime. Myriam, jeune mère de famille, rentre plus tôt de son travail et découvre le carnage dans son appartement parisien. Son fils Adam est mort, sa fille Mila est mortellement blessée. La nounou, Louise, s'est tranché la gorge et les poignets, mais elle a survécu.
+                        </div>
+                        <div class="p-5 bg-emerald-50 rounded-xl border-l-4 border-emerald-500">
+                            <strong>La suspension du temps :</strong> Dès la fin de ce premier chapitre traumatisant, l'auteure opère un immense retour en arrière. Le suspense du roman n'est donc pas de savoir qui a tué, ni comment cela se termine, mais de comprendre le pourquoi. Le récit va reprendre chronologiquement des années plus tôt, au moment précis où Myriam et Paul décident d'engager une nounou.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie2')">
+                        <span>Partie II : L'embauche et l'illusion de la perfection</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie2">+</span>
+                    </button>
+                    <div id="partie2" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-blue-50 rounded-xl border-l-4 border-blue-500">
+                            <strong>Le besoin de s'émanciper :</strong> Myriam, ancienne avocate brillante, étouffe dans son rôle de mère au foyer. Poussée par l'ambition et le désir de retrouver une vie intellectuelle et sociale, elle convainc son mari Paul, producteur de musique bourgeois, d'embaucher une nourrice. Après des entretiens décevants avec des candidates immigrées, ils rencontrent Louise, une Française de cinquante ans, menue, soignée, aux allures de Mary Poppins stricte. Elle est engagée immédiatement.
+                        </div>
+                        <div class="p-5 bg-orange-50 rounded-xl border-l-4 border-orange-500">
+                            <strong>La nounou indispensable :</strong> Louise se révèle être une employée parfaite, presque magique. Elle ne se contente pas de garder les enfants à la perfection, elle prend en charge l'intégralité du foyer. Elle cuisine des plats merveilleux, nettoie l'appartement jusqu'à l'obsession, répare les vêtements. Paul et Myriam sont comblés, ils peuvent travailler sans limite et sortir le soir. Louise devient indispensable, au point que le couple bourgeois l'invite à passer des vacances avec eux en Grèce, effaçant dangereusement la frontière entre l'employée et le membre de la famille.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie3')">
+                        <span>Partie III : Les fêlures et l'aliénation sociale</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie3">+</span>
+                    </button>
+                    <div id="partie3" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-purple-50 rounded-xl border-l-4 border-purple-500">
+                            <strong>La misère cachée :</strong> Le roman alterne les points de vue et nous fait découvrir la vie privée misérable de Louise. Veuve d'un mari violent et lâche, elle a hérité de dettes colossales que le Trésor public réclame. Elle vit dans un studio minuscule et insalubre en lointaine banlieue, totalement seule, brouillée avec sa propre fille, Stéphanie. Le contraste entre le confort de l'appartement parisien de ses patrons et la réalité sordide de sa propre existence devient une blessure quotidienne.
+                        </div>
+                        <div class="p-5 bg-red-50 rounded-xl border-l-4 border-red-500">
+                            <strong>L'effacement progressif :</strong> Louise n'a plus d'identité propre. Son unique raison de vivre est le foyer de Myriam et Paul. Elle commence à avoir des comportements étranges, presque monstrueux : elle cache de la nourriture, donne un poulet jeté à la poubelle aux enfants pour les punir, maquille la petite Mila de manière troublante. Les patrons constatent ces dérives, ressentent un malaise grandissant, mais ferment les yeux par lâcheté et par confort, incapables de se passer d'elle.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie4')">
+                        <span>Partie IV : La folie et la tragédie inéluctable</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie4">+</span>
+                    </button>
+                    <div id="partie4" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-gray-100 rounded-xl border-l-4 border-gray-600">
+                            <strong>La menace de l'abandon :</strong> Mila et Adam grandissent. Myriam et Paul commencent à évoquer le fait que les enfants iront bientôt tous les deux à l'école, et qu'ils n'auront plus besoin de nounou à plein temps. Pour Louise, c'est l'annonce d'une mort sociale absolue. Sans eux, elle retourne au néant de son studio et à l'asphyxie de ses dettes. Une obsession délirante s'empare d'elle : Myriam doit absolument faire un troisième enfant. Ainsi, Louise pourra rester indispensable encore de longues années.
+                        </div>
+                        <div class="p-5 bg-yellow-50 rounded-xl border-l-4 border-yellow-600">
+                            <strong>Le meurtre comme possession :</strong> Louise tente par tous les moyens d'instaurer un climat propice pour que le couple procrée, mais Myriam s'y refuse fermement. La raison de Louise vacille totalement. Confrontée à l'effondrement de son unique monde, isolée de tous, humiliée par l'administration des impôts, elle commet l'acte indicible. Le roman rejoint alors son point de départ. Une dernière section montre brièvement la capitaine de police, Nina Dorval, tentant vainement de comprendre ce crime absurde, soulignant que la véritable folie échappe toujours à la pure rationalité.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ONGLET 3: FICHES ORAL ================= -->
+        <section id="oral" class="tab-content">
+            
+            <!-- PRÉSENTATION -->
+            <div id="oral-presentation" class="mb-12 bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-8 border-b border-slate-100 pb-4">
+                    <span class="bg-slate-800 text-white font-black px-4 py-2 rounded-xl text-2xl">1</span>
+                    <h3 class="text-3xl font-black text-slate-800">Présentation <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">1 min</span></h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 1</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Je vais vous présenter Chanson douce, le deuxième roman de Leïla Slimani, qui a reçu le très prestigieux Prix Goncourt en 2016. L'auteure s'est inspirée d'un terrible fait divers survenu à New York en 2012 pour écrire cette œuvre percutante. Ce livre se présente sous la forme d'un thriller psychologique totalement inversé : l'assassinat effroyable des deux enfants par leur nourrice nous est révélé brutalement dès la première ligne. J'ai choisi ce roman car il dépasse largement le simple fait divers criminel. Leïla Slimani s'en sert comme d'un prétexte pour mener une véritable autopsie de notre société moderne. Elle y dénonce avec une immense justesse la lutte des classes au cœur de Paris, l'hypocrisie de la bourgeoisie et la détresse silencieuse de ces femmes de l'ombre à qui nous confions pourtant ce que nous avons de plus précieux.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 2</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Aujourd'hui, j'ai décidé de vous parler de Chanson douce, écrit par Leïla Slimani en 2016. C'est un roman féroce qui explore le thème de la marginalité urbaine et du déclassement social. Ce qui m'a profondément captivé dans cette lecture, c'est l'absence totale de jugement moral de la part de la romancière. Elle nous décrit le lent basculement dans la folie meurtrière de Louise, une nounou d'apparence parfaite, sans jamais la transformer en un monstre sanguinaire caricatural, ni l'excuser. Le livre analyse avec une froideur chirurgicale le huis clos étouffant qui se met en place entre un couple de jeunes cadres dynamiques parisiens et leur employée, soulignant les dynamiques toxiques de dépendance, de condescendance et de mépris de classe involontaire qui finissent par provoquer une catastrophe inévitable.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 3</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Mon choix s'est porté sur Chanson douce de Leïla Slimani, une œuvre couronnée par le prix Goncourt 2016. J'ai été fasciné par ce roman car il peut se lire comme un formidable essai féministe et sociologique sur les contradictions de la maternité moderne. À travers le personnage de Myriam, une brillante avocate qui refuse de sacrifier sa carrière pour élever ses enfants, l'auteure montre comment l'émancipation d'une classe de femmes privilégiées repose très souvent sur l'exploitation financière et émotionnelle d'une autre classe de femmes, plus précaires et invisibles. La nounou, Louise, devient le rouage indispensable mais méprisé de cette émancipation bourgeoise. C'est un livre dérangeant parce qu'il nous oblige à regarder en face la solitude extrême et la violence sociale qui règnent derrière les portes blindées des beaux appartements parisiens.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 4</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">L'œuvre que je souhaite vous présenter est Chanson douce, de Leïla Slimani. J'ai été happé par ce roman à cause de son style clinique, incisif, presque blanc, qui rappelle beaucoup l'écriture de Camus dans L'Étranger. Le roman commence par l'assassinat d'une violence insoutenable de deux enfants par leur nourrice. Toute la suite du texte est une longue remontée dans le temps, une descente aux enfers minutieuse pour tenter de trouver du sens là où il n'y en a apparemment pas. Slimani nous démontre que le monstre n'est pas forcément une créature de cauchemar. Le monstre moderne, c'est cette femme effacée, polie, maniaque, écrasée par les dettes et la solitude, qui finit par se briser intérieurement parce que la société a refusé de lui accorder la moindre existence propre en dehors de sa fonction d'employée de maison.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RÉSUMÉ EXPRESS -->
+            <div id="oral-resume" class="mb-12 bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-8 border-b border-slate-100 pb-4">
+                    <span class="bg-emerald-400 text-white font-black px-4 py-2 rounded-xl text-2xl">2</span>
+                    <h3 class="text-3xl font-black text-slate-800">Résumé Express <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">2 min</span></h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 1</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">Le roman s'ouvre sur un choc traumatique insoutenable. Myriam rentre chez elle et découvre le massacre de ses deux jeunes enfants, Mila et Adam, assassinés par Louise, leur nounou de cinquante ans, qui a ensuite tenté de se suicider. À partir de cet incipit sanglant, le récit fait un bond en arrière de plusieurs années pour retracer l'enchaînement des événements. Myriam, une avocate qui s'ennuie profondément dans sa vie de mère au foyer, décide avec son mari Paul d'engager une personne pour s'occuper des enfants afin de reprendre sa carrière professionnelle.<br><br>Leur choix se porte sur Louise, une femme d'apparence impeccable, stricte et silencieuse. Très vite, Louise devient la pièce maîtresse absolue de l'appartement du dixième arrondissement de Paris. Elle fait tout : elle éduque, elle cuisine admirablement, elle range, elle anticipe chaque besoin. Paul et Myriam sont sous le charme et s'en remettent totalement à elle, l'invitant même en vacances avec eux. Mais cette perfection cache en réalité une faille béante. En parallèle, le roman nous fait découvrir la vie intime de la nourrice : une veuve couverte par les dettes de son défunt mari, habitant un studio miteux en grande banlieue, totalement seule et isolée du reste du monde.<br><br>Le drame se noue autour de cette dépendance toxique. Louise n'a plus aucune vie propre, elle n'existe qu'à travers cette famille bourgeoise qui, paradoxalement, lui rappelle sans cesse sa condition de subalterne. Quand les enfants grandissent et que les parents commencent à évoquer le moment où ils n'auront plus besoin d'elle à plein temps, Louise panique. Face à l'horreur de devoir retourner au néant de sa propre existence, sa raison se fissure complètement. Dans un délire possessif, pour empêcher cet abandon social, elle commet l'irréparable, clôturant cette tragédie moderne de l'aliénation.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 2</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">L'architecture de l'œuvre repose entièrement sur la mécanique mortelle du huis clos social. La première page nous livre la fin tragique de l'histoire, la mort des enfants aux mains de leur nourrice, imposant d'emblée un climat oppressant sur le reste de la lecture. La romancière tisse ensuite la toile de cette chute en remontant au moment de l'embauche. Paul et Myriam, représentants typiques de la bourgeoisie urbaine parisienne qui veulent à la fois réussir leur carrière, sortir et être de bons parents, engagent Louise pour déléguer les contraintes domestiques.<br><br>L'intégration de Louise est fulgurante. Par un perfectionnisme frénétique et un zèle inquiétant, elle se rend littéralement irremplaçable. Elle repousse les murs de son emploi pour envahir l'intimité du couple. Mais derrière cette dévotion se cache la grande misère financière d'une femme harcelée par les huissiers et brisée par la vie. Le roman excelle à montrer les petites humiliations du quotidien : les patrons qui jettent de la nourriture de prix sans y penser, les familiarités froides, la condescendance cachée sous des compliments faciles, qui alimentent silencieusement la blessure de Louise.<br><br>La fin du roman est la description clinique d'une décompensation psychiatrique. Sentant que les enfants vieillissent et que son contrat prendra bientôt fin, Louise s'accroche désespérément à l'idée que Myriam doit faire un troisième bébé pour qu'elle puisse rester éternellement dans l'appartement, qui est devenu son seul refuge psychologique. Face au refus inébranlable de la mère, la solitude et la terreur du vide poussent Louise dans la folie meurtrière pure. Le livre s'achève sur le constat d'échec d'une capitaine de police, soulignant qu'aucune enquête rationnelle ne pourra jamais sonder toute la complexité des abîmes de la folie et de la violence sociale.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 3</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">Chanson douce est un roman froidement centré sur la question des frontières et du déclassement social. Après nous avoir assommé avec le récit du meurtre atroce des enfants dans le premier chapitre, Slimani détricote les années précédentes pour analyser la naissance du monstre. L'arrivée de Louise chez Myriam et Paul apparaît d'abord comme un miracle moderne. La nounou idéale permet à la mère de reprendre le travail et au père de ne s'occuper de rien, instaurant une paix domestique apparente. Mais cette paix est bâtie sur un déséquilibre malsain.<br><br>L'intrigue avance en nous montrant le double visage de Louise. À Paris, elle est la fée du logis, propre, aimante et efficace. Dès qu'elle retourne dans son quartier précaire, elle redevient une femme pauvre, traquée par le Trésor public et abandonnée par sa propre fille. Louise développe une forme de schizophrénie sociale. Elle se met à considérer l'appartement bourgeois comme son propre royaume et les enfants comme les siens, tout en accumulant des comportements troublants qui alertent parfois Myriam, comme le fait de cacher de vieux aliments ou d'imposer des rituels très sévères.<br><br>Face à cette agression sourde du monde matériel et de la misère, la trajectoire de l'héroïne est celle d'un enfermement total. L'annonce implicite que la famille va un jour se passer d'elle agit comme un déclencheur fatal. Louise comprend qu'elle n'a jamais été un membre de la famille, mais un simple outil jetable. La vengeance ou plutôt le désespoir de l'oubliée la conduit au crime final, dans une tentative illogique de figer la famille pour toujours dans le drame pour ne pas être effacée de leur mémoire. C'est un portrait glacial de l'invisibilité des travailleurs précaires dans nos sociétés modernes.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 4</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">L'histoire que raconte Leïla Slimani est celle d'une dépossession mutuelle entre deux femmes. Au départ, Myriam souffre de la solitude de la maternité et délègue son rôle de mère à Louise pour exister professionnellement. Louise accepte ce transfert avec une dévotion qui devient rapidement morbide. Elle lave, repasse, cuisine et anime l'appartement avec une précision de soldat. Les parents ferment délibérément les yeux sur les excentricités grandissantes de la nourrice parce qu'elle garantit leur confort de vie parisien, créant une cécité coupable au sein du couple.<br><br>Le récit s'accélère douloureusement lorsque l'auteure nous fait entrer dans l'intimité misérable de Louise. Couverte de dettes, expulsable, sans amour ni famille propre, la nounou s'agrippe à l'appartement de ses patrons comme à un radeau de survie. Elle organise secrètement des petites manipulations pour s'assurer qu'ils ne pourront plus jamais se passer de sa présence. Elle voudrait fusionner avec ce monde bourgeois lumineux, mais la barrière de l'argent et de sa condition de domestique la rejette constamment dans les ténèbres de sa réalité.<br><br>La fin du roman scelle le triomphe de la folie face à la cruauté sociale. Quand Louise réalise que Myriam refuse d'avoir un autre enfant, son avenir s'effondre. L'angoisse d'être licenciée et rejetée dans la pauvreté absolue fait disjoncter son esprit. Elle mutile l'appartement et tue les deux enfants avec une violence froide avant de retourner l'arme contre elle. Slimani achève son œuvre non pas par une résolution judiciaire apaisante, mais en laissant les différents protagonistes face à l'impossibilité de donner un sens rationnel à une telle horreur, prouvant que l'exploitation humaine mène inévitablement à la catastrophe.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MOTIVATIONS -->
+            <div id="oral-motivations" class="mb-12">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="bg-emerald-700 text-white font-black px-4 py-2 rounded-xl text-2xl">3</span>
+                    <h3 class="text-3xl font-black text-slate-800">Mes 10 Arguments (Motivations) <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">2 min au total</span></h3>
+                </div>
+                <p class="text-sm text-slate-500 mb-8 font-bold">Cliquez sur les fiches pour les retourner et mémorisez l'analyse (2 fiches suffisent pour tenir les 2 minutes). Les 3 dernières fiches vous permettent de tisser le lien avec « Manon Lescaut ».</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 perspective-1000">
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-emerald-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">⚡</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 1</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">L'Incipit Inoubliable</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-emerald-50 border border-emerald-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai été immédiatement choqué par l'audace de la première page. Ouvrir un roman par la phrase courte, brutale et glaçante énonçant la mort des enfants est un tour de force narratif exceptionnel. Slimani détruit délibérément le suspense policier classique. Le lecteur connaît la fin tragique dès la première seconde. Ce choix esthétique transforme totalement la lecture : nous ne cherchons plus à savoir qui est le coupable, mais nous sommes forcés d'analyser la lente détérioration psychologique et sociale qui a pu mener une femme d'apparence inoffensive à commettre le pire des actes. C'est le triomphe de la tragédie sur le polar.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-emerald-600 shadow-sm">
+                                    <strong>Chapitre 1, première ligne :</strong><br>
+                                    Le bébé est mort. Il a suffi de quelques secondes. Le médecin a assuré qu'il n'avait pas souffert.
+                                </div>
+                                <div class="bg-emerald-100 p-2 rounded-lg text-xs mt-2 font-medium text-emerald-900">
+                                    <strong>Analyse littéraire :</strong> L'utilisation de la parataxe (phrases très courtes, sans liaison) crée un rythme sec, objectif et chirurgical, presque comme un rapport d'autopsie ou un procès-verbal de police. Ce refus absolu du pathos et de l'adjectif larmoyant rend le fait divers mille fois plus terrifiant pour le lecteur.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-red-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🎭</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 2</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le huis clos social</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-red-50 border border-red-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Le roman fonctionne comme un huis clos théâtral étouffant au cœur de la capitale. J'ai trouvé brillant la façon dont Slimani utilise l'espace confiné de l'appartement parisien comme un laboratoire de la lutte des classes moderne. C'est le seul endroit où deux mondes qui s'ignorent dans la rue sont contraints de cohabiter intimement. La misère financière de Louise (qui cache ses rappels d'impôts) se frotte quotidiennement à l'insouciance matérielle des parents qui jettent des yaourts entamés. Le drame naît de cette promiscuité toxique où le dominé observe le dominant manger à sa table.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-red-600 shadow-sm">
+                                    <strong>Au cours du récit :</strong><br>
+                                    C'était un petit monde clos, régi par des règles que Louise s'ingéniait à deviner. Elle voulait être indispensable.
+                                </div>
+                                <div class="bg-red-100 p-2 rounded-lg text-xs mt-2 font-medium text-red-900">
+                                    <strong>Analyse littéraire :</strong> L'antithèse implicite réside dans le mot "indispensable". L'employée, qui n'est juridiquement rien, cherche à inverser le rapport de force social par un zèle perfectionniste, s'assurant le contrôle psychologique des maîtres de maison pour masquer son propre vide existentiel.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-orange-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🍽️</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 3</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le rapport morbide à la nourriture</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-orange-50 border border-orange-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Un motif m'a particulièrement mis mal à l'aise et fasciné lors de la lecture : le rapport maladif de la nounou à la nourriture. Ayant connu la faim et le manque, Louise ne supporte pas le gaspillage bourgeois. Cela se traduit par des actes de plus en plus cruels et déviants, comme la scène effrayante où elle force les enfants à regarder la carcasse d'un poulet jeté à la poubelle, ou lorsqu'elle cache des restes périmés sous son lit. La nourriture devient ici le symbole pur de la fracture sociale et l'un des symptômes les plus visibles de son basculement irréversible dans la démence.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-orange-500 shadow-sm">
+                                    <strong>L'épisode du poulet :</strong><br>
+                                    Elle a posé la carcasse du poulet au milieu de la table. Les enfants se sont mis à pleurer de terreur.
+                                </div>
+                                <div class="bg-orange-100 p-2 rounded-lg text-xs mt-2 font-medium text-orange-900">
+                                    <strong>Analyse littéraire :</strong> L'irruption du grotesque et de la cruauté dans le décor aseptisé d'un repas d'enfants. L'animal mort jeté sur la table agit comme une allégorie violente de la pauvreté vengeresse qui vient terroriser l'innocence aveugle de la jeunesse dorée parisienne.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-purple-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">👁️</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 4</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le style clinique et glaçant</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-purple-50 border border-purple-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai été subjugué par l'écriture de Leïla Slimani, qui refuse tout sentimentalisme, comme Flaubert ou Camus avant elle. La voix du narrateur (focalisation zéro) est distante, froide et implacable. Elle ne juge ni l'égoïsme des jeunes parents aveuglés par leur confort, ni la folie croissante de l'assassin. Ce ton volontairement neutre décuple le malaise du lecteur. C'est l'écriture du "fait divers" portée à son paroxysme littéraire. Le style clinique agit comme un scalpel qui dissèque les angoisses maternelles et l'hypocrisie sociétale sans jamais offrir la consolation d'une leçon de morale explicite.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-purple-600 shadow-sm">
+                                    <strong>Fin du roman :</strong><br>
+                                    La capitaine Dorval a rembobiné. Elle a voulu comprendre. Mais aucune image n'est venue.
+                                </div>
+                                <div class="bg-purple-100 p-2 rounded-lg text-xs mt-2 font-medium text-purple-900">
+                                    <strong>Analyse littéraire :</strong> L'utilisation d'une syntaxe brève et sèche marque l'échec de la rationalité policière face à l'énigme du mal humain. L'auteure assume l'absence de résolution morale du livre : comprendre la mécanique du drame ne permet pas d'en excuser ou d'en saisir la monstruosité finale.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-yellow-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">👻</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 5</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">L'effacement de l'identité</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-yellow-50 border border-yellow-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Le roman aborde de façon magistrale le thème terrible de l'invisibilité dans les grandes métropoles. Louise n'a pas d'amis, pas d'amour, un mari mort et une fille qui la fuit. Son identité de femme s'est évaporée pour n'être plus que la fonction qu'elle occupe : "la nounou". Sa plus grande terreur, le moteur de son acte assassin, c'est que les enfants grandissent, aillent à l'école et que les parents n'aient plus besoin d'elle. Cet abandon signifierait sa disparition sociale totale, sa plongée dans le vide existentiel. C'est l'angoisse pure de l'effacement qui la rend folle à lier.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-yellow-500 shadow-sm">
+                                    <strong>Les pensées de Louise :</strong><br>
+                                    Elle a peur de ce monde sans eux. Elle ne sera plus personne, juste une vieille femme seule et endettée.
+                                </div>
+                                <div class="bg-yellow-100 p-2 rounded-lg text-xs mt-2 font-medium text-yellow-900">
+                                    <strong>Analyse littéraire :</strong> Le passage au discours indirect libre nous fait pénétrer la terreur intime du personnage. Le rythme binaire de la déchéance ("vieille femme seule" / "et endettée") met en lumière la condition tragique du prolétariat moderne, jetable dès qu'il perd son utilité économique.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-pink-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🤱</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 6</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le tabou de la Maternité défaite</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-pink-50 border border-pink-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Je trouve très courageux la manière dont l'auteure s'attaque au mythe sacré de la mère parfaite. Myriam, l'avocate, avoue explicitement étouffer dans son rôle maternel, s'ennuyer avec ses propres enfants et ressentir le besoin vital de fuir l'appartement pour reprendre le travail. De l'autre côté, Louise agit comme un substitut maternel aliénant, aimant ces enfants avec une exclusivité maladive, cherchant à remplacer la mère biologique. Le roman dénonce l'injonction sociétale contradictoire faite aux femmes modernes : devoir tout réussir professionnellement tout en déléguant leur amour maternel, avec les risques de fracture mortelle que cela comporte.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-pink-500 shadow-sm">
+                                    <strong>Myriam, au début du roman :</strong><br>
+                                    Elle a eu peur de devenir folle, enfermée toute la journée avec un enfant qui ne parle pas.
+                                </div>
+                                <div class="bg-pink-100 p-2 rounded-lg text-xs mt-2 font-medium text-pink-900">
+                                    <strong>Analyse littéraire :</strong> L'emploi du champ lexical de la claustration psychiatrique ("devenir folle", "enfermée") démythifie totalement l'image d'Épinal de la maternité joyeuse au foyer, l'assimilant à une forme de détention insupportable pour la femme intellectuelle.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-gray-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">💄</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 7</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">La scène du maquillage macabre</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-gray-50 border border-gray-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Une des scènes qui annoncent le plus glaçamment la tragédie finale est celle du retour surprise des parents découvrant la petite Mila outrancièrement maquillée par Louise en femme adulte. Cet épisode m'a marqué car il est le symptôme de l'effondrement des limites saines. La nourrice a totalement perdu le sens de la frontière entre le jeu innocent, l'autorité parentale et la transgression morbide. Elle manipule les enfants comme de véritables poupées désarticulées pour satisfaire son propre univers intérieur malade, préfigurant l'acte absolu de possessivité que sera l'assassinat.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-gray-600 shadow-sm">
+                                    <strong>La découverte :</strong><br>
+                                    La petite fille avait les lèvres peintes d'un rouge agressif et les yeux cernés de noir, comme une femme vieillie prématurément.
+                                </div>
+                                <div class="bg-gray-200 p-2 rounded-lg text-xs mt-2 font-medium text-gray-800">
+                                    <strong>Analyse littéraire :</strong> L'antithèse profondément malaisante entre "petite fille" et "femme vieillie prématurément" détruit l'innocence de l'enfance. La coloration agressive ("rouge", "noir") fonctionne comme une prolepse esthétique (une anticipation) du sang et de la mort à venir.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 8 (LIEN MANON LESCAUT) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🔗</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Manon Lescaut 1</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">Le Personnage en marge de la société</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Il m'a paru évident de faire un parallèle sociologique entre Louise et l'héroïne de l'Abbé Prévost, Manon Lescaut. Malgré les siècles qui les séparent, les deux femmes incarnent la figure tragique de la marginalité urbaine. Louise et Manon sont toutes deux issues de milieux modestes, écrasées par un déclassement social impitoyable. Elles essaient par tous les moyens de survivre et d'intégrer un monde bourgeois brillant qui leur est fondamentalement fermé (l'aristocratie parisienne pour Manon, les jeunes cadres supérieurs pour Louise). Leur tragédie réside dans cette exclusion structurelle de la société qui finira par les repousser violemment.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Prévost (Manon Lescaut) :</strong><br>
+                                    C'est une fille de mauvaise vie... une créature dont l'unique mérite est la figure.
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> Comme Manon qui est réduite à sa vénalité par les nobles, Louise est invisibilisée et réduite à sa pure fonction d'employée de maison par Myriam et Paul. Le mépris de classe, latent ou explicite, agit dans les deux romans comme la prison fatale de l'héroïne.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 9 (LIEN MANON LESCAUT) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">💰</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Manon Lescaut 2</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">Le pouvoir mortifère de l'Argent</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Une autre similitude thématique très forte entre ces deux romans est le rôle écrasant et destructeur de l'argent. Dans "Manon Lescaut", la phobie totale de la misère pousse Manon à se prostituer, à mentir et à escroquer de riches libertins pour maintenir son train de vie luxueux, entraînant Des Grieux dans l'abîme. Dans "Chanson douce", le motif est actualisé mais identique : c'est le surendettement colossal de Louise, les lettres de l'huissier cachées sous son lit et l'impossibilité économique de survivre par elle-même, qui accélèrent sa panique et déclenchent sa folie meurtrière par peur absolue du dénuement final.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Prévost (Manon Lescaut) :</strong><br>
+                                    Nous mourrons de faim si nous ne faisons de l'argent.
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> Ce cri du cœur cynique de Manon résume la violence matérialiste des deux œuvres. La misère financière annihile toute forme de vertu classique. Le crime (l'escroquerie ou le meurtre) devient la seule réponse folle d'êtres acculés par l'extrême précarité économique.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 10 (LIEN MANON LESCAUT) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">💀</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Manon Lescaut 3</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">La Fatalité annoncée</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Enfin, j'ai noté une construction narrative commune reposant sur la certitude de la catastrophe. Slimani détruit tout suspense en dévoilant le massacre des enfants dès la toute première phrase de son livre, nous forçant à remonter le temps pour comprendre la fatalité sociale qui a forgé le crime. L'Abbé Prévost utilise le même mécanisme du destin scellé : l'aventure nous est racontée de manière rétrospective par un Chevalier des Grieux déjà brisé, de retour d'Amérique, pleurant la mort de Manon. Dans les deux cas, le lecteur arpente les pages de l'œuvre avec l'angoisse terrible de connaître l'issue sanglante inévitable.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Slimani (Chanson douce) :</strong><br>
+                                    Le bébé est mort. Il a suffi de quelques secondes.
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> La narration a posteriori donne aux deux œuvres la couleur d'une autopsie inéluctable. L'attention du lecteur n'est pas portée sur le "Que va-t-il se passer ?", mais plutôt sur la mécanique destructrice des passions et des hiérarchies sociales qui broient l'humain.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= ONGLET 4: QUESTIONS DU JURY ================= -->
+        <section id="questions" class="tab-content">
+            
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-black text-blue-900 mb-4 uppercase">Entretien avec le Jury (3 min)</h2>
+                <p class="text-lg text-slate-600 max-w-4xl mx-auto">
+                    Voici 20 questions réactives (sous forme de flashcards) que le jury pourrait vous poser en fonction de l'exposé que vous venez de faire. Cliquez pour voir la réponse.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 perspective-1000">
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">1. Pourquoi l'auteure a-t-il choisi un titre aussi oxymorique que "Chanson douce" ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            L'oxymore entre le titre enfantin, berceur et réconfortant (la berceuse classique d'Henri Salvador) et l'atrocité sanglante de l'incipit crée un immense malaise intellectuel. Il souligne que la barbarie peut surgir au cœur même du foyer rassurant et maternel.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">2. Leïla Slimani s'est inspirée d'un fait divers, lequel ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Elle s'est fortement inspirée de l'affaire Yoselyn Ortega, une nourrice dominicaine qui a assassiné les deux enfants dont elle avait la garde dans un quartier riche de New York (la famille Krim) en 2012, avant de tenter de se trancher la gorge.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">3. Pourquoi l'auteure révèle-t-elle l'issue tragique dès la première phrase ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Pour briser les attentes du lecteur de polar. En évacuant le suspense policier (le "qui"), Slimani force le lecteur à se concentrer sur la tragédie sociologique (le "pourquoi"), l'invitant à décortiquer la lente mécanique de l'aliénation de Louise sans jamais espérer un "happy end".
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">4. Vous parlez de "roman social". En quoi cette œuvre l'est-elle ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Le roman dissèque les rapports de classe dans le Paris moderne. Il met face à face l'hyper-bourgeoisie culturelle (les parents qui commandent des sushis, voyagent, travaillent dans les médias) et le nouveau prolétariat invisible des nounous, qui triment dans l'ombre et la précarité la plus totale.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">5. Avez-vous ressenti de l'empathie pour la meurtrière, Louise ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est le grand paradoxe du livre. Le crime est impardonnable, mais l'auteure parvient à nous faire plaindre l'immense misère de Louise, harcelée par les huissiers, sans amies, subissant la lâcheté de son ancien mari. Le lecteur est partagé entre la compassion sociale et l'effroi meurtrier.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">6. Comment décririez-vous le personnage du père, Paul ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Paul incarne la bourgeoisie faussement décontractée et lâche. Il croit être un bon patron, très humain, mais il est profondément condescendant. Il ferme les yeux sur les étrangetés de Louise par pur égoïsme, refusant d'affronter les conflits tant que son dîner est prêt en rentrant du studio.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">7. Quel rôle joue l'appartement de la famille dans l'intrigue ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            L'appartement est un véritable huis clos théâtral. Pour Louise, c'est à la fois un refuge lumineux face à son studio sordide de banlieue, mais aussi une prison qui lui rappelle constamment sa place de subalterne. Elle y perd son identité pour fusionner maladivement avec ce territoire qu'elle nettoie obsessionnellement.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">8. L'auteure porte-t-elle un regard critique sur la figure de la mère, Myriam ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Oui, sans la juger brutalement, l'auteure montre les contradictions du féminisme bourgeois moderne. L'émancipation professionnelle de Myriam n'est possible que par l'exploitation temporelle d'une autre femme précaire. Myriam refoule sa culpabilité de mère absente en déléguant, avec l'argent, son affection à Louise.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">9. Quel lien concret pouvez-vous faire avec Manon Lescaut concernant "l'argent" ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Dans les deux œuvres, la misère financière absolue broie la morale et mène au meurtre ou à la dégradation totale. Manon sombre dans le vol et le vice par terreur de la pauvreté au 18e siècle, tout comme Louise, au 21e siècle, étouffée par les lettres d'huissiers, perd l'esprit face à la perspective d'être licenciée.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">10. Pourquoi Louise souhaite-t-elle si ardemment que Myriam ait un troisième enfant ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Par instinct de survie purement égoïste. Adam et Mila grandissent, l'école approche et les patrons n'auront bientôt plus besoin de payer une nourrice à temps plein. Un nouveau bébé serait la garantie inespérée d'être prolongée plusieurs années et de repousser la sentence de mort sociale et financière qui l'attend.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">11. Le style d'écriture de Leïla Slimani vous rappelle-t-il un autre auteur étudié au programme ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Son écriture sèche, clinique, très paratactique (phrases courtes) et son ton volontairement dépassionné, presque journalistique, rappellent incontestablement l'écriture neutre et absurde de l'Albert Camus de L'Étranger ou la froideur du Flaubert de Madame Bovary (le refus des épanchements larmoyants).
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">12. Quel est le sens de l'épisode du poulet que Louise déchiquète et pose devant les enfants ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est l'un des premiers accès visibles de folie. Choquée que Myriam ait jeté un poulet presque entier (le gâchis bourgeois face à sa misère d'ancienne pauvre), Louise le sort de la poubelle, le pose sur la table et oblige les enfants terrifiés à le regarder. C'est l'intrusion effrayante de la mort et de la revanche sociale dans l'innocence.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">13. Que nous montre le passé de Louise, notamment sa relation avec son mari mort, Jacques ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Son passé construit la fatalité du personnage. Jacques était un homme minable, brutal et endetté, qui ne la respectait pas. Elle a toujours vécu écrasée par la soumission masculine et la pauvreté. Ce passif éclaire sa dépendance maladive et sa volonté farouche de réussir chez les "riches" pour racheter sa propre vie.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">14. En quoi Louise s'apparente-t-elle à un "personnage en marge" (votre objet d'étude) ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Elle est l'illustration pure de la marge invisible au cœur de la capitale. Elle n'est pas une criminelle de grand chemin, mais une femme banale de banlieue (RER, impôts, solitude), ignorée de tous. Le fait qu'elle s'immisce au cœur de la bourgeoisie sans y appartenir fait d'elle un parasite tragique et inadapté.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">15. Finalement, comprenez-vous le mobile du double meurtre des enfants ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            La raison est illogique et psychiatrique. Dans sa folie, tuer les enfants est le seul moyen de "geler le temps" et d'empêcher l'abandon. Si les enfants meurent, les parents ne pourront pas l'oublier, elle sera liée à eux éternellement par le deuil et le sang. C'est l'acte final et pervers d'une possession totale du foyer.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">16. Que représente la scène des vacances en Grèce pour le lecteur ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est le paroxysme de l'illusion de la famille recomposée. Paul et Myriam y jouent les faux amis égalitaires (en lui payant le voyage, en la forçant à nager) mais la différence de classe éclate continuellement. Louise y réalise avec désespoir qu'elle ne fera jamais réellement partie de leur caste privilégiée.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">17. Y a-t-il une portée universelle dans cette œuvre contemporaine ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Oui, Slimani interroge l'universalisme de la maternité et de la société capitaliste occidentale : notre système force les individus (souvent des femmes) à acheter le temps d'autres individus précaires pour espérer réussir, posant ainsi une lourde question morale sur la modernité de l'esclavage domestique.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">18. Le rôle de la police à la fin (la capitaine Nina Dorval) apporte-t-il une résolution à l'intrigue ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Non, et c'est un point clé. La policière tente de comprendre rationnellement, de chercher le fameux "mobile" avec les méthodes classiques. Mais aucune certitude n'apparaît. Le roman s'achève sur le constat d'impuissance de la justice des hommes à déchiffrer la pure abomination humaine, figeant la terreur.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">19. Louise est-elle la seule responsable de la mort des enfants, au sens philosophique ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Juridiquement oui, mais philosophiquement, le livre met en accusation tout le système sociétal. La froideur de l'administration fiscale, la lâcheté quotidienne des parents bourgeois, l'indifférence cruelle des parisiens face à la détresse : tout a contribué à broyer lentement la conscience de la nourrice.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">20. Que retenez-vous de plus personnel concernant le rapprochement entre Manon et Louise ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est la démonstration que la tragédie classique a totalement évolué. Au 18e siècle avec Manon, la tragédie naissait de l'amour passion et de la triche pour s'élever. Aujourd'hui, avec Louise, la tragédie n'est plus amoureuse ou noble : elle naît de l'exclusion économique pure et froide dans une capitale implacable.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Scripts pour l'interactivité -->
+    <script>
+        // Gestion des Onglets
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('button[id^="nav-"]').forEach(btn => {
+                btn.classList.remove('border-emerald-600', 'text-emerald-600', 'bg-emerald-50');
+                btn.classList.add('border-transparent', 'text-slate-500');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            
+            const activeBtn = document.getElementById('nav-' + tabId);
+            activeBtn.classList.remove('border-transparent', 'text-slate-500');
+            activeBtn.classList.add('border-emerald-600', 'text-emerald-600', 'bg-emerald-50');
+        }
+
+        // Gestion de l'Accordéon du Résumé
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.innerText = '-';
+            } else {
+                content.classList.add('hidden');
+                icon.innerText = '+';
+            }
+        }
+
+        // Graphique Chart.js (Stratégie & Temps)
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('timingChart').getContext('2d');
+            const data = {
+                labels: ['Présentation (1 min)', 'Résumé (2 min)', 'Motivations & Arguments (2 min)', 'Entretien / Questions (3 min)'],
+                datasets: [{
+                    data: [1, 2, 2, 3],
+                    backgroundColor: [
+                        '#1e293b', // slate-800
+                        '#34d399', // emerald-400
+                        '#047857', // emerald-700
+                        '#3b82f6'  // blue-500
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    hoverOffset: 6
+                }]
+            };
+
+            const config = {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            align: 'start',
+                            labels: {
+                                font: { family: "sans-serif" },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) { label = label.split(' (')[0]; }
+                                    return label + ' : ~' + context.raw + ' min';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            };
+
+            new Chart(ctx, config);
+        });
+    </script>
+</body>
+</html>

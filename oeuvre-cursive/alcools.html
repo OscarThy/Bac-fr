@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EAF - Oral : Alcools d'Apollinaire</title>
+    <!-- Tailwind et Chart.js -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+
+        .chart-container { position: relative; width: 100%; max-width: 350px; margin: 0 auto; height: 300px; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
+
+        /* Styles pour les Flashcards (Motivations & Questions) */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .card-inner { transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
+        .flipped .card-inner { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- En-tête -->
+    <header class="bg-emerald-800 text-white p-6 shadow-md flex items-center justify-between shrink-0 sticky top-0 z-50">
+        <a href="../oral.html#cursive" class="text-white hover:text-emerald-200 font-bold text-lg transition-transform hover:-translate-x-1">&larr; Retour à l'Oral</a>
+        <div class="text-center">
+            <h1 class="text-2xl md:text-3xl font-black uppercase tracking-widest">Alcools <span class="font-normal italic text-emerald-300">d'Apollinaire</span></h1>
+        </div>
+        <div class="hidden md:flex gap-3">
+            <span class="px-3 py-1 bg-emerald-900 rounded-full text-xs font-bold border border-emerald-700">⏱️ ~8 min</span>
+            <span class="px-3 py-1 bg-emerald-900 rounded-full text-xs font-bold border border-emerald-700">🔄 Lien : Cahier de Douai</span>
+        </div>
+    </header>
+
+    <!-- Navigation des Onglets -->
+    <div class="bg-white border-b-2 border-slate-200 px-6 shrink-0 sticky top-[88px] z-40 shadow-sm">
+        <div class="flex overflow-x-auto custom-scroll w-full max-w-6xl mx-auto">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex-1 py-4 px-4 font-black text-emerald-600 border-b-4 border-emerald-600 bg-emerald-50 text-sm uppercase tracking-tighter transition-all whitespace-nowrap">📊 Stratégie & Temps</button>
+            <button onclick="switchTab('resume')" id="nav-resume" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">📖 Structure du Recueil</button>
+            <button onclick="switchTab('oral')" id="nav-oral" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">🗣️ Mes Fiches Oral</button>
+            <button onclick="switchTab('questions')" id="nav-questions" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">❓ Questions du Jury</button>
+        </div>
+    </div>
+
+    <!-- Contenu Principal -->
+    <main class="flex-grow max-w-6xl mx-auto w-full p-6 md:p-10 pb-20">
+
+        <!-- ================= ONGLET 1: DASHBOARD ================= -->
+        <section id="dashboard" class="tab-content active">
+            <div class="mb-8 text-center">
+                <h2 class="text-3xl font-black text-emerald-900 mb-4 uppercase">La Stratégie de l'Oral</h2>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto">
+                    L'épreuve orale se divise en deux temps : votre exposé continu (environ 5 minutes), suivi de l'entretien avec le jury (environ 3 minutes). Cliquez sur les étapes ci-dessous pour accéder directement à vos fiches.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-slate-100">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-800 mb-6 border-l-8 border-emerald-500 pl-4">Répartition Chronométrique</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-presentation').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-slate-800 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Présentation (1 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'auteur, le contexte d'écriture et la révolution poétique.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-resume').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-emerald-400 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Résumé de l'œuvre (2 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'architecture du recueil, d'hier à aujourd'hui.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-motivations').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-emerald-700 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Motivations (2 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'analyse de 2 arguments forts et le lien avec Rimbaud.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('questions');">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-blue-500 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-blue-600 transition-colors">Questions du Jury (3 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'entretien réactif basé sur votre exposé.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="chart-container">
+                    <canvas id="timingChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ONGLET 2: RESUME DETAILLÉ ================= -->
+        <section id="resume" class="tab-content">
+            <div class="mb-8 bg-indigo-50 p-8 rounded-3xl border border-indigo-100 shadow-sm">
+                <h2 class="text-3xl font-black text-indigo-900 mb-4 uppercase tracking-wide">Structure des Cycles Poétiques</h2>
+                <p class="text-lg text-indigo-800 opacity-90">
+                    S'agissant d'un recueil de poèmes (1898-1913), il n'y a pas d'intrigue classique. L'œuvre est structurée autour de grands mouvements thématiques et temporels. Cliquez sur chaque cycle pour en découvrir les enjeux profonds.
+                </p>
+            </div>
+
+            <div class="space-y-4" id="accordion-container">
+                <!-- Partie 1 -->
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie1')">
+                        <span>I. Le manifeste de la modernité (Zone et Le Pont Mirabeau)</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie1">+</span>
+                    </button>
+                    <div id="partie1" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-slate-50 rounded-xl border-l-4 border-slate-400">
+                            <strong>Le poème d'ouverture "Zone" :</strong> Bien qu'il soit placé au tout début du recueil, Zone est en réalité le dernier poème écrit par Apollinaire. Il agit comme un véritable prologue manifestaire. Le poète y affirme d'emblée sa lassitude face à l'ancien monde antique (À la fin tu es las de ce monde ancien) et célèbre la beauté inattendue de la modernité industrielle : la Tour Eiffel, les hangars de Port-Aviation, les affiches publicitaires et les automobiles. Il déambule dans un Paris cosmopolite, mêlant ses propres souvenirs douloureux à des visions avant-gardistes dignes du cubisme naissant.
+                        </div>
+                        <div class="p-5 bg-blue-50 rounded-xl border-l-4 border-blue-500">
+                            <strong>Le Pont Mirabeau :</strong> Ce poème incontournable suit immédiatement Zone. Apollinaire y traite du temps qui passe et de la fin de son amour avec la peintre Marie Laurencin. Le pont parisien de béton devient l'allégorie de la stabilité face au fleuve fuyant (la Seine) qui représente les amours qui disparaissent inexorablement. C'est une méditation mélancolique et musicale qui prouve qu'Apollinaire, tout en étant moderne, reste le grand héritier du lyrisme de l'élégie traditionnelle.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Partie 2 -->
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie2')">
+                        <span>II. Le cycle de l'échec amoureux (La Chanson du Mal-Aimé)</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie2">+</span>
+                    </button>
+                    <div id="partie2" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-red-50 rounded-xl border-l-4 border-red-500">
+                            <strong>Une épopée de la douleur :</strong> Ce long poème est le cœur palpitant du recueil. Il a été inspiré par le rejet cuisant que le poète a subi de la part d'Annie Playden, une jeune gouvernante anglaise qu'il a suivie jusqu'à Londres sans succès. Apollinaire y retrace son errance dans les brouillards londoniens, transformant une banale déception amoureuse en un véritable mythe poétique personnel. Il se désigne lui-même comme le "Mal-Aimé".
+                        </div>
+                        <div class="p-5 bg-orange-50 rounded-xl border-l-4 border-orange-500">
+                            <strong>Mythes et mythologies intimes :</strong> Pour exprimer l'immensité de sa souffrance et son incapacité à faire le deuil de cette relation, le poète convoque une armée de figures mythologiques et historiques (Ulysse, les dieux païens, les Cosaques zaporogues). Les invectives, les plaintes et les cris de douleur y côtoient des refrains chantants. Ce cycle montre la capacité d'Apollinaire à utiliser sa propre vie comme un matériau héroïque et tragique, transcendant la simple biographie.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Partie 3 -->
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie3')">
+                        <span>III. Les Rhénanes et l'influence du folklore</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie3">+</span>
+                    </button>
+                    <div id="partie3" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-purple-50 rounded-xl border-l-4 border-purple-500">
+                            <strong>Un séjour marquant en Allemagne :</strong> La section intitulée "Rhénanes" rassemble neuf poèmes (dont Nuit rhénane, La Synagogue, Les Cloches, La Loreley, Mai) écrits lors du séjour d'Apollinaire en Rhénanie entre 1901 et 1902. À cette époque, il travaillait comme précepteur et découvrait les paysages romantiques de l'Allemagne, ses vignes, ses fleuves et ses légendes ancestrales.
+                        </div>
+                        <div class="p-5 bg-yellow-50 rounded-xl border-l-4 border-yellow-600">
+                            <strong>Légendes et ivresse :</strong> Cette partie du recueil est saturée par le thème de l'ivresse (qui donne d'ailleurs son titre au livre) et de l'automne, saison de la pourriture et de la mort des feuilles, mais aussi saison des vendanges et de la renaissance par le vin. Apollinaire réécrit le mythe de la Loreley, cette sorcière des bords du Rhin dont la beauté est si mortelle qu'elle finit par en mourir elle-même. Les poèmes rhénans mélangent une mélancolie presque gothique avec des chants de beuverie pittoresques.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Partie 4 -->
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie4')">
+                        <span>IV. Vendémiaire et la dimension prophétique</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie4">+</span>
+                    </button>
+                    <div id="partie4" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-pink-50 rounded-xl border-l-4 border-pink-600">
+                            <strong>Le poème de clôture :</strong> Vendémiaire ferme le recueil en répondant symétriquement à Zone. Son titre fait référence au mois des vendanges dans le calendrier républicain. Le poète s'y tient à Paris, la nuit, et semble écouter la voix de toutes les villes d'Europe et du monde qui convergent vers lui pour lui offrir leur sang, transformé métaphoriquement en un vin cosmique.
+                        </div>
+                        <div class="p-5 bg-gray-100 rounded-xl border-l-4 border-gray-600">
+                            <strong>Une ivresse d'univers :</strong> Apollinaire, dans ce texte final, affirme son statut de poète prophète, capable d'absorber toute la violence et la beauté du monde. Il boit l'univers ("Je suis ivre d'avoir bu tout l'univers") et transforme la douleur des hommes en art. C'est une fin extrêmement triomphante, pleine d'espérance et d'énergie créatrice, qui promet que l'humanité entrera dans une nouvelle ère de lumière grâce à la poésie.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ONGLET 3: FICHES ORAL ================= -->
+        <section id="oral" class="tab-content">
+            
+            <!-- PRÉSENTATION -->
+            <div id="oral-presentation" class="mb-12 bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-8 border-b border-slate-100 pb-4">
+                    <span class="bg-slate-800 text-white font-black px-4 py-2 rounded-xl text-2xl">1</span>
+                    <h3 class="text-3xl font-black text-slate-800">Présentation <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">1 min</span></h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 1</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Je vais vous présenter Alcools, un recueil de poèmes majeur du vingtième siècle, publié par Guillaume Apollinaire en 1913. Cette œuvre s'inscrit dans une période de grands bouleversements techniques et artistiques, juste avant la Première Guerre mondiale. Apollinaire y réalise une véritable révolution poétique, notamment par la suppression totale et définitive de la ponctuation, obligeant le lecteur à trouver son propre rythme de respiration. J'ai choisi de vous parler de cette œuvre car elle représente le pont parfait entre la tradition littéraire classique et l'avant-garde moderne. L'auteur y mêle avec génie ses souffrances amoureuses les plus intimes à l'effervescence de la ville industrielle naissante, créant une esthétique de la surprise et du contraste permanent.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 2</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Aujourd'hui, j'ai décidé de vous présenter le recueil Alcools de Guillaume Apollinaire, publié en 1913. Il s'agit d'une œuvre fondatrice de la modernité poétique, qui rassemble quinze années de la vie de l'auteur. Le titre originel devait être Eau-de-vie, mais Apollinaire a finalement opté pour Alcools, un titre qui illustre sa soif brûlante de vivre toutes les expériences possibles jusqu'à l'ivresse. J'ai été particulièrement frappé par l'audace de ce recueil. Apollinaire y introduit des éléments jugés jusqu'alors laids ou prosaïques, comme des sirènes d'usines, des avions ou des affiches de publicité, pour les transformer en véritable matière poétique. Il invente ainsi une nouvelle forme de lyrisme, où la ville et le monde moderne deviennent aussi émouvants qu'un paysage romantique.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 3</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Mon choix s'est porté sur Alcools de Guillaume Apollinaire, un recueil édité en 1913, à l'aube d'un siècle nouveau. Apollinaire, grand ami du peintre Pablo Picasso, est profondément influencé par la peinture cubiste. J'ai sélectionné cette œuvre car on y retrouve précisément cette technique artistique du collage et de la fragmentation appliquée à la littérature. Dans ses poèmes, l'auteur superpose des images disparates, des bribes de conversations entendues dans la rue, et des souvenirs lointains, sans lien logique apparent. Cette absence de ponctuation et cette construction fragmentée nous invitent à lire le recueil non pas comme une histoire linéaire, mais comme une toile cubiste où de multiples réalités s'entremêlent pour créer une émotion totalement neuve.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 4</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Je souhaite vous parler du recueil Alcools de Guillaume Apollinaire, publié en 1913. Bien que célèbre pour son innovation formelle, cette œuvre est avant tout, à mes yeux, l'autobiographie poignante d'un homme malheureux en amour. Tout au long de ces pages, Apollinaire exorcise ses ruptures douloureuses, notamment avec la gouvernante anglaise Annie Playden et la peintre Marie Laurencin. J'ai été très touché par la façon dont l'auteur transcende son propre chagrin. Loin de s'apitoyer sur lui-même comme un poète romantique traditionnel, il transforme sa blessure intime en une gigantesque épopée mythologique. Il devient la figure universelle du Mal-Aimé, prouvant que la plus grande poésie naît souvent de la transmutation de la souffrance en art.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RÉSUMÉ EXPRESS -->
+            <div id="oral-resume" class="mb-12 bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-8 border-b border-slate-100 pb-4">
+                    <span class="bg-emerald-400 text-white font-black px-4 py-2 rounded-xl text-2xl">2</span>
+                    <h3 class="text-3xl font-black text-slate-800">Résumé Express <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">2 min</span></h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 1</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">Le recueil Alcools ne raconte pas une histoire avec une intrigue suivie, mais il trace plutôt un itinéraire spirituel et poétique couvrant une quinzaine d'années. L'œuvre s'ouvre magistralement avec le poème Zone, véritable manifeste de la modernité. Le poète s'y promène dans les rues du Paris industriel et cosmopolite, déclarant qu'il est las de l'Antiquité et célébrant la beauté brute de l'acier, des avions et des sirènes d'usines. C'est une porte d'entrée fracassante vers le vingtième siècle.<br><br>Cependant, une fois ce cap moderne franchi, le recueil plonge le lecteur dans les réminiscences du passé amoureux du poète. Avec La Chanson du Mal-Aimé et Le Pont Mirabeau, Apollinaire aborde la douleur inguérissable de ses ruptures sentimentales. Il utilise la thématique du fleuve et de l'eau pour symboliser la fuite inexorable du temps et de l'amour, se présentant comme l'archétype universel de l'homme abandonné qui tente de survivre grâce à la magie de ses mots.<br><br>Le voyage se poursuit ensuite à travers le folklore et les mythes, notamment dans la section des Rhénanes, inspirée par son séjour en Allemagne. On y croise des figures surnaturelles comme la sorcière Loreley et on y célèbre l'ivresse des vendanges d'automne. Le recueil se clôt enfin de manière grandiose et prophétique avec le poème Vendémiaire. Apollinaire s'y élève au-dessus de Paris la nuit, comme un démiurge. Il absorbe symboliquement l'univers tout entier, transformant la douleur du monde en un vin cosmique qui garantit sa survie éternelle en tant qu'artiste.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 2</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">L'architecture d'Alcools est fondamentalement bâtie sur l'esthétique de la surprise et du contraste. Dès la première page, le poème Zone nous plonge dans un univers urbain chaotique. Le poète marche sous la Tour Eiffel et observe l'effervescence de la ville moderne. Ce texte d'ouverture agit comme un choc visuel et rythmique, d'autant plus que l'absence totale de ponctuation accélère la lecture et désoriente le lecteur, l'obligeant à flotter dans une matière poétique continue, presque liquide.<br><br>Mais ce manifeste de l'avant-garde côtoie immédiatement des textes aux formes beaucoup plus traditionnelles. Des poèmes comme Le Pont Mirabeau ou Les Colchiques s'inscrivent dans un héritage lyrique très ancien, celui de la complainte amoureuse. Apollinaire y pleure ses échecs sentimentaux, en l'occurrence ses relations avortées avec Annie Playden et Marie Laurencin. Il confronte en permanence sa mélancolie intime et ses souvenirs larmoyants à la dureté métallique et à la froideur du siècle nouveau qui se construit autour de lui.<br><br>La fin du recueil opère une véritable métamorphose alchimique. Après avoir traversé les légendes sombres de l'Allemagne dans Les Rhénanes et exorcisé ses peines, Apollinaire propose une résolution triomphante. Dans Vendémiaire, le dernier poème, l'ivresse n'est plus celle de la destruction ou de l'oubli par l'alcool, mais celle de la création absolue. Le poète déclare qu'il a bu tout l'univers et qu'il est désormais prêt à chanter pour l'humanité entière, s'érigeant en figure héroïque capable de relier le passé et l'avenir.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 3</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">Alcools est avant tout un grand recueil du déracinement et du voyage. Apollinaire, de son vrai nom Wilhelm de Kostrowitzky, était un homme sans patrie évidente, né en Italie de mère polonaise, ayant grandi à Monaco avant d'arriver en France. Cette errance géographique se reflète totalement dans la structure de son œuvre. Le recueil s'ouvre avec Zone, où le poète déambule sans but précis dans les rues de Paris, puis d'Europe, tel un vagabond cosmopolite contemplant les immigrés et les marginaux avec une immense empathie fraternelle.<br><br>Ce voyage est aussi intérieur et temporel. La section centrale de l'œuvre est dominée par le ressentiment et le deuil. Dans La Chanson du Mal-Aimé, le poète se replonge dans ses souvenirs londoniens pour tenter d'exorciser la douleur causée par une femme qui s'est refusée à lui. L'écriture devient alors une arme pour conjurer le sort. Il convoque les légendes païennes, les rois antiques et les monstres folkloriques, créant un collage impressionnant où le présent trivial rencontre la mythologie sacrée, prouvant sa capacité à tout poétiser.<br><br>Le point d'orgue du livre est une apothéose dionysiaque. Après les errances allemandes et les complaintes, le recueil s'achève sur le poème Vendémiaire. Dans un élan d'une puissance inouïe, Apollinaire rassemble les villes de la terre entière. L'errance trouve enfin son but : le poète n'est plus un vagabond perdu, il devient le réceptacle, le centre de gravité de l'univers nouveau. Il s'enivre de toutes les expériences humaines pour forger un chant nouveau, affirmant que la poésie est le seul remède face à la cruauté du monde.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 4</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">L'histoire que raconte Alcools est celle d'une réinvention personnelle par le langage. L'œuvre commence par un constat de fatigue existentielle dans le poème Zone, où le poète affirme être fatigué de l'antiquité et des anciennes formes d'art. Il revendique une nouvelle religion, celle du quotidien, où les catalogues, les affiches et la technologie moderne remplacent les anciens textes sacrés. C'est une entrée en matière d'une audace folle qui annonce la rupture définitive avec la poésie larmoyante du siècle précédent.<br><br>Cependant, Apollinaire est un homme de contrastes, et la suite du recueil prouve qu'il ne renie pas totalement le passé. Des textes majeurs comme Le Pont Mirabeau ou Les Fiançailles montrent un poète profondément ancré dans la souffrance romantique. Il y explore la cruauté de la fuite du temps, l'effacement de la jeunesse et l'incapacité pathétique à retenir l'amour de celles qui le quittent. Le titre même, Alcools, renvoie à ce besoin compulsif de s'enivrer pour oublier cette douleur insoutenable ou pour tenter de raviver des souvenirs morts.<br><br>La trajectoire du recueil mène vers une forme de salut métaphysique. Alors que le poète semblait englouti par ses échecs dans les poèmes rhénans aux ambiances automnales et brumeuses, l'œuvre se redresse soudainement. Le poème final, Vendémiaire, agit comme une résurrection de l'artiste. Ayant transmuté toute sa douleur en vers, Apollinaire se dresse au-dessus de Paris comme une divinité bienveillante. Il boit métaphoriquement l'univers entier pour devenir la voix immortelle de son époque, offrant un formidable message d'espoir à la veille de l'ère industrielle et de ses tragédies.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MOTIVATIONS -->
+            <div id="oral-motivations" class="mb-12">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="bg-emerald-700 text-white font-black px-4 py-2 rounded-xl text-2xl">3</span>
+                    <h3 class="text-3xl font-black text-slate-800">Mes 10 Arguments (Motivations) <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">2 min au total</span></h3>
+                </div>
+                <p class="text-sm text-slate-500 mb-8 font-bold">Cliquez sur les fiches pour les retourner et mémorisez l'analyse (2 fiches suffisent pour tenir les 2 minutes). Les 3 dernières fiches vous permettent de tisser le lien avec le « Cahier de Douai » de Rimbaud.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 perspective-1000">
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-emerald-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">⚙️</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 1</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">La Ville comme Nouvelle Muse</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-emerald-50 border border-emerald-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Ce qui m'a immédiatement frappé à la lecture, c'est la façon dont Apollinaire introduit sans aucun complexe la brutalité du monde urbain et industriel dans la sphère poétique, traditionnellement réservée à la nature ou aux grandes idées abstraites. Dans le poème Zone, il érige la Tour Eiffel, les hangars de Port-Aviation, les usines et même les sirènes d'alarme au rang de sujets nobles. En refusant de détourner le regard de la modernité, il prouve que la beauté ne réside pas dans l'objet lui-même, mais dans le regard que le poète pose sur lui. Il invente une esthétique du trivial qui change la littérature à jamais.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-emerald-600 shadow-sm">
+                                    <strong>Zone (v. 1-2) :</strong><br>
+                                    À la fin tu es las de ce monde ancien<br>
+                                    Bergère ô tour Eiffel le troupeau des ponts bêle ce matin
+                                </div>
+                                <div class="bg-emerald-100 p-2 rounded-lg text-xs mt-2 font-medium text-emerald-900">
+                                    <strong>Analyse :</strong> La métaphore filée de la "bergère" appliquée à une structure d'acier industriel (la Tour Eiffel) provoque un télescopage saisissant entre l'univers pastoral classique et la géométrie moderne. Ce contraste fonde l'avant-garde poétique.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-red-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">⏳</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 2</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le supplice du temps qui passe</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-red-50 border border-red-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai été très sensible au traitement de la fuite du temps, un thème classique que l'auteur réussit à renouveler totalement, particulièrement dans Le Pont Mirabeau. Apollinaire utilise la métaphore aquatique du fleuve parisien, la Seine, pour illustrer l'incapacité douloureuse de l'homme à retenir ce qu'il aime, comme l'eau qui file inexorablement entre les doigts. Le poète insiste sur l'immobilité de son propre corps resté sur le pont face au mouvement inarrêtable de ses sentiments et de sa vie passée. La poésie devient la seule ancre capable de fixer le souvenir dans l'éternité.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-red-600 shadow-sm">
+                                    <strong>Le Pont Mirabeau :</strong><br>
+                                    Vienne la nuit sonne l’heure<br>
+                                    Les jours s’en vont je demeure
+                                </div>
+                                <div class="bg-red-100 p-2 rounded-lg text-xs mt-2 font-medium text-red-900">
+                                    <strong>Analyse :</strong> Le refrain, aux allures d'incantation, repose sur une antithèse absolue entre le mouvement inéluctable du temps ("s'en vont") et la fixité douloureuse du poète ("je demeure"). L'absence de ponctuation accélère visuellement cette fuite liquides des mots.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-orange-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">💔</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 3</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le Mythe du Mal-Aimé</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-orange-50 border border-orange-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Il est fascinant de voir comment Apollinaire parvient à transformer une expérience autobiographique douloureuse, à savoir sa rupture houleuse avec la gouvernante Annie Playden, en une véritable épopée universelle. Dans La Chanson du Mal-Aimé, il ne se contente pas de pleurnicher de manière romantique. Il convoque un bestiaire mythologique, des rois, des figures légendaires pour donner à sa souffrance intime une dimension cosmique et sacrée. Il construit ainsi sa propre légende poétique : celle de l'éternel amoureux éconduit qui rachète son échec dans la réalité par sa victoire dans l'art.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-orange-500 shadow-sm">
+                                    <strong>La Chanson du Mal-Aimé :</strong><br>
+                                    Voie lactée ô sœur lumineuse<br>
+                                    Des blancs ruisseaux de Chanaan
+                                </div>
+                                <div class="bg-orange-100 p-2 rounded-lg text-xs mt-2 font-medium text-orange-900">
+                                    <strong>Analyse :</strong> L'apostrophe cosmique ("Voie lactée") et la référence biblique ("Chanaan") prouvent la volonté d'Apollinaire d'élever son chagrin personnel à des proportions divines, ancrant sa plainte dans l'histoire absolue de l'humanité.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-purple-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🧩</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 4</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">L'Esthétique Cubiste et le Collage</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-purple-50 border border-purple-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai été extrêmement surpris par la construction même des poèmes du recueil. Ami intime de peintres comme Picasso, Apollinaire applique la technique du cubisme directement à sa poésie. Plutôt que de développer une narration logique de A à Z, il juxtapose brutalement des impressions, des morceaux de dialogues entendus dans la rue, des visions urbaines et des pensées intimes sans aucune transition. Ce procédé de collage poétique force le lecteur à participer activement pour reconstituer le sens global de l'œuvre, rendant la lecture terriblement moderne et exigeante.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-purple-600 shadow-sm">
+                                    <strong>Zone :</strong><br>
+                                    Tu lis les prospectus les catalogues les affiches qui chantent tout haut / Voilà la poésie ce matin
+                                </div>
+                                <div class="bg-purple-100 p-2 rounded-lg text-xs mt-2 font-medium text-purple-900">
+                                    <strong>Analyse :</strong> L'énumération paratactique (sans liens logiques) de supports de communication marchande érigés au rang de poésie montre la destruction des frontières hiérarchiques de l'art classique. C'est l'incorporation brute du monde matériel.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-yellow-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🚫</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 5</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">La suppression de la ponctuation</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-yellow-50 border border-yellow-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Le coup de génie le plus célèbre de ce recueil est évidemment l'absence totale et volontaire de signes de ponctuation au moment des dernières corrections sur épreuves en 1912. Cette décision est loin d'être un simple caprice esthétique. En supprimant les points et les virgules, Apollinaire fluidifie le poème, qui coule d'un trait comme une mélodie ininterrompue ou un fleuve. De plus, cela crée des ambiguïtés sémantiques fascinantes : le lecteur ne sait plus exactement où s'arrête une phrase et où commence la suivante, ce qui donne une épaisseur de sens magistrale à chaque vers.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-yellow-500 shadow-sm">
+                                    <strong>L'Émigrant de Landor Road :</strong><br>
+                                    Les mains tremblaient<br>Les yeux pleuraient
+                                </div>
+                                <div class="bg-yellow-100 p-2 rounded-lg text-xs mt-2 font-medium text-yellow-900">
+                                    <strong>Analyse :</strong> Le blanc spatial remplace la ponctuation syntaxique. Ce vide laissé entre les vers dicte organiquement le rythme haletant et hésitant du cœur brisé, imposant un flux de conscience ininterrompu.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-pink-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🍷</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 6</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">L'Ivresse Cosmique du Poète</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-pink-50 border border-pink-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai adoré la conclusion prophétique du recueil avec le poème Vendémiaire. Tout au long du livre, l'alcool représentait souvent la dérive, la noyade des chagrins dans les bars de Paris ou les brasseries d'Allemagne. Mais à la toute fin, cette ivresse change fondamentalement de nature : elle devient dionysiaque et triomphante. Apollinaire annonce qu'il a bu métaphoriquement le monde entier, les expériences, les larmes, les fleuves et les villes d'Europe, pour les transformer en matière poétique. Il s'érige ainsi en dieu créateur de la modernité, prêt à affronter l'avenir radieux.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-pink-500 shadow-sm">
+                                    <strong>Vendémiaire :</strong><br>
+                                    Je suis ivre d'avoir bu tout l'univers / Sur le quai d'où je voyais l'onde couler et dormir les bélandres
+                                </div>
+                                <div class="bg-pink-100 p-2 rounded-lg text-xs mt-2 font-medium text-pink-900">
+                                    <strong>Analyse :</strong> L'hyperbole absolue "tout l'univers" positionne le poète comme l'encyclopédie sensible du monde. Le verbe "boire" est transmuté en symbole d'assimilation spirituelle et intellectuelle, conférant un pouvoir quasi messianique à l'acte d'écrire.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-gray-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🎶</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 7</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le lyrisme et la tradition conservée</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-gray-50 border border-gray-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Contrairement à ce qu'on pourrait penser d'un livre d'avant-garde, Apollinaire ne rase pas tout l'héritage classique. Ce qui fait le génie du recueil Alcools, c'est justement sa capacité à maintenir une musicalité traditionnelle et lyrique au milieu du chaos urbain. Même lorsqu'il parle d'automobiles ou de prostituées, il utilise régulièrement l'octosyllabe (le vers de la chanson populaire) ou l'alexandrin solennel. Ce mélange de prosodie ancienne et de sujets ultra-modernes crée un décalage d'une immense beauté, prouvant que le poète ne détruit l'ancien monde que pour mieux le renouveler.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-gray-600 shadow-sm">
+                                    <strong>Les Colchiques :</strong><br>
+                                    Le pré est vénéneux mais joli en automne / Les vaches y paissant / Lentement s'empoisonnent
+                                </div>
+                                <div class="bg-gray-200 p-2 rounded-lg text-xs mt-2 font-medium text-gray-800">
+                                    <strong>Analyse :</strong> Le rythme régulier et presque pastoral de la ritournelle cache une symbolique funeste, créant un sentiment de mélancolie douce et mortelle, ancré dans la plus grande tradition de l'élégie romantique.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 8 (LIEN RIMBAUD) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🔗</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Rimbaud 1</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">L'errance et la liberté</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Il m'a semblé inévitable de rapprocher le cosmopolitisme d'Apollinaire des fugues de Rimbaud dans le Cahier de Douai. Chez les deux poètes, le voyage, la marche et l'errance sont au cœur du processus créatif. Là où Rimbaud s'enfuit sur les routes de campagne les "poings dans ses poches crevées" (Ma Bohème) pour fuir l'étouffement provincial, Apollinaire erre dans les brouillards de Londres ou les rues de Paris. Pour l'un comme pour l'autre, le vagabondage physique est la condition absolue de la liberté poétique et intellectuelle.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Rimbaud (Ma Bohème) :</strong><br>
+                                    Je m'en allais, les poings dans mes poches crevées
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> La route physique devient une métaphore de la route poétique. L'errance permet de s'affranchir des règles bourgeoises pour trouver l'inspiration directement dans le mouvement et le dénuement matériel.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 9 (LIEN RIMBAUD) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">💥</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Rimbaud 2</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">Le rejet du monde ancien</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Les deux poètes partagent une volonté farouche de dynamiter les codes du passé. Dans le poème Zone, Apollinaire déclare être "las de ce monde ancien" et célèbre la modernité industrielle (avions, Tour Eiffel). Cette démarche fait directement écho à l'irrévérence du jeune Rimbaud dans le Cahier de Douai, où il s'attaque violemment aux piliers de son époque : la religion ("Le Mal"), la bourgeoisie étriquée ("À la Musique") et l'esthétique classique ("Vénus Anadyomène"). Tous deux font entrer la laideur et le trivial dans la grande poésie.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Rimbaud (À la musique) :</strong><br>
+                                    Ils ont des bottines / À bavettes, dont les bouts couleur de tabac...
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> L'introduction d'objets triviaux et banals détruit la noblesse imposée par le Parnasse. Chez les deux auteurs, le prosaïque et le laid deviennent les nouveaux matériaux de l'avant-garde esthétique.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 10 (LIEN RIMBAUD) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">📜</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Rimbaud 3</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">L'émancipation de la forme</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">La révolution thématique s'accompagne obligatoirement chez ces deux auteurs d'une révolution formelle. Apollinaire accomplit un acte radical en supprimant totalement la ponctuation de son recueil "Alcools" pour fluidifier le vers. Rimbaud, quelques décennies plus tôt, avait déjà commencé ce travail de sape en disloquant l'alexandrin classique par des enjambements et des rejets d'une violence inouïe. Dans les deux cas, il s'agit de briser l'ancien carcan formel pour laisser l'émotion nue et incandescente dicter son propre rythme de respiration.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Rimbaud (Vénus Anadyomène) :</strong><br>
+                                    Et qui porte au nombril une plaie effrayante.
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> La chute du sonnet crée un choc (la plaie/la laideur) qui vient casser la mécanique bien huilée du poème régulier. La forme se dérègle volontairement pour épouser parfaitement les contours de la modernité.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= ONGLET 4: QUESTIONS DU JURY ================= -->
+        <section id="questions" class="tab-content">
+            
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-black text-blue-900 mb-4 uppercase">Entretien avec le Jury (3 min)</h2>
+                <p class="text-lg text-slate-600 max-w-4xl mx-auto">
+                    Voici 20 questions réactives (sous forme de flashcards) que le jury pourrait vous poser en fonction de l'exposé que vous venez de faire. Cliquez pour voir la réponse.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 perspective-1000">
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">1. Pourquoi Apollinaire a-t-il totalement supprimé la ponctuation dans Alcools ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Il a pris cette décision de dernière minute en 1912 après avoir lu les poèmes de Cendrars. Il considérait que la ponctuation était artificielle et que le rythme même du vers et la respiration naturelle du lecteur suffisaient à structurer le texte et à libérer de multiples sens.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">2. Quel était le titre originel du recueil avant qu'il ne choisisse "Alcools" ? Pourquoi ce changement ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Le recueil devait s'appeler "Eau-de-vie". Apollinaire a changé pour "Alcools" car ce terme, plus moderne, exprime la soif brûlante de vivre, l'ivresse des expériences (voyages, amours), l'étourdissement urbain et la force distillée de sa poésie.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">3. Pourquoi le poème "Zone", écrit en dernier, a-t-il été placé au tout début de l'ouvrage ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est un véritable manifeste esthétique. En le plaçant en ouverture, Apollinaire avertit le lecteur qu'il entre dans un espace nouveau ("À la fin tu es las de ce monde ancien"). Il revendique la beauté du monde urbain et industriel avant de plonger dans des poèmes plus anciens et mélancoliques.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">4. Vous avez parlé d'influence cubiste. En quoi Alcools est-il un recueil "cubiste" ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Ami de Picasso, Apollinaire utilise le procédé de "collage". Il juxtapose dans un même poème des images éclatées, des dialogues sans lien, et des époques différentes, forçant le lecteur à recomposer lui-même l'image globale, exactement comme un tableau de Braque ou Picasso.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">5. Qui sont les deux femmes principales qui ont inspiré le thème de l'amour malheureux dans ce livre ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Il s'agit d'Annie Playden, la gouvernante anglaise qui repoussa ses avances et inspira "La Chanson du Mal-Aimé" ou "L'Émigrant de Landor Road", et de la peintre Marie Laurencin, dont la rupture douloureuse inspira notamment "Le Pont Mirabeau".
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">6. Dans "Le Pont Mirabeau", que symbolise l'eau de la Seine ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            L'eau (le fleuve) symbolise de manière traditionnelle l'écoulement inexorable du temps ("fugit irreparabile tempus") et la disparation inévitable des sentiments amoureux, s'opposant à la permanence douloureuse du poète (qui "demeure" sur le pont).
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">7. Comment expliquez-vous la présence de légendes et du folklore allemand (Les Rhénanes) ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Apollinaire a vécu en Allemagne (Rhénanie) entre 1901 et 1902 comme précepteur. Il a été profondément marqué par les paysages d'automne et les mythes romantiques allemands (comme la sorcière de la Loreley), qu'il intègre pour donner une dimension magique et macabre à son œuvre.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">8. Vous comparez Apollinaire à Rimbaud. Lequel des deux vous semble le plus radical dans sa rupture ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Rimbaud est plus fulgurant et rebelle politiquement, rompant avec la société par la fugue et la guerre ("Cahier de Douai"). Apollinaire, lui, mène une révolution plus esthétique et mélancolique, en conservant un lyrisme ancien profondément mêlé à l'avant-garde.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">9. Quel est le sens du mot "Vendémiaire", titre du dernier poème du recueil ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Vendémiaire est le mois des vendanges dans le calendrier révolutionnaire. Il symbolise la récolte (le poète a récolté les douleurs du monde), l'ivresse absolue, mais aussi la renaissance et l'ouverture d'une ère poétique entièrement nouvelle en clôture de l'ouvrage.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">10. Apollinaire a-t-il inventé le vers libre ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Non, le vers libre a été initié avant lui (Laforgue, Rimbaud). Mais Apollinaire le pousse à son paroxysme en l'associant à l'absence de ponctuation et à des sujets modernes. De plus, il mêle ce vers libre à des formes très classiques (l'alexandrin, l'octosyllabe régulier), créant une musicalité hybride unique.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">11. Quel rapport le poète entretient-il avec la religion dans ce livre ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Un rapport très paradoxal. Dans "Zone", il déclare que "la religion seule est restée toute neuve", comparant le Christ à un aviateur montant au ciel. Il utilise des images mystiques chrétiennes, mais les désacralise en les mêlant à la technologie et au culte païen de la vie moderne.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">12. Vous parlez de "Mal-Aimé". Le poète se victimise-t-il vraiment tout le temps ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Non, la souffrance n'est qu'un point de départ. Le recueil montre une incroyable vitalité de résilience. Même lorsqu'il souffre, il boit, il voyage, il découvre, et finalement, dans "Vendémiaire", il triomphe en avalant l'univers entier. C'est l'histoire d'une guérison par la poésie.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">13. Qu'est-ce que le mythe d'Orphée, et en quoi s'applique-t-il à Apollinaire ici ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Orphée est le poète antique qui charme les bêtes et descend aux enfers pour ramener sa femme aimée, mais échoue. Comme lui, Apollinaire tente de vaincre la perte et la mort de l'amour grâce au pouvoir purificateur de son chant poétique (la Chanson du Mal-Aimé).
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">14. Vous parlez de la nouveauté urbaine chez Rimbaud et Apollinaire. N'y a-t-il pas une différence d'échelle ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Absolument. Rimbaud critique surtout l'étroitesse de la petite ville de province ("À la musique") pour s'évader dans la nature. Apollinaire, au contraire, s'immerge pleinement dans la grande métropole mondiale, industrielle et tentaculaire (Paris, Londres).
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">15. Quel rôle jouent la peinture et la vue (l'œil) dans ce recueil ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Un rôle capital. Critique d'art et ami des peintres (il invente le mot "surréalisme" plus tard), Apollinaire est un poète du regard. Ses poèmes sont construits comme des tableaux visuels (les fenêtres, les affiches, les paysages rhénans), captant la couleur et la géométrie de la rue.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">16. Pourquoi Apollinaire utilise-t-il souvent le feu et la flamme comme allégories ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Le feu (dans Les Fiançailles par exemple) représente la douleur qui purifie. Le poète y consume son ancien "Moi" et ses regrets passéistes, dans un brasier spirituel, afin de pouvoir renaître de ses cendres en tant qu'artiste totalement libre de l'avant-garde.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">17. Y a-t-il une dimension politique ou sociale dans Alcools ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Oui, particulièrement son empathie pour les marginaux. En tant qu'étranger lui-même, il dresse le portrait fraternel des émigrants, des juifs exilés ("La Synagogue"), des ouvriers et des mendiants, leur conférant une noblesse digne de la grande poésie épique.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">18. La poésie d'Apollinaire est-elle optimiste ou pessimiste ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Elle transcende ces catégories. Elle contient l'extrême tristesse d'une plainte amoureuse, mais la résolution du recueil est éclatante et lumineuse. L'acte poétique chez lui triomphe de la mort en créant un monde nouveau fait de vitalité dionysiaque.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">19. En quoi Alcools est-il un livre du "voyage" ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est un voyage géographique (Paris, Londres, la Rhénanie, la Méditerranée) mais aussi temporel (de la mythologie antique au monde industriel du XXe siècle). Le recueil vagabonde d'une impression à l'autre, refusant toute sédentarité intellectuelle ou poétique.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">20. Pour conclure sur votre lien avec Rimbaud, diriez-vous qu'ils partagent la même vision de l'amour ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Ils partagent l'idée d'un amour très corporel et non idéalisé. Cependant, Rimbaud vit la découverte sensuelle, joyeuse et presque adolescente des premiers désirs ("Sensation"), alors qu'Apollinaire est un poète blessé, ancré dans le regret, le deuil et le mythe du Mal-Aimé.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Scripts pour l'interactivité -->
+    <script>
+        // Gestion des Onglets
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('button[id^="nav-"]').forEach(btn => {
+                btn.classList.remove('border-emerald-600', 'text-emerald-600', 'bg-emerald-50');
+                btn.classList.add('border-transparent', 'text-slate-500');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            
+            const activeBtn = document.getElementById('nav-' + tabId);
+            activeBtn.classList.remove('border-transparent', 'text-slate-500');
+            activeBtn.classList.add('border-emerald-600', 'text-emerald-600', 'bg-emerald-50');
+        }
+
+        // Gestion de l'Accordéon du Résumé
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.innerText = '-';
+            } else {
+                content.classList.add('hidden');
+                icon.innerText = '+';
+            }
+        }
+
+        // Graphique Chart.js (Stratégie & Temps)
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('timingChart').getContext('2d');
+            const data = {
+                labels: ['Présentation (1 min)', 'Résumé (2 min)  ', 'Motivations & Arguments (2 min)', 'Entretien / Questions (3 min)'],
+                datasets: [{
+                    data: [1, 2, 2, 3],
+                    backgroundColor: [
+                        '#1e293b', // slate-800
+                        '#34d399', // emerald-400
+                        '#047857', // emerald-700
+                        '#3b82f6'  // blue-500
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    hoverOffset: 6
+                }]
+            };
+
+            const config = {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            align: 'start',
+                            labels: {
+                                font: { family: "sans-serif" },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) { label = label.split(' (')[0]; }
+                                    return label + ' : ~' + context.raw + ' min';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            };
+
+            new Chart(ctx, config);
+        });
+    </script>
+</body>
+</html>
