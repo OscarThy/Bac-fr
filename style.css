@@ -6,7 +6,7 @@ body { margin: 0; padding: 0; background-color: #f8fafc; }
     from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
 }
-
+/* test */
 .custom-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
 .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
 .custom-scroll::-webkit-scrollbar-thumb { background: #93c5fd; border-radius: 10px; }
