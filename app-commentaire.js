@@ -64,17 +64,23 @@ function genererSousOngletsComm() {
 }
 
 function allerVersAuteur(id) {
-    // CORRECTIF : On ignore les majuscules lors de la recherche
     const auteur = BDD.auteurs.find(a => a.id.toLowerCase() === id.toLowerCase());
     if(auteur) {
         stateComm.mainTab = 'auteurs';
         stateComm.subTab = auteur.genre;
         changeTabComm('auteurs');
+        
         setTimeout(() => {
             const el = document.getElementById(`auteur-${auteur.id}`);
             if(el) { 
+
                 el.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
-                el.classList.add('highlight-flash'); 
+
+                el.classList.add('transform', 'scale-[1.03]', 'ring-4', 'ring-indigo-400', 'shadow-2xl', 'z-10', 'relative', 'transition-all', 'duration-500');
+
+                setTimeout(() => {
+                    el.classList.remove('transform', 'scale-[1.03]', 'ring-4', 'ring-indigo-400', 'shadow-2xl', 'z-10', 'relative');
+                }, 1500); 
             }
         }, 150);
     }
@@ -107,11 +113,15 @@ function renderContentComm() {
         const auteursFiltres = BDD.auteurs.filter(a => a.genre === stateComm.subTab);
         auteursFiltres.forEach(aut => {
             const mvts = aut.mouvements.map(m => `<button onclick="allerVersMouvement('${m.id}')" class="text-xs font-bold px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full hover:bg-indigo-200 transition">${m.nom}</button>`).join(' ');
+            
+            // NOUVEAU : Si l'auteur est incontournable, on ajoute un coeur animé
+            const coeurHTML = aut.incontournable ? `<span title="Auteur incontournable pour le Bac" class="text-red-500 ml-3 text-xl cursor-help animate-pulse">❤️</span>` : '';
+
             container.innerHTML += `
-                <div id="auteur-${aut.id}" class="p-8 bg-white border border-gray-200 rounded-2xl shadow-sm border-l-8 border-l-indigo-600">
-                    <div class="flex justify-between items-start mb-6">
-                        <h3 class="font-black text-2xl text-indigo-900">${aut.nom}</h3>
-                        <div class="flex gap-2">${mvts}</div>
+                <div id="auteur-${aut.id}" class="p-8 bg-white border border-gray-200 rounded-2xl shadow-sm border-l-8 border-l-indigo-600 transition-all duration-500 mb-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                        <h3 class="font-black text-2xl text-indigo-900 flex items-center mb-3 md:mb-0">${aut.nom} ${coeurHTML}</h3>
+                        <div class="flex gap-2 flex-wrap">${mvts}</div>
                     </div>
                     <p class="text-gray-700 leading-relaxed text-lg bg-indigo-50 p-6 rounded-xl">${aut.bio}</p>
                 </div>`;
