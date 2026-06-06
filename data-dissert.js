@@ -725,46 +725,46 @@ const BDD_DISSERTATION = {
                 explication: "Ce parcours analyse comment la marginalité sociale et morale des protagonistes (triche, prostitution, vol) devient le moteur d'un récit d'aventure haletant. Le plaisir romanesque naît de l'intensité dramatique des péripéties, de la fatalité de la passion amoureuse et de la subversion des cadres moraux de l'époque."
             },
             biographie: "Antoine-François Prévost (1697-1763), dit l'Abbé Prévost, mène une existence romanesque et mouvementée, oscillant entre les ordres religieux et la vie militaire. Journaliste, traducteur et romancier, il s'exile à plusieurs reprises en Angleterre et en Hollande pour fuir la justice. Publié en 1731, son chef-d'œuvre *Manon Lescaut* est censuré à sa sortie pour atteinte aux bonnes mœurs.",
-            resume_complet: "Le roman raconte l'histoire du Chevalier des Grieux, un jeune homme de bonne famille destiné à l'Église, dont la vie bascule lors de sa rencontre avec Manon Lescaut. Pris d'une passion obsessionnelle pour cette jeune fille terrifiée par la pauvreté et éprise de luxe, des Grieux abandonne son honneur, sa famille et sa fortune. Pour satisfaire les caprices financiers de Manon, le couple s'installe à Paris et plonge dans la marginalité : des Grieux apprend à tricher au jeu, tandis que Manon accepte de se faire entretenir par de riches amants. Arrêtés à plusieurs reprises, ils s'évadent, et des Grieux va jusqu'à tuer un gardien pour libérer sa maîtresse. Condamnée à la déportation en Louisiane comme fille de joie, Manon est suivie par des Grieux qui sacrifie tout pour elle. Dans le dénuement du Nouveau Monde, ils découvrent enfin la pureté d'un amour désintéressé. Cependant, pour fuir les avances du neveu du gouverneur local, ils s'enfuient dans le désert où Manon meurt d'épuisement, laissant des Grieux brisé.",
+            resume_complet: "Le roman raconte l'histoire du Chevalier des Grieux, un jeune homme de bonne famille destiné à l'Église, dont la vie bascule lors de sa rencontre avec Manon Lescaut. Pris d'une passion obsessionnelle pour cette jeune fille terrifiée par la pauvreté et éprise de luxe, des Grieux abandonne son honneur, sa famille et sa fortune. Pour satisfaire les caprices financiers de Manon, le couple s'installe à Paris et plonge dans la marginalité : des Grieux apprend à tricher au jeu, tandis que Manon accepte de se faire entretenir par de riches amants. Arrêtés à plusieurs reprises, ils s'évadent, et des Grieux va jusqu'à tuer un gardien pour libérer sa maîtresse. Condamnée à la déportation en Louisiane comme fille de joie, Manon éveille le respect de des Grieux qui sacrifie tout pour la suivre. Dans le dénuement du Nouveau Monde, ils découvrent enfin la pureté d'un amour désintéressé. Cependant, pour fuir les avances du neveu du gouverneur local, ils s'enfuient dans le désert où Manon meurt d'épuisement, laissant des Grieux brisé.",
             citations: [
                 {
                     theme: "1. Fatalité et aveuglement de la passion",
                     items: [
-                        { cit: "Elle me parut si charmante que je me trouvai enflammé tout d'un coup.", loc: "Partie I", analyse: "Métaphore du feu soulignant le caractère immédiat et destructeur du coup de foudre." },
-                        { cit: "Je frémis, comme il arrive lorsqu'on marche la nuit dans un chemin inconnu.", loc: "Partie I", analyse: "Comparaison prémonitoire associant la passion à une dérive nocturne dangereuse." },
-                        { cit: "L’amour est une passion innocente ; comment le Ciel l'aurait-il punie ?", loc: "Partie I", analyse: "Question rhétorique témoignant de la mauvaise foi et de la cécité morale du Chevalier." },
-                        { cit: "J'avais perdu la connaissance de moi-même et de mes devoirs.", loc: "Partie I", analyse: "Formulation marquant l'aliénation psychologique totale causée par l'obsession." },
-                        { cit: "Mon âme ne suivit pas la sienne.", loc: "Partie II", analyse: "Litote célèbre lors de la mort de Manon, traduisant le désespoir absolu du survivant." }
+                        { cit: "je me trouvai enflammé tout d'un coup jusqu'au transport.", loc: "Partie I", analyse: "La soudaineté du coup de foudre amoureux vécu comme une aliénation immédiate de la volonté." },
+                        { cit: "On voit, dans le Chevalier des Grieux, un exemple terrible de la force des passions.", loc: "Avis de l'auteur", analyse: "L'annonce édifiante du roman, présentant d'emblée la passion comme une force tragique destructrice." },
+                        { cit: "Le déshonneur et la honte ne me paraissaient plus des maux redoutables, dès que j'envisageais le bonheur de la revoir.", loc: "Partie I", analyse: "L'effacement complet des valeurs morales traditionnelles sous l'effet de l'obsession amoureuse." },
+                        { cit: "Je suis le plus malheureux de tous les hommes par la constance de mon amour", loc: "Partie I", analyse: "Le déchirement tragique d'un amant conscient de sa propre dépendance affective face à l'inconstance." },
+                        { cit: "C'est une vertu bien austère que celle qui s'oppose aux plus doux penchants de la nature.", loc: "Partie I", analyse: "Sophisme argumentatif où des Grieux tente de naturaliser et de légitimer sa passion coupable auprès de Tiberge." }
                     ]
                 },
                 {
-                    theme: "2. L'argent, le luxe et la corruption",
+                    theme: "2. L'argent, le luxe et la corruption morale",
                     items: [
-                        { cit: "Manon était passionnée pour le plaisir ; je l'étais pour elle.", loc: "Partie I", analyse: "Structure en chiasme conceptuel révélant l'asymétrie fatale de leurs désirs." },
-                        { cit: "Nous mourrons de faim à Paris si nous ne trouvons pas de l'or.", loc: "Partie I (Manon)", analyse: "Registre réaliste pragmatique qui vient briser l'idéalisme amoureux traditionnel." },
-                        { cit: "L'or est l'idole universelle de ce siècle corrompu.", loc: "Partie I", analyse: "Maxime désabusée érigeant l'argent en puissance théologique majeure du XVIIIe siècle." },
-                        { cit: "Je lui trouvais un cœur droit et une conduite honteuse.", loc: "Partie II", analyse: "Antithèse soulignant la complexité du personnage de Manon, partagée entre amour et vénalité." },
-                        { cit: "Il proposa de se venger de G... M... en lui prenant son argent.", loc: "Partie I", analyse: "Glissement moral où le ressentiment social justifie le recours au vol." }
+                        { cit: "Manon était passionnée pour le plaisir ; je l'étais pour elle, et pour tout ce qui pouvait lui en donner.", loc: "Partie I", analyse: "Structure en chiasme asymétrique révélant le conflit fondamental entre idéalisme amoureux et réalisme vénal." },
+                        { cit: "l'amour le plus tendre ne saurait s'accorder avec la faim.", loc: "Partie I (Lettre de Manon)", analyse: "Le pragmatisme cynique du siècle matérialiste qui vient subvertir l'idéalisme romanesque traditionnel." },
+                        { cit: "L'or est une idole trop puissante à Paris pour qu'on puisse lui disputer le cœur des belles.", loc: "Partie I", analyse: "Métaphore de l'or érigé en puissance théologique et en valeur suprême de la capitale sous la Régence." },
+                        { cit: "Je lui trouvais un cœur droit et une conduite honteuse.", loc: "Partie I", analyse: "Antithèse soulignant la duplicité psychologique du personnage de Manon, oscillant entre amour et besoin de confort." },
+                        { cit: "Je ne pus m'empêcher de jeter un regard de mépris sur la fortune et sur les grandeurs du monde.", loc: "Partie I", analyse: "Refus apparent du matérialisme mondain par l'amant mystique qui sacrifie sa position pour son idole." }
                     ]
                 },
                 {
                     theme: "3. La marginalité, la transgression et le crime",
                     items: [
-                        { cit: "Je franchis les degrés de la honte sans m'en apercevoir.", loc: "Partie I", analyse: "Métaphore de la dégradation morale continue d'un aristocrate qui s'ensauvage." },
-                        { cit: "Je me liai avec la ligue de l'Industrie pour vivre à ses dépens.", loc: "Partie I", analyse: "Périphrase ironique et euphémisme pour désigner le milieu des tricheurs professionels." },
-                        { cit: "Je versai le sang de ce malheureux sans hésiter.", loc: "Partie II", analyse: "Récit d'un meurtre formulé de manière froide, marquant la perte des repères moraux." },
-                        { cit: "Ma foi, mon honneur, tout était sacrifié à mon idole.", loc: "Partie I", analyse: "Hyperbole et métaphore religieuse plaçant Manon au-dessus des lois divines." },
-                        { cit: "Il est doux d'escroquer les vieux libertins qui abusent de leur pouvoir.", loc: "Partie II", analyse: "Justification idéologique de la triche, présentée comme une justice sociale." }
+                        { cit: "Je franchis enfin tous les degrés de la honte sans m'en apercevoir.", loc: "Partie I", analyse: "La métaphore de la descente aux enfers moraux d'un aristocrate se dépouillant de son honneur par paliers." },
+                        { cit: "en peu de temps j'occupai une place honorable parmi les chevaliers de l'industrie.", loc: "Partie I", analyse: "Périphrase ironique et antiphrase pour désigner le milieu des tricheurs professionnels et de la marginalité du jeu." },
+                        { cit: "Je lui lâchai un coup qui lui passa le pistolet au travers de la tête. Le malheureux tomba mort sur la place.", loc: "Partie II", analyse: "Le basculement irréversible de la marge mondaine vers la criminalité de sang lors de l'évasion de Saint-Lazare." },
+                        { cit: "Ma foi, mon honneur, tout était sacrifié à mon idole.", loc: "Partie I", analyse: "Hyperbole blasphématoire plaçant la femme aimée au-dessus de la morale religieuse et des devoirs de sa condition." },
+                        { cit: "Il proposa de se venger de G... M... en lui prenant son argent.", loc: "Partie I", analyse: "Justification amorale du vol, transformé par les marginaux en un acte de vengeance ou de justice sociale personnelle." }
                     ]
                 },
                 {
                     theme: "4. Liberté, exil et rédemption",
                     items: [
-                        { cit: "Je trouvais de la joie dans cet exercice de ma liberté.", loc: "Partie II", analyse: "Formulation paradoxale liant le bonheur de l'évasion à la précarité de la marge." },
-                        { cit: "L'Amérique nous parut le vrai lieu de notre bonheur purifié.", loc: "Partie II", analyse: "Utopie spatiale envisageant le Nouveau Monde comme un espace de régénération morale." },
-                        { cit: "Je rompis mon épée, pour m'en servir à lui creuser une fosse.", loc: "Partie II", analyse: "Geste symbolique fort brisant l'attribut de la noblesse pour accomplir un devoir de deuil." },
-                        { cit: "Nos âmes étaient enfin dépouillées des vains ornements de Paris.", loc: "Partie II", analyse: "Métaphore du dépouillement associant la pauvreté matérielle à la pureté retrouvée." },
-                        { cit: "C'est le Ciel qui me punit à l'instant même où je croyais être heureux.", loc: "Partie II", analyse: "Lecture providentialiste du drame, inscrivant la mort de Manon dans une logique de châtiment." }
+                        { cit: "mais je trouvais de la joie dans cet exercice de ma liberté.", loc: "Partie II", analyse: "Formulation paradoxale liant le sentiment de plénitude et de liberté à l'errance précaire dans Paris." },
+                        { cit: "Le Nouvel-Orléans nous parut d'abord un lieu de délices.", loc: "Partie II", analyse: "L'illusion de l'utopie géographique exotique, envisagée comme un sanctuaire purificateur pour le couple." },
+                        { cit: "Nos âmes, délivrées des passions qui les avaient si longtemps agitées, ne s'occupaient plus que de s'aimer et de se plaire réciproquement.", loc: "Partie II", analyse: "La rédemption et l'apaisement moral des amants atteints uniquement par le dénuement et l'éloignement de la corruption." },
+                        { cit: "Je rompis mon épée pour m'en servir à creuser la terre; mais elle m'était moins utile que mes mains.", loc: "Partie II", analyse: "Geste symbolique fort brisant l'attribut de la noblesse pour accomplir un devoir de deuil absolu dans le désert." },
+                        { cit: "je lui déclarai que les semences de vertu qu’il avait jetées autrefois dans mon cœur commençaient à produire des fruits dont il allait être satisfait.", loc: "Partie II, p. 323-324", analyse: "Métaphore horticole et chrétienne marquant le retour définitif à l'ordre moral et la fin des égarements de la marge." }
                     ]
                 }
             ],
