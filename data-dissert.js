@@ -237,26 +237,18 @@ const BDD_DISSERTATION = {
             <br><br>Avec <em>Le bruissement du temps</em>, Hélène Dorion orchestre une symphonie sensorielle de la forêt. Le lecteur est invité à écouter le temps géologique et végétal, infiniment plus lent et sage que le temps trépidant des sociétés humaines. L'écoute du vent dans les hautes branches agit comme une méditation spirituelle, forçant l'humain à accepter l'impermanence de sa condition et la petitesse de son existence face à la mémoire des arbres.
             <br><br>Enfin, <em>L'horizon des événements</em> ouvre le recueil sur une conscience écologique globale et anxieuse. L'autrice dresse le constat effrayant de la destruction de l'environnement (déforestation, incendies liés au réchauffement, silence de l'extinction des espèces). Le saccage industriel de la nature est assimilé à une automutilation de l'humanité. Cependant, l'œuvre ne s'achève pas sur un nihilisme total : l'acte d'écrire de la poésie est perçu comme la plantation d'une graine, une confiance obstinée dans la résilience de la sève et du mot face au désastre.`,
             citations: [
-                { cit: "Mes forêts sont de longues tiges de chair.", loc: "Mes forêts sont...", analyse: "Métaphore organique abolissant la frontière conceptuelle entre le règne végétal et le corps humain." },
-                { cit: "L'écorce de mes jours se détache.", loc: "L'écorce incertaine", analyse: "Allégorie somatique du vieillissement et de l'usure de l'existence acceptée." },
-                { cit: "Mes forêts sont des miroirs d'eau trouble.", loc: "Une chute de galets", analyse: "Le paysage institué en espace d'introspection psychanalytique des douleurs enfouies." },
-                { cit: "Je respire au rythme des branches.", loc: "Le bruissement du temps", analyse: "La respiration naturelle dicte la scansion et le rythme vital du vers poétique libre." },
-                { cit: "Je marche dans les cendres de mes ancêtres.", loc: "L'écorce incertaine", analyse: "La forêt envisagée comme un immense cimetière sacré et lieu de recueillement mémoriel." },
-                { cit: "Chaque cerne de l'arbre est un deuil enfoui.", loc: "Une chute de galets", analyse: "L'analogie chronologique parfaite entre la croissance du végétal et l'accumulation des pertes humaines." },
-                { cit: "Le temps creuse ses sillons dans la mousse.", loc: "Le bruissement du temps", analyse: "L'usure matérielle observée comme la trace tangible et silencieuse de l'Histoire du monde." },
-                { cit: "L'instant vacille comme une feuille morte.", loc: "L'horizon des événements", analyse: "Comparaison classique renouvelée pour illustrer l'impermanence de la condition terrestre." },
-                { cit: "Le silence est le gardien des siècles.", loc: "Le bruissement du temps", analyse: "Allégorie de la mémoire naturelle, infiniment supérieure et plus vaste que la mémoire humaine." },
-                { cit: "Le bruit des haches résonne dans mes veines.", loc: "L'horizon des événements", analyse: "Synesthésie de la douleur empathique : la déforestation est vécue comme une mutilation interne." },
-                { cit: "Les troncs mutilés pleurent une résine noire.", loc: "Une chute de galets", analyse: "Personnification tragique du bois pour souligner l'atrocité de l'exploitation industrielle." },
-                { cit: "La cendre remplace l'horizon.", loc: "L'écorce incertaine", analyse: "Image apocalyptique et factuelle des méga-incendies ravageant l'avenir boréal." },
-                { cit: "Un ciel vide d'oiseaux.", loc: "L'horizon des événements", analyse: "Métonymie glaçante du déclin de la biodiversité et de l'installation d'un silence mortifère." },
-                { cit: "Nous avons oublié la langue de la sève.", loc: "Le bruissement du temps", analyse: "Le constat accusateur de l'amnésie humaine vis-à-vis des savoirs ancestraux du vivant." },
-                { cit: "Écrire, c'est replanter une graine dans la faille.", loc: "L'écorce incertaine", analyse: "Métaphore définissant la nécessité de l'acte littéraire comme un geste de sauvegarde environnementale." },
-                { cit: "La sève finit toujours par remonter.", loc: "L'horizon des événements", analyse: "Affirmation philosophique finale de l'espoir et de la force invincible des cycles de la vie." },
-                { cit: "Je tisse mes mots avec des lianes.", loc: "Le bruissement du temps", analyse: "La création du recueil de poésie est conçue comme un artisanat purement organique et naturel." },
-                { cit: "Un poème pour chaque arbre tombé.", loc: "Une chute de galets", analyse: "Le livre devient un sanctuaire de papier et un hommage funèbre aux victimes de l'anthropocène." },
-                { cit: "La lumière perce toujours la canopée.", loc: "L'écorce incertaine", analyse: "L'optimisme lumineux clôturant la descente dans les ténèbres psychologiques." },
-                { cit: "Mes racines cherchent encore la lumière.", loc: "L'horizon des événements", analyse: "La profession de foi intime du désir de résilience spirituelle face aux tragédies." }
+                { cit: "Mes forêts sont de longues tiges d'histoire", loc: "Poèmes anaphoriques", analyse: "L'anaphore fondatrice du recueil qui verticalise le temps et relie la forêt à la généalogie de l'humanité." },
+                { cit: "et quand je m’y promène / c’est pour prendre le large / vers moi-même", loc: "Poèmes anaphoriques", analyse: "La promenade forestière n'est pas une fuite du monde, mais un voyage introspectif vers l'intimité profonde." },
+                { cit: "mes forêts sont des aiguilles d'ombre", loc: "Poèmes anaphoriques", analyse: "Métaphore visuelle frappante mêlant la précision des conifères à la mélancolie (l'ombre)." },
+                { cit: "il fait un temps de débris / un temps d'écorces et de pierres", loc: "Une chute de galets", analyse: "La minéralisation du paysage qui reflète l'aridité du deuil et la rudesse de l'épreuve intime." },
+                { cit: "comment habiter / ce qui s'effondre", loc: "L'horizon des événements", analyse: "La question centrale du recueil, traduisant à la fois l'éco-anxiété moderne et la vulnérabilité du sujet lyrique." },
+                { cit: "mes forêts sont un peuple / de feuilles et de vent", loc: "Poèmes anaphoriques", analyse: "Personnification collective ('un peuple') qui donne une dignité politique et sociale à la nature menacée." },
+                { cit: "le monde se déchire / sous nos yeux", loc: "L'horizon des événements", analyse: "Le constat lucide et tragique de l'urgence écologique et de la perte d'harmonie entre l'homme et la Terre." },
+                { cit: "mes forêts sont des arbres / qu'on abat", loc: "Poèmes anaphoriques", analyse: "La poésie se fait acte de dénonciation factuelle contre la déforestation et le saccage industriel." },
+                { cit: "nous habitons la faille", loc: "L'écorce incertaine", analyse: "L'acceptation de la vulnérabilité et de la blessure comme condition humaine fondamentale." },
+                { cit: "mes forêts sont des larmes / qui ne tombent pas", loc: "Poèmes anaphoriques", analyse: "La forêt comme réceptacle de la douleur tue ; le chagrin intériorisé trouve un miroir dans la sève silencieuse." },
+                { cit: "une rumeur de sève / et de sang", loc: "Le bruissement du temps", analyse: "Fusion totale entre le règne végétal et la physiologie humaine, prouvant l'interdépendance du vivant." },
+                { cit: "le bruit du monde / s'éloigne", loc: "L'écorce incertaine", analyse: "La forêt comme sanctuaire et rempart vital contre la frénésie aliénante de la modernité urbaine." }
             ],
             docs_complementaires: [
                 { titre: "À la forêt de Gastine", source: "Pierre de Ronsard (1550)", citation: "Écoute-moi, forêt, ô forêt, ma compagne...", analyse: "L'ancêtre lointain de la poésie forestière écologiste, déplorant déjà la destruction des vieux arbres par les bûcherons." },
@@ -881,47 +873,47 @@ const BDD_DISSERTATION = {
                 nom: "Les romans de l'énergie : création et destruction",
                 explication: "Ce parcours explore la théorie balzacienne selon laquelle chaque individu possède un capital fini d'énergie vitale. Le désir ('Vouloir') et l'action ('Pouvoir') consument cette force divine et accélèrent la mort. Le roman met en scène la combustion tragique d'un héros dont les souhaits matériels se traduisent par le rétrécissement physique d'un talisman magique, illustrant la tension entre création artistique, consumérisme et survie."
             },
-            biographie: "Honoré de Balzac (1799-1850) est le père fondateur du Réalisme moderne en littérature. Écrivain titanesque et visionnaire, il conçoit *La Comédie humaine*, une œuvre monumentale regroupant plus de 90 romans reliés par le système des personnages reparaissants, visant à cartographier et analyser scientifiquement toutes les classes, les intérieurs et les mœurs de la société post-révolutionnaire du XIXe siècle.",
-            resume_complet: "Publié en 1831, <em>La Peau de chagrin</em> est un roman philosophique et fantastique articulé en trois parties. Raphaël de Valentin, un jeune aristocrate surdoué mais totalement ruiné et désespéré par l'indifférence de la société parisienne, s'apprête à se suicider en se jetant dans la Seine. Il entre par hasard dans la boutique d'un vieil antiquaire mystique qui lui propose un pacte faustien : un talisman en peau d'âne sauvage, capable d'exaucer absolument tous ses désirs. Cependant, le vieillard énonce la clause fatale : à chaque souhait formulé, la Peau rétrécira, abrégeant proportionnellement la durée de vie du héros. Ivre de cynisme, Raphaël accepte et demande un banquet somptueux. Il est immédiatement entraîné dans une orgie frénétique chez le banquier Taillefer, où il constate le premier rétrécissement de l'objet. Lors de cette fête, il confie son passé à son ami Émile : étudiant ascétique, il travaillait à un traité philosophique dans une mansarde, soutenu par l'amour pur de Pauline, avant de se ruiner et de sombrer dans la folie en tentant de conquérir la comtesse Foedora, 'la femme sans cœur', allégorie de la haute société parisienne. Devenu immensément riche grâce au talisman, Raphaël vit désormais cloîtré dans un hôtel particulier, s'imposant une existence mécanique d'automate pour ne plus rien désirer et ainsi préserver sa vie. Mais ses retrouvailles avec Pauline raniment une passion dévorante. La Peau fond à vue d'œil. Affolé, Raphaël consulte en vain la science et la médecine. Il meurt foudroyé dans un dernier élan de désir pour Pauline, la Peau réduite à néant.",
+            biographie: "Honoré de Balzac (1799-1850) est le père fondateur du Réalisme moderne en littérature[cite: 1496]. Écrivain titanesque et visionnaire, il conçoit *La Comédie humaine*, une œuvre monumentale regroupant plus de 90 romans reliés par le système des personnages reparaissants, visant à cartographier et analyser scientifiquement toutes les classes, les intérieurs et les mœurs de la société post-révolutionnaire du XIXe siècle[cite: 1495, 1497, 1498].",
+            resume_complet: `Publié en 1831, <em>La Peau de chagrin</em> est un roman philosophique et fantastique articulé en trois parties. Raphaël de Valentin, un jeune homme ruiné et désespéré [cite: 1519, 1595], s'apprête à se suicider en se jetant dans la Seine après avoir perdu son dernier écu au jeu[cite: 1542, 1545, 1630]. Il entre par hasard dans le magasin d'un vieil antiquaire mystique qui lui propose un pacte : un talisman en peau d'onagre sauvage capable d'exaucer absolument tous ses désirs[cite: 1689, 1833, 1900, 1918]. Cependant, la clause est fatale : à chaque souhait formulé, la Peau rétrécira, abrégeant proportionnellement la durée de vie du héros[cite: 1928, 1929, 1930, 1931, 2008, 2009]. Ivre de cynisme, Raphaël accepte et demande un banquet somptueux[cite: 1991, 1996]. Il est immédiatement entraîné dans une orgie frénétique chez le banquier Taillefer, où il constate le premier rétrécissement de l'objet[cite: 2062, 2133, 2179]. Lors de cette fête, il confie son passé à son ami Émile : étudiant ascétique, il travaillait à un traité philosophique dans une mansarde, soutenu par l'amour pur de Pauline, avant de se ruiner et de sombrer dans la folie en tentant de conquérir la comtesse Foedora, « la femme sans cœur », incarnation de l'égoïsme mondain[cite: 184, 186, 261, 321, 337, 525]. Devenu immensément riche grâce au talisman, Raphaël vit désormais cloîtré, s'imposant une existence mécanique sans désirs pour préserver sa vie[cite: 1007, 1031]. Mais ses retrouvailles avec Pauline raniment sa passion[cite: 1077, 1115]. La Peau fond à vue d'œil[cite: 1173]. Après avoir consulté en vain la science et la médecine [cite: 1214, 1220, 1315], Raphaël meurt foudroyé dans un ultime élan de désir pour Pauline[cite: 1447, 1456].`,
             citations: [
                 {
-                    theme: "1. Le pacte faustien, le temps et la Peau",
+                    theme: "1. Le pacte fantastique, le temps et l'écriture de la Peau",
                     items: [
-                        { cit: "Si tu me possèdes, tu posséderas tout, mais ta vie m'appartiendra.", loc: "Le Talisman", analyse: "Formule contractuelle fantastique actant le sacrifice de l'existence au profit de la toute-puissance." },
-                        { cit: "VOULOIR nous brûle et POUVOIR nous détruit ; mais SAVOIR laisse notre faible organisation dans un perpétuel état de calme.", loc: "Le Talisman (L'Antiquaire)", analyse: "Maxime ternaire résumant la thèse philosophique balzacienne sur la gestion de l'énergie vitale." },
-                        { cit: "À chaque vouloir, je décroîtrai comme tes jours. Regarde-moi.", loc: "Le Talisman", analyse: "Inscription métaphorique matérialisant l'écoulement du temps sous la forme d'un déclin physique." },
-                        { cit: "Il tenait le monde entre ses mains, mais il ne le voulait plus.", loc: "L'Agonie", analyse: "Antithèse tragique montrant le paradoxe d'un héros paralysé par sa propre omnipotence." },
-                        { cit: "La Peau s'était réduite à la dimension d'une feuille de saule.", loc: "L'Agonie", analyse: "Comparaison végétale accentuant la précarité imminente de la vie du protagoniste." }
+                        { cit: "Si tu me possèdes, tu posséderas tout. Mais ta vie m'appartiendra. Dieu l'a voulu ainsi.", loc: "Le Talisman", analyse: "La formule gravée en sanscrit qui scelle le pacte de soumission de l'existence au profit de la toute-puissance[cite: 1927, 1928, 1936]." },
+                        { cit: "A chaque vouloir je décroîtrai comme tes jours. Elle est là. Me veux-tu ? Prends. Dieu t'exaucera. Soit !", loc: "Le Talisman", analyse: "L'inscription fatidique qui matérialise l'écoulement irréversible du temps sous la forme d'un rétrécissement physique[cite: 1929, 1930, 1931, 1932, 1933, 1934]." },
+                        { cit: "Vouloir nous brûle et Pouvoir nous détruit ; mais Savoir laisse notre faible organisation dans un perpétuel état de calme.", loc: "Le Talisman (L'Antiquaire)", analyse: "Maxime ternaire fondamentale résumant la thèse philosophique de Balzac sur la dissipation ou la conservation de l'énergie vitale[cite: 1955, 1957]." },
+                        { cit: "Le monde lui appartenait, il pouvait tout et ne voulait plus rien.", loc: "La Peau de chagrin (Le réveil)", analyse: "Antithèse tragique montrant la paralysie totale du héros, condamné à l'inaction par peur d'abréger ses jours[cite: 994, 996]." },
+                        { cit: "La Peau de chagrin était comme un tigre avec lequel il lui fallait vivre, sans en réveiller la férocité.", loc: "L'Agonie", analyse: "Comparaison animale sauvage soulignant le danger permanent qui guette les moindres désirs inconscients du héros[cite: 1031, 1032]." }
                     ]
                 },
                 {
-                    theme: "2. La satire sociale et l'allégorie de Paris",
+                    theme: "2. La satire sociale, l'orgie et l'allégorie de Foedora",
                     items: [
-                        { cit: "Foedora, c’était la société personnifiée.", loc: "La Femme sans cœur", analyse: "Allégorie érigeant la comtesse en symbole de l'égoïsme et de la froideur de la haute bourgeoisie." },
-                        { cit: "L'argent est la seule divinité de cette époque matérialiste.", loc: "Le Talisman", analyse: "Diagnostic réaliste de Balzac dénonçant le triomphe du capitalisme après la Révolution." },
-                        { cit: "Paris est un gouffre d'or, de vices et de génies consumés.", loc: "La Femme sans cœur", analyse: "Accumulation métaphorique dépeignant la capitale comme un monstre dévorateur d'énergie." },
-                        { cit: "Elle se laissait adorer, mais elle ne se donnait jamais.", loc: "La Femme sans cœur", analyse: "Antithèse révélant la perversion du désir mondain, réduit à un pur exercice de pouvoir narcissique." },
-                        { cit: "Une débauche d'esprits et de cadavres d'idées.", loc: "Le Talisman (L'Orgie)", analyse: "Alliance de mots (débauche/cadavres) fustigeant le cynisme intellectuel lors du festin de Taillefer." }
+                        { cit: "Foedora se produisait là comme un spectacle dans le spectacle.", loc: "La Femme sans cœur", analyse: "Mise en abyme théâtrale montrant que la comtesse n'est qu'un artifice mondain guidé par la vanité[cite: 620, 622]." },
+                        { cit: "Elle cachait un cœur de bronze sous sa frêle et gracieuse enveloppe.", loc: "La Femme sans cœur", analyse: "Antithèse réaliste révélant la dureté et l'égoïsme absolu de la comtesse, imperméable au sentiment[cite: 624, 634]." },
+                        { cit: "Ici-bas rien n'est complet que le malheur.", loc: "Le Talisman", analyse: "Maxime balzacienne désabusée traduisant le pessimisme foncier du roman face aux illusions humaines[cite: 1571]." },
+                        { cit: "L'orgie seule déploya sa grande voix, sa voix composée de cent clameurs confuses qui grossissent comme les crescendo de Rossini.", loc: "Le Talisman", analyse: "Comparaison musicale décrivant le chaos intellectuel, le pillage des idées et la débauche de paroles lors du festin de Taillefer[cite: 2179, 2575]." },
+                        { cit: "C'était la vie fangeuse au sein du luxe, un horrible mélange des pompes et des misères humaines...", loc: "La Peau de chagrin (Le réveil)", analyse: "Antithèse fustigeant la laideur morale et la déchéance physique du vice lorsque les fards du luxe tombent au matin[cite: 988]." }
                     ]
                 },
                 {
-                    theme: "3. La faillite scientifique et la fin de la raison",
+                    theme: "3. La faillite de la science et de la raison positiviste",
                     items: [
-                        { cit: "Les savants étaient devenus de véritables enfants devant ce mystère.", loc: "L'Agonie", analyse: "Comparaison ironique soulignant l'impuissance du rationalisme positiviste du XIXe siècle face à l'occulte." },
-                        { cit: "Une force inconnue, supérieure à toutes les lois de la matière.", loc: "L'Agonie", analyse: "Formulation marquant l'irruption du fantastique au cœur même du protocole de description réaliste." },
-                        { cit: "La médecine est une science conjecturale qui s'écharpe sur un cadavre.", loc: "L'Agonie", analyse: "Satire féroce de la corporation médicale, incapable de diagnostiquer le mal du héros." },
-                        { cit: "La presse hydraulique se brisa sans l'aplatir d'un cheveu.", loc: "L'Agonie", analyse: "Hyperbole technique démontrant l'échec de la puissance industrielle face au talisman sacré." },
-                        { cit: "Ils mesuraient l'impossible avec leurs compas inutiles.", loc: "L'Agonie", analyse: "Oxymore marquant la vanité du scientisme confronté à la fatalité du destin spirituel." }
+                        { cit: "Le racornissement du cuir est un fait inexplicable et cependant naturel, qui, depuis l'origine du monde, fait le désespoir de la médecine et des jolies femmes.", loc: "L'Agonie (Maugredie)", analyse: "Ironie balzacienne plaçant l'impuissance des médecins sur le même plan que la coquetterie féminine face au mystère fantastique[cite: 1306]." },
+                        { cit: "La médecine est une science conjecturale qui s'écharpe sur un cadavre.", loc: "Analyse thématique", analyse: "Satire féroce de la corporation médicale (Briset, Caméristus, Maugredie), perdue dans des théories vaines sans sauver le patient[cite: 1311, 1315]." },
+                        { cit: "L'eau contenue dans la machine brisa la fonte, produisit un jet d'une puissance incommensurable, et se dirigea heureusement sur une vieille forge qu'elle renversa...", loc: "L'Agonie", analyse: "L'échec de la presse hydraulique mécanique face à l'indestructibilité magique du talisman oriental[cite: 1220, 1222, 1225]." },
+                        { cit: "L'Allemand saisit un marteau de forgeron, jeta la peau sur une enclume, et, de toute la force que donne la colère, déchargea sur le talisman le plus terrible coup...", loc: "L'Agonie (Spieghalter)", analyse: "L'impuissance de la force brute industrielle et de la métallurgie à entamer le cuir rebelle[cite: 1225, 1226, 1227]." },
+                        { cit: "En rentrant chez lui, Valentin était en proie à une rage froide ; il ne croyait plus à rien, ses idées se brouillaient dans sa cervelle...", loc: "L'Agonie", analyse: "Le vertige intellectuel du savant rationaliste (disciple de Gay-Lussac) confronté à un fait impossible qui brise la raison[cite: 1242, 1243, 1853]." }
                     ]
                 },
                 {
-                    theme: "4. L'énergie vitale, l'agonie et la passion",
+                    theme: "4. L'énergie consumée, la passion et l'agonie tragique",
                     items: [
-                        { cit: "Raphaël vécut dès lors comme un automate mécanique.", loc: "L'Agonie", analyse: "Comparaison technologique traduisant la mort psychologique du personnage qui s'interdit de désirer." },
-                        { cit: "Pauline, je t'aime et je meurs !", loc: "L'Agonie", analyse: "Structure dramatique liant consubstantiellement l'explosion de l'amour à l'anéantissement physique." },
-                        { cit: "Il fixait la Peau avec des yeux de fou et de condamné.", loc: "L'Agonie", analyse: "Double qualification marquant le glissement de la toute-puissance vers la paranoïa morbide." },
-                        { cit: "Sa vie s'échappait par ses regards enflammés.", loc: "La Femme sans cœur", analyse: "Métaphore des fluides illustrant la théorie balzacienne de la dissipation de l'énergie par l'expression." },
-                        { cit: "Le moribond mordit sauvagement le sein de Pauline.", loc: "L'Agonie (La mort)", analyse: "Registre bestial traduisant la fureur pulsionnelle ultime du héros au moment de son agonie finale." }
+                        { cit: "La vie passée dans le vide des abstractions ou dans les abîmes du monde moral mène à quelque folle sagesse.", loc: "Le Talisman (Émile)", analyse: "Synthèse philosophique du dilemme énergétique du roman : la pensée et la passion détruisent l'homme[cite: 2580, 2581]." },
+                        { cit: "Tuer les sentiments pour vivre vieux, ou mourir jeune en acceptant le martyre des passions, voilà notre arrêt.", loc: "Le Talisman (Émile)", analyse: "La formulation nette du verdict biologique balzacien pesant sur le destin de Raphaël[cite: 2581]." },
+                        { cit: "Mourir avec toi, demain matin, ensemble, dans un dernier baiser, ce serait un bonheur.", loc: "L'Agonie (Pauline)", analyse: "La dimension romantique du sacrifice amoureux accepte l'anéantissement physique pour l'intensité d'un instant de perfection[cite: 1258, 1262, 1264]." },
+                        { cit: "Il y a de ces tressaillements intimes qui peuvent surprendre les gens superficiels, mais ces effets de notre nature intérieure sont aussi simples que les phénomènes habituels de notre vision extérieure...", loc: "La Femme sans cœur", analyse: "La théorie des fluides et de la communication invisible des âmes par la puissance magnétique de la pensée[cite: 368, 369, 370]." },
+                        { cit: "Le moribond chercha des paroles pour exprimer le désir qui dévorait toutes ses forces ; mais il ne trouva que les sons étranglés du râle dans sa poitrine...", loc: "L'Agonie (La Mort)", analyse: "La scène finale de combustion totale : l'explosion pulsionnelle ultime consume les dernières parcelles du capital vital[cite: 1454, 1455, 1456]." }
                     ]
                 }
             ],
@@ -933,7 +925,7 @@ const BDD_DISSERTATION = {
                 { titre: "Spleen LXXVIII", source: "Charles Baudelaire (1857)", citation: "Le Temps mange la vie.", analyse: "L'angoisse poétique du sablier que Balzac matérialise physiquement à travers le rétrécissement de la peau." },
                 { titre: "Le Rouge et le Noir", source: "Stendhal (1830)", citation: "Julien avait de l'énergie, c'était son crime.", analyse: "La célébration de la force vitale et de l'ambition de la jeunesse du XIXe siècle étouffée par la Restauration." },
                 { titre: "Frankenstein", source: "Mary Shelley (1818)", citation: "Je suis le créateur de ma propre destruction.", analyse: "Le mythe scientifique du savant ou de l'homme puni par l'Académie pour avoir bravé les limites de la nature." },
-                { titre: "Aurélia", source: "Gérard de Nerval (1855)", citation: "Le rêve est une seconde vie.", analyse: "L'irruption du fantastique et du délire onirique comme mode d'exploration des fêlures psychiques." },
+                { titre: "Aurélia", source: "Gérard de Nerval (1855)", citation: "Le Rêve est une seconde vie.", analyse: "L'irruption du fantastique et du délire onirique comme mode d'exploration des fêlures psychiques." },
                 { titre: "Les Tableaux de Paris", source: "Louis-Sébastien Mercier (1781)", citation: "Le gouffre parisien.", analyse: "La fresque sociale pré-révolutionnaire décrivant déjà la corruption des mœurs par la spéculation financière." },
                 { titre: "Physiologie du mariage", source: "Honoré de Balzac (1829)", citation: "Tout est force dans l'univers.", analyse: "L'essai théorique fondateur où Balzac pose ses premières hypothèses scientifiques sur les fluides vitaux." }
             ],
@@ -945,25 +937,25 @@ const BDD_DISSERTATION = {
                         {
                             titre: "I. Le paradoxe de la toute-puissance illusoire : le pouvoir absolu condamnant à l'inaction",
                             sous_parties: [
-                                "A. Le pacte fantastique comme promesse d'une omnipotence totale ('Vouloir' et 'Pouvoir' sans limites).",
-                                "B. La paralysie tragique du héros : ne plus rien désirer pour empêcher le rétrécissement matériel de la Peau.",
-                                "C. L'existence végétative d'un automate (Raphaël renonçant à son humanité pour survivre)."
+                                "A. Le pacte fantastique comme promesse d'une omnipotence totale ('Vouloir' et 'Pouvoir' sans limites)[cite: 1928, 1985].",
+                                "B. La paralysie tragique du héros : ne plus rien désirer pour empêcher le rétrécissement matériel de la Peau[cite: 1031].",
+                                "C. L'existence végétative d'un automate (Raphaël renonçant à son humanité pour survivre)[cite: 1007]."
                             ]
                         },
                         {
                             titre: "II. En réalité, une vie consumée par l'intensité dramatique des passions antérieures",
                             sous_parties: [
-                                "A. Le passé d'artisan intellectuel : la rédaction ascétique de la Théorie de la volonté dans la mansarde.",
-                                "B. La combustion destructrice et stérile de l'énergie amoureuse pour conquérir la froide Foedora.",
-                                "C. Le festin initial chez Taillefer : l'orgie comme paroxysme de la dissipation de la force vitale."
+                                "A. Le passé d'artisan intellectuel : la rédaction ascétique de la Théorie de la volonté dans la mansarde[cite: 184, 190].",
+                                "B. La combustion destructrice et stérile de l'énergie amoureuse pour conquérir la froide Foedora[cite: 337, 630].",
+                                "C. Le festin initial chez Taillefer : l'orgie comme paroxysme de la dissipation de la force vitale[cite: 2062, 2179]."
                             ]
                         },
                         {
                             titre: "III. La formule balzacienne comme diagnostic tragique de la modernité",
                             sous_parties: [
-                                "A. Raphaël, archétype d'une génération romantique désenchantée, dévorée par l'ambition sociale bourgeoise.",
-                                "B. L'échec final du matérialisme : l'accumulation de richesses dorées qui débouche sur le vide existentiel.",
-                                "C. Le triomphe de la passion sur la raison : l'amour ultime avec Pauline comme explosion fatale et sublime."
+                                "A. Raphaël, archétype d'une génération romantique désenchantée, dévorée par l'ambition sociale bourgeoise[cite: 2074, 2076].",
+                                "B. L'échec final du matérialisme : l'accumulation de richesses dorées qui débouche sur le vide existentiel[cite: 988].",
+                                "C. Le triomphe de la passion sur la raison : l'amour ultime avec Pauline comme explosion fatale et sublime[cite: 1265, 1447]."
                             ]
                         }
                     ]
@@ -975,25 +967,25 @@ const BDD_DISSERTATION = {
                         {
                             titre: "I. Un roman de l'involution, du déclin et de l'anéantissement universel",
                             sous_parties: [
-                                "A. La disparition physique, millimétrée et inéluctable du talisman, symbole du capital de vie.",
-                                "B. La dégradation physiologique, l'agonie et la phtisie du héros Raphaël de Valentin.",
-                                "C. L'effondrement des valeurs morales traditionnelles et de la noblesse d'esprit, dévorées par la puissance de l'argent."
+                                "A. La disparition physique, millimétrée et inéluctable du talisman, symbole du capital de vie[cite: 1173, 1930].",
+                                "B. La dégradation physiological, l'agonie et la phtisie du héros Raphaël de Valentin[cite: 993, 1295].",
+                                "C. L'effondrement des valeurs morales traditionnelles et de la noblesse d'esprit, dévorées par la puissance de l'argent[cite: 988, 2273]."
                             ]
                         },
                         {
                             titre: "II. La persistance de forces spirituelles, artistiques et affectives indestructibles",
                             sous_parties: [
-                                "A. L'amour absolu, pur et désintéressé de Pauline qui survit à la déchéance et à la folie du héros.",
-                                "B. Le pouvoir éternel du 'Savoir' incarné par la collection de l'antiquaire et la création littéraire.",
-                                "C. La pérennité du Désir humain qui renaît de ses cendres, érigeant l'intrigue au rang de mythe universel."
+                                "A. L'amour absolu, pur et désintéressé de Pauline qui survit à la déchéance et à la folie du héros[cite: 475, 1432].",
+                                "B. Le pouvoir éternel du 'Savoir' incarné par la collection de l'antiquaire et la création littéraire[cite: 1957, 1967].",
+                                "C. La pérennité du Désir humain qui renaît de ses cendres, érigeant l'intrigue au rang de mythe universel[cite: 1443]."
                             ]
                         },
                         {
                             titre: "III. La disparition comme condition paradoxale de la Beauté et du renouvellement réaliste",
-                            sus_parties: [
-                                "A. La combustion de l'énergie nécessaire à l'éclat de l'œuvre d'art : le panache romantique de l'incandescence brève.",
-                                "B. La ruine de l'illusion romanesque individuelle permettant l'avènement d'une peinture lucide et chirurgicale de la société.",
-                                "C. Le roman comme sanctuaire textuel immortalisant les vestiges d'un monde en mutation."
+                            sous_parties: [
+                                "A. La combustion de l'énergie nécessaire à l'éclat de l'œuvre d'art : le panache romantique de l'incandescence brève[cite: 2003, 2581].",
+                                "B. La ruine de l'illusion romanesque individuelle permettant l'avènement d'une peinture lucide et chirurgicale de la société[cite: 2620, 2621].",
+                                "C. Le roman comme sanctuaire textuel immortalisant les vestiges d'un monde en mutation[cite: 1714, 1744]."
                             ]
                         }
                     ]
@@ -1005,25 +997,25 @@ const BDD_DISSERTATION = {
                         {
                             titre: "I. Un héros pris au piège de forces déterministes et fatales supérieures",
                             sous_parties: [
-                                "A. Le déterminisme social et financier implacable de la Restauration qui accule le provincial ruiné au suicide.",
-                                "B. La machination diabolique du talisman magique dont la clause scelle l'involution mécanique de l'existence.",
-                                "C. L'influence corruptrice des figures de tentation parisiennes (le cynisme d'Émile, la froideur de Foedora)."
+                                "A. Le déterminisme social et financier implacable de la Restauration qui accule le provincial ruiné au suicide[cite: 1542, 1655].",
+                                "B. La machination diabolique du talisman magique dont la clause scelle l'involution mécanique de l'existence[cite: 1928, 2008].",
+                                "C. L'influence corruptrice des figures de tentation parisiennes (le cynisme d'Émile, la froideur de Foedora)[cite: 408, 527, 852]."
                             ]
                         },
                         {
                             titre: "II. L'affirmation du libre arbitre et de la responsabilité pleine et entière du protagoniste",
                             sous_parties: [
-                                "A. L'acte volontaire et conscient de la signature du pacte initial : accepter l'incandescence au prix de la mort.",
-                                "B. Le narcissisme, l'orgueil de caste et la soif de puissance mondaine qui guident chaque choix du personnage.",
-                                "C. Le refus délibéré de la sagesse stoïque prônée par l'antiquaire (le choix du Vouloir contre le Savoir)."
+                                "A. L'acte volontaire et conscient de la signature du pacte initial : accepter l'incandescence au prix de la mort[cite: 1991, 2007].",
+                                "B. Le narcissisme, l'orgueil de caste et la soif de puissance mondaine qui guident chaque choix du personnage[cite: 337, 2143].",
+                                "C. Le refus délibéré de la sagesse stoïque prônée par l'antiquaire (le choix du Vouloir contre le Savoir)[cite: 1957, 1991]."
                             ]
                         },
                         {
                             titre: "III. Une responsabilité tragique qui dépasse la simple morale individuelle",
                             sous_parties: [
-                                "A. Raphaël comme cobaye expérimental d'une maladie collective : la fureur de jouir propre au XIXe siècle.",
-                                "B. L'impuissance de la volonté face aux pulsions inconscientes du désir (les souhaits involontaires dévorants).",
-                                "C. Le dénouement comme assomption tragique : assumer sa mort dans un dernier élan de passion amoureuse absolue."
+                                "A. Raphaël comme cobaye expérimental d'une maladie collective : la fureur de jouir propre au XIXe siècle[cite: 988, 2300].",
+                                "B. L'impuissance de la volonté face aux pulsions inconscientes du désir (les souhaits involontaires dévorants)[cite: 1030].",
+                                "C. Le dénouement comme assomption tragique : assumer sa mort dans un dernier élan de passion amoureuse absolue[cite: 1265, 1456]."
                             ]
                         }
                     ]
@@ -1038,61 +1030,61 @@ const BDD_DISSERTATION = {
                 nom: "La célébration du monde",
                 explication: "Ce parcours étudie la manière dont l'écriture poétique et sensuelle de Colette magnifie le réel le plus banal. Célébrer le monde signifie ici réenchanter le paysage naturel (les jardins de l'enfance), honorer le règne animal et végétal par une prose hyper-sensorielle, et proclamer l'émancipation triomphante de la femme qui brise ses entraves (les vrilles) pour conquérir son autonomie artistique et hédoniste."
             },
-            biographie: "Sidonie-Gabrielle Colette (1873-1594), dite Colette, est une romancière, mime et journaliste majeure du XXe siècle. Première femme à recevoir des funérailles nationales en France, elle mène une existence farouchement libre et transgressive. Longtemps exploitée par son premier mari Willy qui signe ses premiers romans (*Claudine*), elle s'émancipe par le music-hall avant de bâtir une œuvre monumentale centrée sur l'enfance, le corps et la communion organique avec la nature.",
-            resume_complet: "Composé de deux œuvres distinctes réunies par le programme, le recueil offre une géographie sentimentale et poétique. *Sido* (1930) est une œuvre de la maturité où Colette mythifie son enfance en Bourgogne. Elle y dresse le portrait de sa mère, Sidonie dite Sido, prêtresse panthéiste d'un jardin familial conçu comme le centre d'un système solaire. Sido y dialogue avec les bêtes, commande aux plantes et lit l'avenir dans le vent. Colette évoque aussi son père (le Capitaine), amant blessé dont la bibliothèque recèle des cahiers vides, et ses frères et sœurs (les Sauvages), marginaux inadaptés à la comédie bourgeoise. *Les Vrilles de la vigne* (1908) rassemble des pièces courtes, des poèmes en prose rédigés après sa rupture avec Willy. À travers l'allégorie du rossignol qui brise les vrilles de la vigne pour ne pas mourir enchaîné, Colette chante sa libération. Elle célèbre la Baie de Somme, ses chiens (Toby-Chien), et s'approprie son existence de femme libre et d'écrivaine sensuelle, trouvant dans la sensation physique un rempart contre la fuite du temps.",
+            biographie: "Sidonie-Gabrielle Colette (1873-1954) est une romancière, mime et journaliste majeure de la littérature française. Menant une existence farouchement libre et transgressive, longtemps exploitée par son premier mari Willy qui signe ses premiers romans, elle s'émancipe par le music-hall avant de bâtir une œuvre monumentale centrée sur l'enfance, l'indépendance de la femme, le corps et la communion organique avec la nature.",
+            resume_complet: `Composé de deux œuvres distinctes réunies par le programme, le recueil offre une géographie sentimentale et poétique. <br><br><em>Sido</em> (1930) est une œuvre de la maturité où Colette mythifie son enfance en Bourgogne. Elle y dresse le portrait de sa mère, Sidonie dite Sido, prêtresse panthéiste d'un jardin familial conçu comme le centre d'une rose des vents. Sido y commande aux plantes et lit l'avenir dans le gel ou les aubes. Colette y évoque aussi son père (le Capitaine), un romantique blessé dont la bibliothèque recèle des cahiers blancs, et ses frères et sœurs (les Sauvages), inadaptés à la comédie bourgeoise. <br><br><em>Les Vrilles de la vigne</em> (1908) rassemble des poèmes en prose rédigés après sa rupture avec Willy. À travers l'allégorie du rossignol qui rompt les vrilles de la vigne pour ne pas mourir étouffé, Colette chante sa libération douloureuse mais vitale. Elle y célèbre la nature sauvage (Baie de Somme, jours gris), l'instinct animal (Toby-Chien), et s'approprie son existence de femme affranchie et d'écrivaine sensuelle, trouvant dans la sensation physique un rempart contre la fuite inexorable du temps.`,
             citations: [
                 {
-                    theme: "1. La figure mythologique de Sido et l'enfance",
+                    theme: "1. La mythification de Sido et le sanctuaire du jardin",
                     items: [
-                        { cit: "Elle était le centre rayonnant de notre système solaire familial.", loc: "Sido", analyse: "Métaphore cosmique divinisant la mère comme source absolue de chaleur et d'ordre moral." },
-                        { cit: "Regarde ! me disait-elle. C'est l'injonction suprême de son enseignement.", loc: "Sido", analyse: "Injonction impérative instituant le regard poétique comme principal héritage maternel." },
-                        { cit: "Sido, qui comprenait sans peine le langage secret des bêtes et des plantes.", loc: "Sido", analyse: "Hyperbole panthéiste transformant la mère en une chamane connectée aux mystères du vivant." },
-                        { cit: "Elle n'a jamais rien possédé en propre, ce qui la rendait immensément riche.", loc: "Sido", analyse: "Structure antithétique opposant la pauvreté matérielle à la noblesse spirituelle de la communion terrestre." },
-                        { cit: "Je la chante de mon mieux, elle est mon tombeau poétique.", loc: "Sido", analyse: "Métaphore de la liturgie attribuant à l'écriture la fonction d'immortaliser la mémoire sacrée." }
+                        { cit: "Dans mon quartier natal, on n’eût pas compté vingt maisons sans jardin.", loc: "Sido", analyse: "La géographie de l'enfance est immédiatement placée sous le signe du végétal, excluant la ville et l'urbanisation." },
+                        { cit: "Animée d’un lent, gracieux et sûr mouvement de planète, elle tournait en tous sens...", loc: "Sido", analyse: "Métaphore cosmique divinisant la mère, Sido, érigée en astre solaire régissant l'ordre moral et naturel du foyer." },
+                        { cit: "« Regarde ! » C’est par ce mot que j’ai été le plus souvent, le plus impérieusement convoquée.", loc: "Sido", analyse: "L'injonction maternelle fondatrice qui institue l'observation (le regard poétique et patient) comme un héritage éthique absolu." },
+                        { cit: "Je la chante de mon mieux.", loc: "Sido", analyse: "Formulation aux accents épiques (qui rappelle l'Antiquité) où l'auteure attribue à son écriture la mission de rendre immortelle la mémoire maternelle." },
+                        { cit: "Tu n'es qu'une petite bourgeoise.", loc: "Sido (Sido à Colette)", analyse: "L'orgueil spirituel de la mère, pauvre matériellement mais supérieurement riche de sa communion avec la terre, qui méprise les conventions mondaines parisiennes." }
                     ]
                 },
                 {
-                    theme: "2. Sensualité, synesthésies et rapport charnel au monde",
+                    theme: "2. La sensualité, les synesthésies et l'émerveillement",
                     items: [
-                        { cit: "J'appartiens viscéralement à un pays de sève et de terre que j'ai quitté.", loc: "Sido", analyse: "Adjectif organique ('viscéralement') marquant l'enracinement physique du souvenir de l'enfance." },
-                        { cit: "Le parfum écrasant et lourd du muguet mouillé en fleurs.", loc: "Sido", analyse: "Accumulation d'adjectifs sensoriels provoquant une synesthésie olfactive et tactile chez le lecteur." },
-                        { cit: "Ô vent, vent salé de ma liberté, viens purifier mon âme !", loc: "Les Vrilles de la vigne", analyse: "Apostrophe lyrique et anaphore célébrant la nature sauvage comme force thérapeutique." },
-                        { cit: "Une gelée blanche, crissante sous le pas comme du verre brisé.", loc: "Sido", analyse: "Comparaison sonore et tactile restituant avec une hyper-précision clinique la matérialité de la province." },
-                        { cit: "J'ai vu se lever le jour rose, mouillé et tiède comme une chair.", loc: "Les Vrilles de la vigne", analyse: "Personnification et comparaison érotisée de l'aube, témoignant d'un hédonisme permanent." }
+                        { cit: "Car j'aimais tant l'aube, déjà, que ma mère me l'accordait en récompense.", loc: "Sido", analyse: "La lumière naissante de l'aube devient l'objet d'un désir physique absolu, une récompense sacrée supérieure aux biens matériels." },
+                        { cit: "J'appartiens à un pays que j'ai quitté.", loc: "Les Vrilles de la vigne (Jour gris)", analyse: "Le paradoxe d'un enracinement viscéral et inaltérable dans la terre natale, malgré l'exil urbain de l'âge adulte." },
+                        { cit: "Viens, toi qui l'ignores, viens que je te dise tout bas : le parfum des bois de mon pays égale la fraise et la rose !", loc: "Les Vrilles de la vigne (Jour gris)", analyse: "Synesthésie (mêlant l'odorat et le goût) invitant à la communion charnelle avec les éléments et clamant la supériorité de la province." },
+                        { cit: "Il y a encore, dans mon pays, une vallée étroite comme un berceau...", loc: "Les Vrilles de la vigne (Jour gris)", analyse: "La comparaison maternelle de la nature, perçue comme le lieu réconfortant de la naissance et de la protection." },
+                        { cit: "Une mer basse, lointaine, qui a l'air de s'être retirée pour toujours...", loc: "Les Vrilles de la vigne (En baie de Somme)", analyse: "L'hyper-réalisme poétique avec lequel Colette capte l'immensité mélancolique et changeante des paysages maritimes." }
                     ]
                 },
                 {
-                    theme: "3. L'allégorie de la libération féminine",
+                    theme: "3. L'allégorie de la liberté féminine et de l'art",
                     items: [
-                        { cit: "Je ne veux plus jamais me marier, je veux appartenir à ma propre vie !", loc: "Les Vrilles de la vigne", analyse: "Injonction féministe catégorique brisant le carcan de l'aliénation conjugale du Second Empire." },
-                        { cit: "La vigne a rompu ses vrilles étouffantes, je peux enfin chanter.", loc: "Les Vrilles (Préface)", analyse: "Allégorie végétale : la douleur de la rupture amoureuse est la condition de l'émancipation poétique." },
-                        { cit: "Je veux faire exactement ce que je veux sur cette terre.", loc: "Les Vrilles de la vigne", analyse: "Répétition provocatrice revendiquant l'impertinence comme une philosophie morale suprême." },
-                        { cit: "C'est de mon propre flanc que je tire ma force de création.", loc: "Les Vrilles de la vigne", analyse: "Formulation somatique situant la puissance artistique dans l'autonomie biologique de la femme." },
-                        { cit: "Je contemple mon corps dans le miroir avec un respect sauvage.", loc: "Les Vrilles de la vigne", analyse: "Alliance de mots (respect/sauvage) marquant la réappropriation de la chair soustraite au regard masculin." }
+                        { cit: "Autrefois, le rossignol ne chantait pas la nuit.", loc: "Les Vrilles de la vigne (Ouverture)", analyse: "La phrase incipit du recueil qui installe l'atmosphère du conte allégorique pour raconter sa propre métamorphose." },
+                        { cit: "Pour ne pas mourir étouffé, il chanta.", loc: "Les Vrilles de la vigne", analyse: "L'allégorie de la création : l'art et l'écriture naissent comme un acte de survie vital contre la domination (l'étouffement conjugal)." },
+                        { cit: "Je ne connais plus le sommeil heureux, mais je ne crains plus les vrilles de la vigne...", loc: "Les Vrilles de la vigne", analyse: "La résilience poignante de l'émancipation : accepter la perte du repos naïf au profit de l'indépendance gagnée." },
+                        { cit: "Moi, je veux faire ce que je veux !... Je veux jouer la pantomime, même la comédie...", loc: "Les Vrilles de la vigne (De quoi est-ce qu'on a l'air ?)", analyse: "L'injonction rebelle et provocatrice assumant la marginalité artistique (le music-hall) contre la respectabilité bourgeoise." },
+                        { cit: "L'effroi de la nuit amoureuse m'a sauvée de vos tendres et féroces enlacements.", loc: "Les Vrilles de la vigne", analyse: "L'oxymore (« tendres et féroces ») qui dénonce la prison hypocrite du mariage et célèbre le réveil brutal de la conscience féminine." }
                     ]
                 },
                 {
-                    theme: "4. La mélancolie du temps et l'envers de la joie",
+                    theme: "4. Le silence, la mélancolie et la fuite du temps",
                     items: [
-                        { cit: "Mon père était un poète silencieux et amputé de ses vers.", loc: "Sido", analyse: "Oxymore et métaphore douloureuse peignant la tragédie de l'artiste manqué (le Capitaine)." },
-                        { cit: "Les grands cahiers blancs et vides de mon père restèrent sur la table.", loc: "Sido", analyse: "Symbole spatial de l'œuvre avortée que la fille se donne pour mission de racheter par sa propre écriture." },
-                        { cit: "Nous étions des sauvages fiers, inadaptés à la comédie sociale des hommes.", loc: "Sido", analyse: "Registre mélioratif de la marginalité familiale, opposée à l'hypocrisie de la bourgeoisie." },
-                        { cit: "Le temps s'écoule, irréparable, emportant les visages aimés.", loc: "Les Vrilles de la vigne", analyse: "Topos lyrique du sablier, adouci par la permanence des cycles éternels de la nature bourguignonne." },
-                        { cit: "Je n'ai pas fini d'être triste, mais la sève remonte.", loc: "Les Vrilles de la vigne", analyse: "Antithèse conjuguant la lucidité du chagrin à l'élan vital invincible du vivant." }
+                        { cit: "Aussi ne laissa-t-il, lui qui écrivait si facilement, qu'une douzaine de volumes in-octavo, reliés en demi-veau...", loc: "Sido (Le Capitaine)", analyse: "L'évocation bouleversante de l'œuvre paternelle fantôme : des livres parfaitement reliés qui ne contiennent que des pages blanches." },
+                        { cit: "Il me donna, de lui-même, l'image d'un homme qui a beaucoup souffert.", loc: "Sido", analyse: "La lucidité mélancolique de la fille devant le sacrifice du Capitaine, mutilé de guerre, qui n'a vécu que pour l'amour de sa femme." },
+                        { cit: "Où sont les enfants ? — Où veux-tu qu'ils soient ? Ils sont dans le jardin.", loc: "Sido", analyse: "Le jardin comme refuge exclusif des « sauvages » (ses frères et sœur), inadaptés au monde normé des adultes." },
+                        { cit: "Je voudrais dire, je voudrais dire, je voudrais dire...", loc: "Les Vrilles de la vigne (Le Dernier Feu)", analyse: "L'épanorthose et la répétition traduisant l'urgence de l'écrivaine et sa lutte pour fixer la sensation éphémère par les mots." },
+                        { cit: "Ôte ta main de mon épaule...", loc: "Les Vrilles de la vigne (Nuit blanche)", analyse: "Le refus de la fausse consolation amoureuse pour affronter en face, avec lucidité, la solitude existentielle." }
                     ]
                 }
             ],
             docs_complementaires: [
-                { titre: "Les Confessions", source: "Jean-Jacques Rousseau (1782)", citation: "Je me rappelle ces jours heureux de mon enfance.", analyse: "La matrice autobiographique liant la pureté de la mémoire à la nostalgie du paradis naturel." },
-                { titre: "Du côté de chez Swann", source: "Marcel Proust (1913)", citation: "L'odeur de la madeleine...", analyse: "L'importance de la sensation matérielle involontaire comme unique moyen de ressusciter le temps perdu." },
-                { titre: "Correspondances", source: "Charles Baudelaire (1857)", citation: "Les parfums, les couleurs et les sons se répondent.", analyse: "La théorie des synesthésies poétiques appliquées à la description des jardins bourguignons." },
-                { titre: "La Mare au diable", source: "George Sand (1846)", citation: "La nature est un immense livre ouvert.", analyse: "La célébration de la province rurale par une femme de lettres affranchie des codes mondains parisiens." },
-                { titre: "Mes forêts", source: "Hélène Dorion (2021)", citation: "Mes forêts sont des miroirs...", analyse: "La filiation contemporaine : l'écriture organique établissant un lien fusionnel entre corps féminin et nature." },
-                { titre: "Le Parti pris des choses", source: "Francis Ponge (1942)", citation: "Le monde muet est notre patrie.", analyse: "L'attention microscopique portée aux éléments les plus banals de la matière, pratiquée de fait par Sido." },
-                { titre: "Feuilles d'herbe", source: "Walt Whitman (1855)", citation: "Je chante le corps électrique.", analyse: "Le lyrisme hédoniste américain célébrant la matérialité charnelle et la fusion cosmique avec l'univers." },
-                { titre: "Une chambre à soi", source: "Virginia Woolf (1929)", citation: "Une femme doit avoir de l'argent et une chambre à soi pour écrire.", analyse: "La réflexion féministe contemporaine sur les conditions matérielles nécessaires à l'émancipation créatrice." },
-                { titre: "Les Nourritures terrestres", source: "André Gide (1897)", citation: "Nathanaël, je t'enseignerai la ferveur.", analyse: "L'apologie de la sensation pure, de l'instant présent et du refus des morales ascétiques traditionnelles." },
-                { titre: "Chants d'automne", source: "Alphonse de Lamartine (1820)", citation: "Le lac des regrets.", analyse: "Le contre-modèle : Colette refuse la déploration larmoyante du romantisme pour ancrer sa mémoire dans la joie." }
+                { titre: "Les Confessions", source: "Jean-Jacques Rousseau (1782)", citation: "Je me rappelle ces jours heureux de mon enfance.", analyse: "La matrice autobiographique liant la pureté de la mémoire à la nostalgie du paradis naturel originel." },
+                { titre: "Du côté de chez Swann", source: "Marcel Proust (1913)", citation: "L'édifice immense du souvenir...", analyse: "L'importance de la sensation matérielle et sensorielle comme seul moyen de ressusciter le temps perdu de l'enfance." },
+                { titre: "Correspondances", source: "Charles Baudelaire (1857)", citation: "Les parfums, les couleurs et les sons se répondent.", analyse: "La théorie des synesthésies poétiques directement appliquées à la prose hyper-sensorielle de Colette." },
+                { titre: "La Mare au diable", source: "George Sand (1846)", citation: "La nature est un immense livre ouvert.", analyse: "La célébration de la province rurale par une femme de lettres également affranchie des codes mondains parisiens." },
+                { titre: "Mes forêts", source: "Hélène Dorion (2021)", citation: "Mes forêts sont de longues tiges d'histoire.", analyse: "La filiation contemporaine : l'écriture organique établissant un lien fusionnel absolu entre l'intime et la nature." },
+                { titre: "Le Parti pris des choses", source: "Francis Ponge (1942)", citation: "Observons plutôt ce caillou.", analyse: "L'attention microscopique portée aux éléments les plus banals de la matière, exigence enseignée par le célèbre « Regarde ! » de Sido." },
+                { titre: "Feuilles d'herbe", source: "Walt Whitman (1855)", citation: "Je chante le corps électrique.", analyse: "Le lyrisme hédoniste célébrant la matérialité charnelle et la fusion cosmique avec l'univers." },
+                { titre: "Une chambre à soi", source: "Virginia Woolf (1929)", citation: "Une femme doit avoir de l'argent et une chambre à soi pour écrire.", analyse: "La réflexion féministe fondatrice sur les conditions matérielles nécessaires à l'émancipation créatrice." },
+                { titre: "Les Nourritures terrestres", source: "André Gide (1897)", citation: "Nathanaël, je t'enseignerai la ferveur.", analyse: "L'apologie de la sensation pure, de l'instant présent et du refus des morales intellectuelles ascétiques traditionnelles." },
+                { titre: "Chants d'automne", source: "Alphonse de Lamartine (1820)", citation: "Salut, bois couronnés d'un reste de verdure...", analyse: "Le romantisme larmoyant (le « lac des regrets ») dont Colette prend radicalement le contre-pied en célébrant la vie." }
             ],
             plans: [
                 {
@@ -1103,24 +1095,24 @@ const BDD_DISSERTATION = {
                             titre: "I. Un réenchantement du réel fondé sur l'émerveillement sensoriel et l'enfance",
                             sous_parties: [
                                 "A. La célébration poétique de la nature bourguignonne et du jardin matriciel divinisé (Sido).",
-                                "B. Le regard de l'enfance qui transfigure le quotidien le plus banal en miracle cosmique.",
+                                "B. Le regard de l'enfance qui transfigure le quotidien le plus banal en miracle cosmique (le givre, le soleil, le vent).",
                                 "C. L'hyper-sensorialité de la prose (synesthésies olfactives, tactiles) qui magnifie la matière."
                             ]
                         },
                         {
                             titre: "II. Mais une écriture hantée par la morsure de la réalité, de la perte et du deuil",
                             sous_parties: [
-                                "A. L'omniprésence du spectre de la fuite du temps et de la disparition des visages aimés.",
+                                "A. L'omniprésence du spectre de la fuite du temps et de la disparition inéluctable des visages aimés.",
                                 "B. La tragédie des ambitions déchues : le portrait mélancolique du père amputé (les cahiers blancs).",
-                                "C. La douleur physique de la rupture amoureuse et de la solitude dans les Vrilles."
+                                "C. La douleur physique et morale de la rupture amoureuse et de la solitude dans les Vrilles de la vigne."
                             ]
                         },
                         {
                             titre: "III. L'émerveillement comme un choix éthique supérieur et un acte de résilience poétique",
                             sous_parties: [
-                                "A. Refuser le regret larmoyant romantique pour imposer la célébration hédoniste du présent.",
-                                "B. L'allégorie végétale (rompre les vrilles) : transmuter la souffrance de l'émancipation en liberté créatrice.",
-                                "C. L'écriture organique comme rempart ultime et triomphant contre la mort et l'oubli."
+                                "A. Refuser le regret larmoyant pour imposer la célébration hédoniste de l'instant présent.",
+                                "B. L'allégorie végétale : transmuter la souffrance de l'étouffement en chant d'émancipation et de liberté créatrice.",
+                                "C. L'écriture organique érigée comme le rempart ultime et triomphant contre la mort et l'oubli."
                             ]
                         }
                     ]
@@ -1132,25 +1124,25 @@ const BDD_DISSERTATION = {
                         {
                             titre: "I. La quête nostalgique d'un paradis perdu originel et de figures mythologiques",
                             sous_parties: [
-                                "A. La reconstruction mémorielle et idéalisée de l'enfance heureuse à Saint-Sauveur.",
-                                "B. Sido érigée en idéal maternel indépassable, divinité solaire maîtresse des éléments naturels.",
-                                "C. La nostalgie d'une harmonie primitive et panthéiste entre l'homme, l'animal et le végétal."
+                                "A. La reconstruction mémorielle et idéalisée de l'enfance protégée à Saint-Sauveur.",
+                                "B. Sido érigée en idéal maternel indépassable, divinité panthéiste maîtresse des éléments naturels.",
+                                "C. La nostalgie d'une harmonie primitive et bienveillante entre l'homme, l'animal et le végétal."
                             ]
                         },
                         {
-                            titre: "II. Le refus du culte du passé : une écriture ancrée dans la conquête de la liberté présente",
+                            titre: "II. Le refus du culte du passé : une écriture farouchement ancrée dans la conquête du présent",
                             sous_parties: [
-                                "A. Briser le carcan du mariage patriarcal (les vrilles de Willy) pour exister par et pour soi-même.",
-                                "B. La célébration du corps féminin réapproprié et de l'indépendance de l'artiste de music-hall.",
-                                "C. L'attention absolue portée à la sensation immédiate du réel (la Baie de Somme, Paris) contre le regret."
+                                "A. Briser le carcan du mariage patriarcal (les tendres et féroces enlacements) pour exister par et pour soi-même.",
+                                "B. La célébration subversive du corps féminin réapproprié et de l'indépendance de l'artiste de music-hall.",
+                                "C. L'attention absolue portée à la sensation immédiate du réel (la Baie de Somme, les hivers) contre la fuite du temps."
                             ]
                         },
                         {
-                            titre: "III. L'art littéraire comme recréation d'un idéal moderne et immanent",
+                            titre: "III. L'art littéraire comme recréation d'un idéal moderne, esthétique et immanent",
                             sous_parties: [
-                                "A. Racheter l'échec poétique du père (les pages blanches) par le triomphe stylistique de la fille.",
-                                "B. L'héritage de Sido appliqué au monde adulte : ériger le regard curieux en éthique de vie.",
-                                "C. La prose poétique comme victoire définitive de la création sur la dégradation temporelle."
+                                "A. Racheter l'échec poétique du père (les pages vierges) par le triomphe stylistique de la fille écrivaine.",
+                                "B. L'héritage de Sido appliqué au monde adulte : ériger le regard curieux (« Regarde ! ») en philosophie de vie permanente.",
+                                "C. La prose poétique qui immortalise l'émotion et impose une victoire définitive de la littérature sur la mort."
                             ]
                         }
                     ]
@@ -1162,25 +1154,25 @@ const BDD_DISSERTATION = {
                         {
                             titre: "I. Une écriture physiologique où le corps est le premier outil de connaissance",
                             sous_parties: [
-                                "A. Le rejet des abstractions intellectuelles théoriques au profit de la sensation pure de la chair.",
-                                "B. La prévalence de l'odorat, du goût et du toucher pour cartographier le jardin familial de Sido.",
-                                "C. La synesthésie érigée en système stylistique (fusionner les couleurs, les sons et les textures matérielles)."
+                                "A. Le rejet des abstractions intellectuelles théoriques au profit de la sensation pure et matérielle.",
+                                "B. La prévalence de l'odorat, du goût et du toucher pour cartographier le jardin natal de Sido.",
+                                "C. La synesthésie érigée en système littéraire : fusionner la couleur, le bruit de soie de la mer et le contact de l'aube."
                             ]
                         },
                         {
-                            titre: "II. Une communion organique, animale et végétale avec le vivant",
+                            titre: "II. Une communion organique, charnelle et totale avec le vivant",
                             sous_parties: [
-                                "A. Le dialogue direct avec l'animal (Toby-Chien) comme miroir d'une sincérité sensorielle perdue par les hommes.",
-                                "B. La matérialité de la nature restituée avec une hyper-précision clinique (le froid crissant, la sève, le muguet lourd).",
-                                "C. Le paysage descriptif conçu comme une expérience physique d'immersion (la Baie de Somme)."
+                                "A. Le dialogue direct avec l'animal (Toby-Chien) comme miroir d'une sincérité sensorielle que les hommes ont perdue.",
+                                "B. La matérialité de la nature restituée avec une précision clinique exigeante (la gelée crissante, l'aube qui ressemble à une chair).",
+                                "C. Le paysage perçu non plus comme un décor, mais comme une expérience d'immersion physique vertigineuse."
                             ]
                         },
                         {
-                            titre: "III. Ce rapport hyper-sensoriel au monde érigé en éthique morale et artistique",
+                            titre: "III. Ce rapport hyper-sensoriel au monde érigé en morale de libération artistique",
                             sous_parties: [
-                                "A. L'honnêteté de la sensation physique brandie comme une arme contre l'hypocrisie des conventions de la comédie sociale parisiens.",
-                                "B. La réappropriation du corps féminin, célébré dans sa vérité matérielle et sensuelle autonome.",
-                                "C. La ferveur hédoniste immanente comme unique rempart poétique efficace contre la mort et l'angoisse du néant."
+                                "A. L'honnêteté de la sensation physique brandie comme arme contre l'hypocrisie des apparences et de la comédie mondaine parisienne.",
+                                "B. La réappropriation du corps de la femme, célébré et assumé dans sa vérité matérielle autonome.",
+                                "C. La ferveur hédoniste immanente comme unique force capable de surmonter la douleur des deuils et des trahisons."
                             ]
                         }
                     ]
@@ -1203,43 +1195,27 @@ const BDD_DISSERTATION = {
             <br><br>Grâce à l'apprentissage méthodique de la langue et de l'écriture françaises, Zilia s'approprie les outils philosophiques des Lumières. Le dénouement rompt de manière fracassante avec les codes traditionnels du roman sentimental : découvrant qu'Aza l'a trahie en se convertissant au catholicisme pour épouser une Espagnole, elle refuse le mariage de consolation avec Déterville. Devenue financièrement indépendante grâce à la restitution de ses trésors incas, elle choisit de vivre seule dans sa maison de campagne, se consacrant à l'étude, à l'écriture et à une amitié pure, s'émancipant ainsi de toutes les tutelles masculines.`,
             citations: [
                 {
-                    theme: "1. Le regard étranger et la satire des mœurs européennes",
+                    theme: "1. Le traumatisme de l'exil et le regard sur la barbarie",
                     items: [
-                        { cit: "Tout ce que l'on fait dans ce pays-ci... me paraît être en contradiction directe avec la saine raison.", loc: "Lettre 12", analyse: "Formule fondatrice du regard éloigné : la France civilisée est passée au filtre de la logique critique de l'étrangère." },
-                        { cit: "Ce que vous appelez ici la politesse n'est en vérité que la triste coutume d'être faux.", loc: "Lettre 16", analyse: "Antithèse incisive démystifiant les convenances mondaines, redéfinies comme une hypocrisie institutionnalisée." },
-                        { cit: "Ils ont une manie effrénée de l'esprit, et c'est précisément ce qui les rend si profondément sots.", loc: "Lettre 29", analyse: "Formulation paradoxale et ironique raillant la vacuité des conversations de salon où le paraître supplante l'être." },
-                        { cit: "L'argent est la seule et unique divinité que l'on adore ouvertement dans cette contrée.", loc: "Lettre 24", analyse: "Métaphore théologique dénonçant la corruption matérialiste d'une société entièrement soumise au capital." },
-                        { cit: "Un assemblage de couleurs et de reflets qui ne représentent rien de réel à l'esprit.", loc: "Lettre 15", analyse: "Procédé de défamiliarisation appliqué aux miroirs et peintures, soulignant l'artifice du décor occidental." }
+                        { cit: "La ville du Soleil, livrée à la fureur d'une Nation barbare, devroit faire couler mes larmes ; mais ma douleur, mes craintes, mon désespoir, ne sont que pour toi.", loc: "Lettre I", analyse: "La violence originelle de la conquête espagnole est immédiatement supplantée par la douleur intime de la séparation amoureuse." },
+                        { cit: "Je ne suis plus dans les fers des cruels Espagnols. Qui pourroit donc m'empêcher de rentrer sous tes Loix ?", loc: "Lettre II", analyse: "L'incompréhension initiale de Zilia face au second enlèvement par les Français, révélant la vulnérabilité totale de la captive face aux Européens." },
+                        { cit: "Fiers de la puissance d'exterminer, la cruauté est le seul guide de leurs actions.", loc: "Lettre I", analyse: "Le regard inca inverse brutalement les valeurs occidentales : les colonisateurs prétendument civilisés sont définis comme de purs barbares sanguinaires." }
                     ]
                 },
                 {
-                    theme: "2. Le combat philosophique pour l'égalité des sexes et l'éducation",
+                    theme: "2. Le réquisitoire féministe : l'éducation et la place des femmes",
                     items: [
-                        { cit: "L'autorité y est tout entière du côté des hommes, et l'esclavage du côté des femmes.", loc: "Lettre 34", analyse: "Structure symétrique et lexique politique violent dénonçant la nature patriarcale de la société française." },
-                        { cit: "Leur éducation se réduit presque uniquement à la pure politesse des manières et du corps.", loc: "Lettre 34", analyse: "Adverbe restrictif mettant en accusation la privation délibérée d'instruction pour maintenir les femmes dociles." },
-                        { cit: "Vous voudriez que les femmes ne fussent des êtres pensants que pour mieux s'occuper de vos plaisirs.", loc: "Lettre 34", analyse: "Apostrophe accusatrice ciblant l'égoïsme masculin et revendiquant le statut de sujet rationnel pour la femme." },
-                        { cit: "Le plaisir d'être, ce plaisir si pur et oublié par tant d'aveugles humains.", loc: "Lettre 41", analyse: "Formulation philosophique d'influence cartésienne liant l'existence à la conscience de soi autonome." },
-                        { cit: "Il me semble enfin que je n'existe plus désormais que par moi-même et pour moi-même.", loc: "Lettre 40", analyse: "Déclaration solennelle d'indépendance ontologique, brisant le schéma de la dépendance amoureuse." }
+                        { cit: "C'est dans cette ignorance que l'on marie les filles, à peine sorties de l'enfance.", loc: "Lettre XXXIV", analyse: "La dénonciation frontale du système matrimonial français qui exploite la jeunesse et maintient délibérément les femmes dans l'inculture." },
+                        { cit: "C'est une figure d'ornement pour amuser les curieux.", loc: "Lettre XXXIV", analyse: "La réification (chosification) de la femme dans les salons mondains, réduite à un objet esthétique et dépourvue d'agentivité intellectuelle." },
+                        { cit: "Il en est d'assez heureusement nées pour se donner à elles-mêmes ce que l'éducation leur refuse.", loc: "Lettre XXXIV", analyse: "L'éloge des femmes autodidactes (comme Zilia ou Graffigny elle-même) qui s'émancipent par l'effort intellectuel personnel en contournant les interdits patriarcaux." },
+                        { cit: "Quand tu sauras qu'ici l'autorité est entièrement du côté des hommes, tu ne douteras pas, mon cher Aza, qu'ils ne soient responsables de tous les désordres de la société.", loc: "Lettre XXXIV", analyse: "Une charge politique radicale imputant la responsabilité de la décadence morale de la France à la tyrannie masculine absolue." }
                     ]
                 },
                 {
-                    theme: "3. Le traumatisme de l'arrachement et le choc du nouvel univers",
+                    theme: "3. L'émancipation philosophique et le refus du mariage final",
                     items: [
-                        { cit: "Un nouvel univers s’est offert tout à coup à mes yeux effrayés.", loc: "Lettre 2", analyse: "Hyperbole spatiale traduisant le bouleversement radical des repères géographiques et culturels." },
-                        { cit: "Je suis enfermée dans une maison flottante qui n'est point du tout attachée à la terre.", loc: "Lettre 2", analyse: "Périphrase naïve pour décrire le navire européen, symbolisant la claustration et l'instabilité de l'exil." },
-                        { cit: "Je ne suis plus en ces lieux qu'un simple objet de curiosité et d'amusement exotique.", loc: "Lettre 13", analyse: "Formulation passive marquant la souffrance de la réification subie par l'étrangère traitée comme un animal de foire." },
-                        { cit: "Mes nœuds de couleur restent ma seule et unique consolation dans ma solitude.", loc: "Lettre 10", analyse: "Les quipos érigés en relique identitaire et en rempart linguistique contre l'assimilation forcée." },
-                        { cit: "La peine que j'ai à plier mon esprit à ces lignes tracées sur du papier blanc.", loc: "Lettre 16", analyse: "Métaphore physique traduisant la violence culturelle de l'apprentissage forcé de l'écriture alphabétique." }
-                    ]
-                },
-                {
-                    theme: "4. La désillusion sentimentale et le refus du compromis",
-                    items: [
-                        { cit: "Tu es mon Dieu, mon univers, mon tout, je ne vis que par ta lumière.", loc: "Lettre 1 (à Aza)", analyse: "Accumulation hyperbolique et idolâtrie amoureuse initiale, caractérisant l'aliénation affective primitive." },
-                        { cit: "La trahison d'Aza a brisé mon âme, mais elle n'a pas détruit ma raison.", loc: "Lettre 39", analyse: "Antithèse marquant le refus de sombrer dans le pathos tragique grâce au secours de l'esprit critique." },
-                        { cit: "Venez apprendre de moi à connaître les plaisirs innocents, doux et durables de l'étude.", loc: "Lettre 41", analyse: "Inversion ironique des rôles : la captive prétendue sauvage devient le guide spirituel et philosophique du noble européen." },
-                        { cit: "Mon cœur blessé ne saurait désormais se partager entre deux maîtres.", loc: "Lettre finale", analyse: "Métaphore politique du maître refusant le remariage de convenance avec Déterville pour préserver sa liberté." },
-                        { cit: "Le Ciel a détruit mes illusions pour mieux me forcer à chercher la vérité.", loc: "Lettre 40", analyse: "Lecture providentialiste transformant le drame sentimental en un parcours d'éveil philosophique." }
+                        { cit: "Le plaisir d'être ; ce plaisir oublié, ignoré même de tant d'aveugles humains...", loc: "Lettre XLI", analyse: "La formulation d'une autonomie ontologique : Zilia trouve le bonheur suprême dans sa seule existence intellectuelle, indépendamment de l'amour ou du mariage." },
+                        { cit: "Venez apprendre de moi à connoître les plaisirs innocens, & durables de l'étude ; venez en faire le bouclier de votre ame.", loc: "Lettre XLI", analyse: "L'inversion finale des pouvoirs : l'ancienne captive « sauvage » dicte la morale et devient le maître philosophique du noble français Déterville." }
                     ]
                 }
             ],
@@ -1323,25 +1299,25 @@ const BDD_DISSERTATION = {
                         {
                             titre: "I. Le voyage conçu comme un itinéraire d'affranchissement et d'éveil philosophique",
                             sous_parties: [
-                                "A. Passage de l'ombre à la lumière : la sortie de la claustration du temple de Cuzco[cite: 2] et la découverte d'un univers étendu et infini (Lettre 12)[cite: 2]. L'émerveillement et l'éloge de la liberté d'un paysage personnifié qui détient la vie[cite: 2].",
-                                "B. Émancipation idéologique et liberté de ton : le regard critique et personnel de l'étrangère qui utilise l'analogie pour juger les Européens superficiels (le theatrum mundi)[cite: 2], remettre en question l'ethnocentrisme et dénoncer la cupidité financière[cite: 2].",
-                                "C. Émancipation individuelle et romanesque : un véritable parcours initiatique où Zilia prend pleine conscience d'elle-même (l'épisode du miroir de la Lettre 10)[cite: 2], s'affranchit de sa dépendance amoureuse et choisit l'indépendance finale dans son utopie de campagne[cite: 2]."
+                                "A. Passage de l'ombre à la lumière : la sortie de la claustration du temple de Cuzco et la découverte d'un univers étendu et infini.",
+                                "B. Émancipation idéologique et liberté de ton : le regard critique de l'étrangère pour juger les Européens, remettre en question l'ethnocentrisme et dénoncer la cupidité financière.",
+                                "C. Émancipation individuelle et romanesque : un véritable parcours initiatique où Zilia s'affranchit de sa dépendance amoureuse et choisit l'indépendance."
                             ]
                         },
                         {
                             titre: "II. Mais un déplacement initialement marqué par la contrainte, la violence et de nouvelles servitudes",
                             sous_parties: [
-                                "A. Les nouveaux lieux de claustration : Zilia subit un voyage sous le signe de la force, passant du temple inca à la chambre de Déterville[cite: 2], à la 'maison flottante' du navire[cite: 2], puis à l'isolement du couvent[cite: 2]. Elle apparaît comme un être réifié et souffrant[cite: 2].",
-                                "B. La dépendance affective renouvelée : la rencontre avec Déterville constitue une nouvelle forme de soumission[cite: 2]. L'auteure déploie la rhétorique précieuse de la passion amoureuse où Déterville, tel un homme-lige courtois, devient esclave de Zilia[cite: 2].",
-                                "C. L'obstacle des préjugés originels : les premières découvertes s'accompagnent d'erreurs d'interprétation (Lettres 4 et 5), montrant que l'esprit reste initialement dépendant de ses mœurs natales[cite: 2]."
+                                "A. Les nouveaux lieux de claustration : Zilia subit un voyage sous le signe de la force, passant du temple à la maison flottante, puis à l'isolement.",
+                                "B. La dépendance affective renouvelée : la rencontre avec Déterville constitue une nouvelle forme d'esclavage à travers la rhétorique de la passion.",
+                                "C. L'obstacle des préjugés originels : les erreurs d'interprétation initiales montrant que l'esprit reste d'abord dépendant de ses mœurs natales."
                             ]
                         },
                         {
                             titre: "III. Le véritable voyage est intellectuel : l'émancipation par l'éducation et la maîtrise des signes",
                             sous_parties: [
-                                "A. L'acquisition de la langue comme voie d'accès à la liberté réelle : dépasser l'incompréhension primitive pour repérer le langage du corps[cite: 2], nommer les objets (Lettre 11)[cite: 2] et accéder à la pleine connaissance de l'écriture (Lettre 16)[cite: 2].",
-                                "B. La conquête du pouvoir des livres : le voyage géographique se transmue en une soif de connaissances scientifiques et culturelles (réflexion sur la catharsis de la tragédie, sur l'opéra et sur les inventions modernes)[cite: 2].",
-                                "C. L'aboutissement des Lumières : l'émancipation définitive ne provient pas du simple déplacement géographique, mais de la formation d'une pensée autonome, d'un amour raisonné et d'une réflexion critique sur la condition féminine[cite: 2]."
+                                "A. L'acquisition de la langue comme voie d'accès à la liberté réelle : dépasser l'incompréhension primitive et accéder à l'écriture.",
+                                "B. La conquête du pouvoir des livres : la soif de connaissances scientifiques et culturelles.",
+                                "C. L'aboutissement des Lumières : l'émancipation définitive par la formation d'une pensée autonome et d'une réflexion critique sur la condition féminine."
                             ]
                         }
                     ]
@@ -1357,48 +1333,48 @@ const BDD_DISSERTATION = {
                 explication: "Ce parcours examine les fondements de la liberté face aux dérives du pouvoir arbitraire et de la tyrannie. Il s'agit d'analyser la dimension paradoxale de la servitude, conçue non comme une contrainte purement extérieure, mais comme une abdication volontaire du peuple. Le parcours invite à penser les moyens de réveiller la conscience civique, de préserver l'état de nature égalitaire et d'ériger l'éducation, la raison et l'amitié en remparts indestructibles pour entretenir la liberté."
             },
             biographie: "Étienne de La Boétie (1530-1563) naît à Sarlat dans une famille de magistrats. Reçu conseiller au Parlement de Bordeaux après de brillantes études de droit, il s'y lie d'une amitié fusionnelle et immortelle avec Michel de Montaigne. Rédigé de manière fulgurante durant sa jeunesse (vers 18 ans), son *Discours de la servitude volontaire* (surnommé *Le Contr'un*) constitue un chef-d'œuvre de philosophie politique, jetant les bases du concept moderne de désobéissance civile avant d'être emporté prématurément par la maladie.",
-            resume_complet: `Le <em>Discours de la servitude volontaire</em> est un pamphlet philosophique d'une audace conceptuelle inouïe. La Boétie y pose une question centrale qui renverse toutes les théories politiques traditionnelles : comment se fait-il que des millions d'hommes, des villes entières, se soumettent docilement et lâchement à la tyrannie d'un seul homme, souvent chétif et lâche ? 
-            <br><br>L'auteur démontre implacablement que le pouvoir d'un despote ne repose pas sur sa force militaire supérieure, mais uniquement sur le consentement et l'obéissance volontaire de ceux qu'il opprime. C'est le peuple qui s'asservit lui-même, qui se coupe la gorge en abdiquant sa liberté naturelle. La Boétie affirme que la liberté et l'égalité sont des données inscrites dans l'état de Nature par la raison divine. 
-            <br><br>Pour expliquer la pérennité de cette aliénation monstrueuse, il identifie trois ressorts majeurs. Le premier est la force de l'habitude et de la coutume : les hommes nés sous le joug n'ayant jamais connu la liberté, prennent leur esclavage pour un état naturel. Le deuxième est l'abêtissement du peuple orchestré par le tyran à travers les divertissements de masse (les théâtres, les farces, les jeux, le pain). Le troisième est la structure pyramidale de la corruption : le tyran s'entoure de cinq ou six complices qui en dominent six cents, qui en dominent six mille, liant la multitude par l'appât du gain. La solution proposée par La Boétie est d'une simplicité révolutionnaire et non violente : pour faire tomber le colosse, il ne faut pas l'attaquer par les armes, il suffit d'arrêter de le soutenir.`,
+            resume_complet: `Le <em>Discours de la servitude volontaire</em> est un pamphlet philosophique d'une audace conceptuelle inouïe. La Boétie y pose une question centrale qui renverse toutes les théories politiques traditionnelles : comment se fait-il que des millions d'hommes, des villes entières, se soumettent docilement et lâchement à la tyrannie d'un seul homme ? 
+            <br><br>L'auteur démontre implacablement que le pouvoir d'un despote ne repose pas sur sa force militaire supérieure, mais uniquement sur le consentement et l'obéissance volontaire de ceux qu'il opprime. C'est le peuple qui s'asservit lui-même, qui se coupe la gorge en abdiquant sa liberté naturelle. La Boétie affirme que la liberté et l'égalité sont des données inscrites dans l'état de Nature. 
+            <br><br>Pour expliquer la pérennité de cette aliénation monstrueuse, il identifie trois ressorts majeurs. Le premier est la force de l'habitude et de la coutume : les hommes nés sous le joug n'ayant jamais connu la liberté, prennent leur esclavage pour un état naturel. Le deuxième est l'abêtissement du peuple orchestré par le tyran à travers les divertissements de masse (les théâtres, les farces, les jeux). Le troisième est la structure pyramidale de la corruption : le tyran s'entoure de cinq ou six complices qui en dominent six cents, qui en dominent six mille. La solution proposée par La Boétie est d'une simplicité révolutionnaire et non violente : pour faire tomber le colosse, il ne faut pas l'attaquer par les armes, il suffit d'arrêter de le soutenir.`,
             citations: [
                 {
-                    theme: "1. Le paradoxe de la servitude volontaire",
+                    theme: "1. Le paradoxe inouï de la servitude volontaire",
                     items: [
-                        { cit: "C'est le peuple qui s'asservit, qui se coupe la gorge et se livre au bourreau.", loc: "Partie 1", analyse: "Formule provocatrice et oxymorique situant la source de la tyrannie dans la passivité du sujet." },
-                        { cit: "Ils ne sont grands que parce que nous sommes à genoux devant eux.", loc: "Partie 1", analyse: "Métaphore spatiale illustrant la relativité intrinsèque du pouvoir, dépendant de la posture du dominé." },
-                        { cit: "Il est incroyable de voir comme le peuple, dès qu'il est assujetti, tombe soudain dans un si profond oubli de sa franchise.", loc: "Partie 2", analyse: "Constat clinique de l'amnésie collective des peuples qui perdent leur dignité en abdiquant." },
-                        { cit: "Comment tant d'hommes souffrent-ils un tyran seul, qui n'a de puissance que celle qu'ils lui donnent ?", loc: "Partie 1", analyse: "Question rhétorique fondatrice ouvrant l'œuvre sur l'énigme du consentement politique." },
-                        { cit: "Vous vous affaiblissez de vos mains afin qu'il soit plus fort et plus dur au joug.", loc: "Partie 1", analyse: "Structure antithétique démontrant le mécanisme de transfert d'énergie vitale vers le despote." }
+                        { cit: "C'est le peuple qui s'asservit, qui se coupe la gorge, qui, ayant le choix ou d'être serf ou d'être libre, quitte la franchise et prend le joug.", loc: "Première partie", analyse: "La thèse centrale de l'œuvre : l'oppression n'est pas subie, elle est un choix actif et suicidaire de la multitude." },
+                        { cit: "Ce sont donc les peuples eux-mêmes qui se laissent ou plutôt se font gourmander, puisqu'en cessant de servir ils en seraient quittes.", loc: "Première partie", analyse: "La Boétie met le peuple face à ses responsabilités politiques : la soumission est une action volontaire." },
+                        { cit: "D'où a-t-il pris tant d'yeux, dont il vous épie, si vous ne les lui baillez ?", loc: "Première partie", analyse: "Une question rhétorique frappante qui démontre que l'appareil répressif du tyran est composé du peuple lui-même." },
+                        { cit: "Comment a-t-il tant de mains pour vous frapper, s'il ne les prend de vous ?", loc: "Première partie", analyse: "L'ironie tragique du pouvoir : la violence de l'État n'existe que par la force physique prêtée par les citoyens." },
+                        { cit: "Vous vous affaiblissez, afin qu'il soit plus fort et roide à vous tenir plus courte la bride.", loc: "Première partie", analyse: "Le mécanisme des vases communicants : chaque renoncement du citoyen renforce directement la puissance tyrannique." }
                     ]
                 },
                 {
                     theme: "2. Les ruses et instruments de l'oppression",
                     items: [
-                        { cit: "Les théâtres, les jeux, les farces... étaient pour les peuples anciens les appâts de la servitude.", loc: "Partie 3", analyse: "Dénonciation philosophique du divertissement de masse comme outil d'anesthésie critique." },
-                        { cit: "Le secret de la domination, le soutien de la tyrannie... c'est qu'il y a toujours quatre ou fieux hommes qui la maintiennent.", loc: "Partie 3", analyse: "Théorie de la chaîne oligarchique décrivant la structure pyramidale de la complicité." },
-                        { cit: "Les tyrans se plaisent à se faire obéir en utilisant le voile de la religion et de la superstition.", loc: "Partie 3", analyse: "Critique de la mystification théocratique utilisée pour sacraliser un pouvoir pourtant illégitime." },
-                        { cit: "Les tyrans faisaient largesse d'un boisseau de blé... et c'était pitié d'entendre crier : Vive le Roi !", loc: "Partie 3", analyse: "Ironie cinglante sur la docilité d'un peuple qui remercie le maître pour lui rendre une miette de son propre bien." },
-                        { cit: "Ils emploient la ruse de la parole avant d'avoir recours à la force des armes.", loc: "Partie 3", analyse: "Lucidité philosophique plaçant la manipulation linguistique au-dessus de la contrainte militaire." }
+                        { cit: "Ce grand secret et le ressort de la domination, le soutien et le fondement de la tyrannie... ce sont toujours quatre ou cinq qui maintiennent le tyran.", loc: "Troisième partie", analyse: "La théorie fondatrice de la pyramide du pouvoir : la tyrannie tient par une chaîne de complicités intéressées, et non par la force." },
+                        { cit: "Les théâtres, les jeux, les farces, les spectacles, les gladiateurs, les bêtes étranges... c'étaient aux peuples anciens les appâts de la servitude.", loc: "Deuxième partie", analyse: "La critique avant-gardiste du divertissement de masse comme outil d'abrutissement politique." },
+                        { cit: "Dès lors qu'un roi s'est déclaré tyran, tout le mauvais, toute la lie du royaume... s'amassent autour de lui et le soutiennent pour avoir part au butin.", loc: "Troisième partie", analyse: "Le despote corrompt la société en associant les pires opportunistes à son système d'extorsion." },
+                        { cit: "Le tyran ne pense jamais que sa puissance lui soit assurée, sinon quand il est venu à ce point qu'il n'a sous lui homme qui vaille.", loc: "Troisième partie", analyse: "L'essence du pouvoir arbitraire : l'écrasement systématique de l'intelligence et du mérite civique." },
+                        { cit: "Les tyrans [...] ne s'oublièrent pas de prendre fort souvent la religion pour devant de corps.", loc: "Deuxième partie", analyse: "La dénonciation de la théocratie : l'utilisation de la foi et de la superstition pour masquer l'illégitimité du pouvoir." }
                     ]
                 },
                 {
                     theme: "3. La coutume contre la liberté naturelle",
                     items: [
-                        { cit: "La première et principale raison de la servitude volontaire, c'est l'habitude de la coutume.", loc: "Partie 2", analyse: "Analyse sociologique démontrant comment le conditionnement éducatif efface l'instinct de liberté." },
-                        { cit: "La nature, ministre de Dieu... nous a tous faits de même forme et égaux en droits.", loc: "Partie 2", analyse: "Fondement jusnaturaliste et humaniste de l'égalité originelle, opposée à l'arbitraire monarchique." },
-                        { cit: "On ne regrette jamais ce qu'on n'a jamais eu la chance de posséder.", loc: "Partie 2", analyse: "Maxime psychologique explicitant l'inaction des générations nées sous la domination." },
-                        { cit: "La liberté est entièrement perdue dès lors que l'homme cesse de la désirer.", loc: "Partie 1", analyse: "Formulation situant l'émancipation non comme une donnée extérieure, mais comme une volonté interne." },
-                        { cit: "Les semences de raison que la nature dépose en notre âme s'étouffent par la mauvaise éducation.", loc: "Partie 2", analyse: "Métaphore végétale soulignant le rôle destructeur du conditionnement culturel sur la rationalité." }
+                        { cit: "Il ne faut pas faire doute que nous ne soyons tous naturellement libres, puisque nous sommes tous compagnons.", loc: "Première partie", analyse: "Le fondement jusnaturaliste de La Boétie : l'égalité biologique des hommes empêche de justifier toute domination naturelle." },
+                        { cit: "La coutume, qui a en toutes choses grand pouvoir sur nous, n'a en aucun endroit si grande vertu qu'en ceci, de nous enseigner à servir.", loc: "Deuxième partie", analyse: "L'analyse sociologique du conditionnement : la répétition efface l'instinct naturel de liberté." },
+                        { cit: "La première raison pourquoi les hommes servent volontairement, c'est pour ce qu'ils naissent serfs et sont nourris tels.", loc: "Deuxième partie", analyse: "La justification de l'inertie des peuples par l'ignorance pure : on ne peut désirer ce qu'on n'a jamais connu." },
+                        { cit: "On ne plaint jamais ce qu'on n'a jamais eu, et le regret ne vient point sinon qu'après le plaisir.", loc: "Deuxième partie", analyse: "Maxime psychologique implacable sur la pérennité des dictatures au fil des générations." },
+                        { cit: "Il est incroyable comme le peuple, dès lors qu'il est assujetti, tombe si soudain en un tel et si profond oubli de la franchise.", loc: "Deuxième partie", analyse: "Le constat clinique et terrifié de la rapidité avec laquelle une nation perd sa dignité politique." }
                     ]
                 },
                 {
                     theme: "4. Le refus de servir et la fraternité",
                     items: [
-                        { cit: "Soyez résolus de ne servir plus, et vous voilà libres à l'instant même.", loc: "Partie 1", analyse: "Injonction impérative fondant le concept de désobéissance civile pacifique et non violente." },
-                        { cit: "Je ne veux pas que vous le poussiez ni l'ébranliez, mais seulement ne le soutenez plus.", loc: "Partie 1", analyse: "Économie de moyens rhétorique : la chute du despote est présentée comme le fruit d'une simple inertie." },
-                        { cit: "Entre les méchants, il n'y a pas d'amitié, il n'y a que de la crainte et des complots.", loc: "Partie 3", analyse: "Antithèse philosophique opposant la pureté de la fraternité humaine à la terreur des cercles de pouvoir." },
-                        { cit: "Le tyran n'est jamais aimé du peuple, et il n'aime lui-même personne.", loc: "Partie 3", analyse: "Condamnation psychologique du despote, condamné par son vice à la solitude absolue." },
-                        { cit: "Apprenons donc quelque fois à bien faire, élevons nos regards vers le Ciel.", loc: "Conclusion", analyse: "Appel humaniste oratoire exhortant à l'élévation intellectuelle pour fuir l'infamie de la soumission." }
+                        { cit: "Soyez résolus de ne servir plus, et vous voilà libres.", loc: "Première partie", analyse: "La formule la plus célèbre de l'œuvre : la liberté ne se quémande pas par les armes, elle se décrète intellectuellement." },
+                        { cit: "Je ne veux pas que vous le poussiez ou l'ébranliez, mais seulement ne le soutenez plus, et vous le verrez, comme un grand colosse à qui on a dérobé sa base, de son poids même fondre en bas et se rompre.", loc: "Première partie", analyse: "La théorisation absolue de la désobéissance civile et pacifique par la force de l'inertie." },
+                        { cit: "L'amitié, c'est un nom sacré, c'est une chose sainte ; elle ne se met jamais qu'entre gens de bien.", loc: "Troisième partie", analyse: "L'amitié érigée en vertu politique supérieure, seul rempart véritable contre la corruption tyrannique." },
+                        { cit: "Entre les méchants, quand ils s'assemblent, c'est un complot, non pas une compagnie ; ils ne s'entraiment pas, mais ils s'entrecraignent.", loc: "Troisième partie", analyse: "L'antithèse révélant la misère psychologique des cercles de pouvoir, soudés par la paranoïa et non par l'amour." },
+                        { cit: "Le tyran ne fut jamais aimé ni n'aima jamais.", loc: "Troisième partie", analyse: "La sentence finale condamnant le despote à la solitude absolue, dépourvu d'humanité véritable." }
                     ]
                 }
             ],
@@ -1422,7 +1398,7 @@ const BDD_DISSERTATION = {
                         {
                             titre: "I. La liberté comme un don inaliénable de la nature et une condition originelle",
                             sous_parties: [
-                                "A. Le fondement jusnaturaliste : la Nature et la raison divine ont créé tous les hommes égaux et libres.",
+                                "A. Le fondement jusnaturaliste : la Nature a créé tous les hommes égaux et libres.",
                                 "B. L'instinct de liberté visible chez les bêtes sauvages qui refusent la captivité.",
                                 "C. La liberté comme propriété essentielle de l'âme humaine, impossible à ôter sans dégrader l'homme."
                             ]
@@ -1446,7 +1422,7 @@ const BDD_DISSERTATION = {
                     ]
                 },
                 {
-                    sujet: "« Soyez résolus de ne plus servir, et vous voilà libres. » (La Boétie) — Suffit-il de cesser d’obéir pour recouvrer la liberté ?",
+                    sujet: "« Soyez résolus de ne servir plus, et vous voilà libres. » (La Boétie) — Suffit-il de cesser d’obéir pour recouvrer la liberté ?",
                     type: "Dialectique",
                     parties: [
                         {
@@ -1498,7 +1474,7 @@ const BDD_DISSERTATION = {
                         {
                             titre: "III. La liberté comme une ascèse intellectuelle et un combat civique permanent",
                             sous_parties: [
-                                "A. Dépasser la passivité naturelle par un effort constant de vigilance et d'esprit critique (les 'gens bien nés').",
+                                "A. Dépasser la passivité naturelle par un effort constant de vigilance et d'esprit critique.",
                                 "B. Le combat non violent du refus d'obéissance, exigeant une force morale renouvelée à chaque instant.",
                                 "C. L'amitié philosophique et la solidarité républicaine comme uniques remparts pour entretenir durablement la liberté."
                             ]
