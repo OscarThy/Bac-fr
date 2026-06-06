@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EAF - Oral : Numéro deux de David Foenkinos</title>
+    <!-- Tailwind et Chart.js -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+
+        .chart-container { position: relative; width: 100%; max-width: 350px; margin: 0 auto; height: 300px; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
+
+        /* Styles pour les Flashcards (Motivations & Questions) */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .card-inner { transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
+        .flipped .card-inner { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- En-tête -->
+    <header class="bg-emerald-800 text-white p-6 shadow-md flex items-center justify-between shrink-0 sticky top-0 z-50">
+        <a href="../oral.html#cursive" class="text-white hover:text-emerald-200 font-bold text-lg transition-transform hover:-translate-x-1">&larr; Retour à l'Oral</a>
+        <div class="text-center">
+            <h1 class="text-2xl md:text-3xl font-black uppercase tracking-widest">Numéro deux <span class="font-normal italic text-emerald-300">de D. Foenkinos</span></h1>
+        </div>
+        <div class="hidden md:flex gap-3">
+            <span class="px-3 py-1 bg-emerald-900 rounded-full text-xs font-bold border border-emerald-700">⏱️ ~8 min</span>
+            <span class="px-3 py-1 bg-emerald-900 rounded-full text-xs font-bold border border-emerald-700">🔄 Lien : Manon Lescaut</span>
+        </div>
+    </header>
+
+    <!-- Navigation des Onglets -->
+    <div class="bg-white border-b-2 border-slate-200 px-6 shrink-0 sticky top-[88px] z-40 shadow-sm">
+        <div class="flex overflow-x-auto custom-scroll w-full max-w-6xl mx-auto">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex-1 py-4 px-4 font-black text-emerald-600 border-b-4 border-emerald-600 bg-emerald-50 text-sm uppercase tracking-tighter transition-all whitespace-nowrap">📊 Stratégie & Temps</button>
+            <button onclick="switchTab('resume')" id="nav-resume" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">📖 Résumé Détaillé</button>
+            <button onclick="switchTab('oral')" id="nav-oral" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">🗣️ Mes Fiches Oral</button>
+            <button onclick="switchTab('questions')" id="nav-questions" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">❓ Questions du Jury</button>
+        </div>
+    </div>
+
+    <!-- Contenu Principal -->
+    <main class="flex-grow max-w-6xl mx-auto w-full p-6 md:p-10 pb-20">
+
+        <!-- ================= ONGLET 1: DASHBOARD ================= -->
+        <section id="dashboard" class="tab-content active">
+            <div class="mb-8 text-center">
+                <h2 class="text-3xl font-black text-emerald-900 mb-4 uppercase">La Stratégie de l'Oral</h2>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto">
+                    L'épreuve orale se divise en deux temps : votre exposé continu (environ 5 minutes), suivi de l'entretien avec le jury (environ 3 minutes). Cliquez sur les étapes ci-dessous pour accéder directement à vos fiches.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-slate-100">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-800 mb-6 border-l-8 border-emerald-500 pl-4">Répartition Chronométrique</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-presentation').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-slate-800 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Présentation (1 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'auteur, le contexte pop-culture et le thème de l'échec.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-resume').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-emerald-400 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Résumé de l'œuvre (2 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">Le casting, le rejet, la dépression et la résilience de Martin.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-motivations').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-emerald-700 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Motivations (2 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'analyse de 2 arguments forts et le lien avec Manon Lescaut.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('questions');">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-blue-500 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-blue-600 transition-colors">Questions du Jury (3 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'entretien réactif basé sur votre exposé.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="chart-container">
+                    <canvas id="timingChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ONGLET 2: RESUME DETAILLÉ ================= -->
+        <section id="resume" class="tab-content">
+            <div class="mb-8 bg-indigo-50 p-8 rounded-3xl border border-indigo-100 shadow-sm">
+                <h2 class="text-3xl font-black text-indigo-900 mb-4 uppercase tracking-wide">Résumé Partie par Partie</h2>
+                <p class="text-lg text-indigo-800 opacity-90">
+                    Le roman est structuré autour de l'ascension foudroyante vers le rêve, suivie de la chute brutale et de la longue reconstruction du personnage. Cliquez sur chaque Partie pour en découvrir les enjeux.
+                </p>
+            </div>
+
+            <div class="space-y-4" id="accordion-container">
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie1')">
+                        <span>Partie I : L'Enfance et la genèse du miracle</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie1">+</span>
+                    </button>
+                    <div id="partie1" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-slate-50 rounded-xl border-l-4 border-slate-400">
+                            <strong>Une enfance fragilisée :</strong> Le roman s'ouvre sur le jeune Martin Hill. C'est un garçon ordinaire, plutôt discret, qui vit mal le divorce récent de ses parents. Son père, un accessoiriste de cinéma londonien, tente maladroitement de maintenir le lien avec son fils, tandis que sa mère refait sa vie à Paris. Cette séparation géographique et affective rend Martin vulnérable, développant chez lui un grand besoin de reconnaissance et d'évasion.
+                        </div>
+                        <div class="p-5 bg-emerald-50 rounded-xl border-l-4 border-emerald-500">
+                            <strong>Le hasard du grand casting :</strong> En 1999, le monde entier est secoué par le phénomène littéraire Harry Potter. La production du futur film lance un casting titanesque pour trouver le garçon qui incarnera le célèbre sorcier à lunettes. Un jour, en accompagnant son père sur un plateau de tournage, Martin est repéré totalement par hasard par le grand producteur du film. Son visage correspond parfaitement à l'imaginaire du livre. Contre toute attente, Martin franchit toutes les étapes du casting avec brio, soutenu par l'ambition soudaine et dévorante de son père.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie2')">
+                        <span>Partie II : Le Choix fatal et la descente aux enfers</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie2">+</span>
+                    </button>
+                    <div id="partie2" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-blue-50 rounded-xl border-l-4 border-blue-500">
+                            <strong>La cruauté de la deuxième place :</strong> Le processus de sélection s'éternise et il ne reste plus que deux garçons en lice au monde : Martin Hill et Daniel Radcliffe. Après des semaines d'attente insoutenable, la décision finale tombe. La créatrice de l'univers elle-même tranche en faveur de Daniel. Martin reçoit le coup de téléphone qui va détruire sa jeunesse : il n'est que le numéro deux. Il a frôlé la gloire absolue et retombe brutalement dans l'anonymat.
+                        </div>
+                        <div class="p-5 bg-orange-50 rounded-xl border-l-4 border-orange-500">
+                            <strong>Le traumatisme psychologique :</strong> Ce rejet ne serait qu'une déception banale s'il n'y avait pas la démesure du succès du film. Partout où Martin va, le visage de Daniel Radcliffe s'affiche. Le monde entier célèbre le garçon qu'il aurait pu être. Cette omniprésence devient une véritable torture psychologique. Son père, brisé par l'échec de ses propres ambitions à travers son fils, sombre dans l'alcoolisme. Martin, lui, s'isole totalement, développe des maladies psychosomatiques et développe une phobie absolue de tout ce qui touche à la magie ou au cinéma.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie3')">
+                        <span>Partie III : L'Exil et l'impossibilité d'oublier</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie3">+</span>
+                    </button>
+                    <div id="partie3" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-purple-50 rounded-xl border-l-4 border-purple-500">
+                            <strong>La fuite à Paris :</strong> Pour échapper à la frénésie britannique autour des films, Martin déménage en France pour vivre avec sa mère. Il espère que l'anonymat parisien le protégera. Mais le phénomène est mondial. Chaque nouveau tome publié, chaque sortie de film au cinéma agit comme une piqûre de rappel douloureuse. Martin cache son passé à tous ses nouveaux amis, terrifié à l'idée d'être défini uniquement comme le garçon qui a raté sa vie.
+                        </div>
+                        <div class="p-5 bg-red-50 rounded-xl border-l-4 border-red-500">
+                            <strong>La marginalisation volontaire :</strong> Le personnage s'enfonce dans la marginalité sociale. Il devient incapable de nouer des relations amoureuses durables, sabotant ses propres chances de bonheur parce qu'il se considère intérieurement comme un raté. Son obsession l'empêche de grandir normalement. Il devient un spectateur fantomatique de sa propre existence, écrasé par le poids virtuel de cette vie extraordinaire qu'un autre vit à sa place.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie4')">
+                        <span>Partie IV : La Résilience et la Paix</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie4">+</span>
+                    </button>
+                    <div id="partie4" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-gray-100 rounded-xl border-l-4 border-gray-600">
+                            <strong>Le lâcher-prise :</strong> Le temps passe, la saga cinématographique touche enfin à sa fin. Devenu adulte, Martin commence lentement un processus de guérison. Il trouve un travail modeste et apaisant au Musée du Louvre, entouré d'œuvres d'art silencieuses qui ont traversé les siècles, ce qui relativise ses propres tourments. Il rencontre une femme avec qui il accepte enfin de s'ouvrir et de raconter son douloureux secret. L'aveu de son échec agit comme une première libération.
+                        </div>
+                        <div class="p-5 bg-yellow-50 rounded-xl border-l-4 border-yellow-600">
+                            <strong>La réconciliation avec le destin :</strong> Le roman se conclut sur une note lumineuse et profondément philosophique. Par un ultime hasard, le destin de Martin croise furtivement celui de Daniel Radcliffe devenu adulte, un acteur fatigué par la pression mondiale et l'absence totale de vie privée. Martin réalise alors que la gloire qu'il a tant jalousée était peut-être une prison dorée pire que son propre anonymat. Il accepte enfin d'être lui-même, comprenant que sa normalité et sa tranquillité sont de véritables richesses.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ONGLET 3: FICHES ORAL ================= -->
+        <section id="oral" class="tab-content">
+            
+            <!-- PRÉSENTATION -->
+            <div id="oral-presentation" class="mb-12 bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-8 border-b border-slate-100 pb-4">
+                    <span class="bg-slate-800 text-white font-black px-4 py-2 rounded-xl text-2xl">1</span>
+                    <h3 class="text-3xl font-black text-slate-800">Présentation <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">1 min</span></h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 1</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Je vais vous présenter Numéro deux, un roman contemporain très original écrit par David Foenkinos et publié en deux mille vingt deux. L'auteur y mélange avec une grande habileté des faits réels historiques liés à la pop culture et une fiction psychologique intime. Le point de départ du livre est historique le casting mondial pour trouver le garçon qui allait incarner le plus célèbre sorcier de la littérature. Nous savons tous qui a gagné ce rôle, mais Foenkinos s'intéresse à celui qui a échoué à la dernière seconde. J'ai choisi cette œuvre car elle aborde de façon poignante la thématique de l'échec dans une société moderne qui ne valorise que la réussite éclatante. C'est le portrait d'un personnage de l'ombre, un enfant dont la vie entière va être ravagée par une décision qui ne lui appartenait pas.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 2</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Aujourd'hui j'ai décidé de vous parler du roman Numéro deux de David Foenkinos paru en deux mille vingt deux. C'est une œuvre qui m'a profondément interpellé car elle interroge la notion vertigineuse du destin et de la chance. L'auteur invente le personnage de Martin Hill le jeune garçon qui est arrivé jusqu'à la sélection finale pour le premier rôle du grand film de magie des années deux mille mais qui n'a finalement pas été retenu. Ce qui rend ce roman brillant c'est qu'il transforme un simple refus de casting en une véritable tragédie moderne. Le rejet subi par l'enfant devient un monstre traumatique qui va le hanter pendant toute sa jeunesse. L'auteur nous force à regarder la cruauté invisible qui se cache derrière chaque grand succès mondial en donnant une voix et une épaisseur psychologique à celui qui est resté sur la touche.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 3</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Mon choix s'est porté sur Numéro deux de David Foenkinos publié très récemment. J'ai été fasciné par ce livre car il peut se lire comme un grand roman sur la résilience et la difficulté de se construire une identité propre. Nous y suivons le parcours de Martin un garçon brisé dès l'enfance pour avoir manqué de très peu le rôle cinématographique le plus convoité de sa génération. L'originalité du livre réside dans la violence de la situation l'enfant ne peut pas oublier son échec car le visage de son rival tapisse les murs les bus et les écrans du monde entier pendant plus de dix ans. Le roman explore avec beaucoup de finesse les conséquences de cet échec sur la dynamique familiale notamment sur son père et nous montre le long et douloureux chemin de Martin pour réussir à exister par lui même sans se définir par ce qu'il a raté.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 4</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">L'œuvre que je souhaite vous présenter est Numéro deux de David Foenkinos. J'ai été happé par ce roman à cause de son empathie exceptionnelle pour les perdants. Dans un monde hyper connecté où la notoriété est devenue une obsession collective l'auteur choisit de célébrer l'anonymat et la normalité. Le roman retrace la lente agonie psychologique d'un jeune britannique Martin qui voit la gloire absolue lui échapper à la toute dernière minute au profit d'un autre acteur. Foenkinos nous plonge dans la tête de ce personnage marginalisé par le sort. L'œuvre démontre de manière très émouvante que la véritable victoire dans la vie n'est pas forcément d'être sous les projecteurs mais de trouver la paix intérieure. C'est un roman qui réhabilite magnifiquement le droit à l'échec et la beauté des vies ordinaires.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RÉSUMÉ EXPRESS -->
+            <div id="oral-resume" class="mb-12 bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-8 border-b border-slate-100 pb-4">
+                    <span class="bg-emerald-400 text-white font-black px-4 py-2 rounded-xl text-2xl">2</span>
+                    <h3 class="text-3xl font-black text-slate-800">Résumé Express <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">2 min</span></h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 1</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">Le roman suit la chronologie d'une vie percutée par le hasard. L'histoire commence en Angleterre à la fin des années quatre vingt dix. Le jeune Martin Hill fils de parents divorcés accompagne un jour son père accessoiriste sur un plateau de cinéma londonien. Par un concours de circonstances inouï il est repéré par un puissant producteur qui cherche l'acteur parfait pour incarner le héros du plus grand phénomène littéraire de l'époque. Contre toute attente Martin franchit une à une les étapes du casting géant se prenant à rêver d'une vie magique qui effacerait ses blessures familiales. Le suspense monte jusqu'à ce qu'il ne reste plus que lui et un autre garçon nommé Daniel. L'élément tragique survient lors de la délibération finale l'auteure de la saga tranche en faveur de Daniel et Martin est recalé. A partir de ce refus le roman retrace la lente agonie psychologique de l'adolescent. Il ne s'agit pas d'un simple échec car le succès mondial des films rend son rival omniprésent. Martin sombre dans la dépression développe des phobies s'isole de ses amis et voit son propre père sombrer dans l'alcoolisme rongé par la déception. Le dernier tiers du livre montre heureusement la fuite de Martin vers la France puis sa lente reconstruction à l'âge adulte jusqu'à son acceptation apaisée d'une vie normale et silencieuse loin des paillettes.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 2</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">L'architecture de l'œuvre repose sur le contraste violent entre l'ascension fulgurante vers le rêve et la brutalité de la chute. La première partie du livre est presque féérique Foenkinos nous plonge dans les coulisses réelles de la fabrication du premier film de la saga des sorciers. Au milieu de cette machine industrielle colossale le jeune Martin Hill émerge comme le candidat idéal. Les adultes autour de lui notamment son père projettent toutes leurs propres ambitions de revanche sociale sur les épaules de cet enfant innocent. La rupture dramatique intervient au moment du choix final. Martin perd le rôle. Dès lors la structure du roman bascule dans le drame intime. L'auteur décrit comment cet échec initial agit comme un poison à diffusion lente qui va gâcher toute l'adolescence et la jeunesse du héros. Chaque nouvelle sortie de film chaque affiche dans la rue est vécue par Martin comme une agression personnelle et une humiliation publique. Il se sent constamment dépossédé de la vie qu'il aurait dû avoir. Incapable d'avancer il se réfugie dans une marginalité volontaire incapable de s'engager émotionnellement. Le dénouement du roman intervient des années plus tard. Martin devenu un jeune homme blessé mais résilient parvient enfin à faire le deuil de son rêve en réalisant la lourdeur du prix de la célébrité mondiale atteignant ainsi une forme de paix intérieure inespérée.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 3</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">Le roman est centré sur la question de la tyrannie du succès dans notre société. Foenkinos construit son récit en plaçant le lecteur dans l'empathie absolue pour celui qui échoue. Après avoir décrit avec beaucoup de réalisme la sélection de Martin Hill pour le rôle cinématographique de la décennie et la joie immense que cela provoque chez son père le livre bascule dans le rejet. Martin est le numéro deux celui que l'histoire efface immédiatement. L'intrigue avance en nous montrant les dégâts collatéraux de cette défaite. Le père de Martin qui avait tout misé sur ce succès ne s'en remet pas et sa chute entraîne la rupture définitive de ses liens avec son fils. Martin se retrouve doublement orphelin de son père et de son rêve. Pour fuir cette réalité étouffante où tout lui rappelle ce qu'il a raté Martin s'exile à Paris chez sa mère. Il s'invente une vie anonyme terne et sans risque refusant toute situation où il pourrait être de nouveau mis en compétition ou jugé. Ce n'est que par la rencontre de l'amour et par le travail discret qu'il finit par effectuer au musée du Louvre au contact silencieux des grandes œuvres d'art qu'il parvient à relativiser sa propre souffrance. La conclusion du livre vient magistralement fermer la boucle en offrant au lecteur une réflexion apaisante sur la futilité de la gloire et la véritable valeur de l'équilibre personnel.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 4</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">L'histoire que raconte David Foenkinos est l'autopsie d'un traumatisme moderne lié à la pop culture. Le jeune Martin au moment du casting n'a pas seulement perdu un travail ou une opportunité il a perdu la clé d'un monde magique qui semblait pouvoir réparer ses failles familiales. Le coup de téléphone lui annonçant son élimination agit comme une petite mort sociale. La suite du récit est la longue et douloureuse exploration d'un syndrome de stress post traumatique invisible. L'auteur excelle à montrer comment l'engouement de la planète entière pour la saga cinématographique devient l'enfer personnel d'un seul garçon. Les lunettes rondes et la cicatrice sur le front de son rival se transforment en instruments de torture quotidiens. Martin devient phobique incapable de sortir dans certains quartiers ou de discuter avec ses camarades de classe fascinés par le phénomène. Face à cette omniprésence agressive la trajectoire de l'héroïne est celle d'un enfermement et d'une auto destruction lente. Il faut attendre la fin de la frénésie mondiale la fin des films et le passage à l'âge adulte pour que la pression retombe. Par un très beau hasard narratif Foenkinos organise une rencontre furtive entre le héros anonyme apaisé et la superstar mondiale épuisée par son succès montrant ainsi de manière lumineuse que le destin avait peut être bien fait les choses en épargnant à Martin le fardeau monstrueux de la célébrité.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MOTIVATIONS -->
+            <div id="oral-motivations" class="mb-12">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="bg-emerald-700 text-white font-black px-4 py-2 rounded-xl text-2xl">3</span>
+                    <h3 class="text-3xl font-black text-slate-800">Mes 10 Arguments (Motivations) <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">2 min au total</span></h3>
+                </div>
+                <p class="text-sm text-slate-500 mb-8 font-bold">Cliquez sur les fiches pour les retourner et mémorisez l'analyse (2 fiches suffisent pour tenir les 2 minutes). Les 3 dernières fiches vous permettent de tisser le lien avec Manon Lescaut de l'Abbé Prévost.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 perspective-1000">
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-emerald-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🎲</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 1</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">La tragédie du Hasard</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-emerald-50 border border-emerald-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai été immédiatement frappé par la façon dont Foenkinos réinvente la notion de destin classique. Dans les tragédies antiques ce sont les dieux qui décident de la chute du héros. Ici la divinité a été remplacée par un élément beaucoup plus effrayant car absurde le hasard pur. Martin ne méritait ni d'être choisi parmi des milliers d'enfants ni d'être éliminé à la dernière seconde. Son jeu d'acteur était aussi bon que celui de son concurrent. C'est simplement une infime préférence subjective un détail indécelable qui a fait basculer la balance. Le roman montre avec cruauté que nos vies ne sont souvent déterminées par aucun mérite moral mais par la violence aveugle de la chance et de l'aléatoire.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-emerald-600 shadow-sm">
+                                    <strong>Le moment du choix :</strong><br>
+                                    La décision s'était jouée à un souffle à une nuance de regard à une seconde d'hésitation.
+                                </div>
+                                <div class="bg-emerald-100 p-2 rounded-lg text-xs mt-2 font-medium text-emerald-900">
+                                    <strong>Analyse littéraire :</strong> L'accumulation et la gradation descendante des compléments de temps et de mesure le souffle la nuance la seconde mettent en évidence l'infiniment petit. L'auteur souligne ainsi le déséquilibre vertigineux entre l'insignifiance de la cause et la dimension cataclysmique des conséquences sur la vie du personnage.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-red-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">👻</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 2</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">L'omniprésence du traumatisme</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-red-50 border border-red-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Ce qui fait la force psychologique de ce roman c'est que l'échec de Martin n'est pas un événement circonscrit dans le passé qu'il pourrait oublier avec le temps. La véritable torture de sa condition de numéro deux réside dans la surexposition médiatique de son rival. L'auteur utilise le succès mondial et réel des films comme une arme de destruction psychologique massive contre son personnage de fiction. Le traumatisme de Martin se réactive constamment et malgré lui chaque fois qu'il voit une affiche un jouet ou qu'il entend une musique du film. Il devient le prisonnier d'un monde qui célèbre perpétuellement la vie qu'il a perdue le condamnant à une forme de paranoïa quotidienne et étouffante.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-red-600 shadow-sm">
+                                    <strong>L'angoisse quotidienne :</strong><br>
+                                    Le visage de l'autre était partout sur les bus dans les librairies sur les écrans. Il n'y avait aucun refuge possible.
+                                </div>
+                                <div class="bg-red-100 p-2 rounded-lg text-xs mt-2 font-medium text-red-900">
+                                    <strong>Analyse littéraire :</strong> L'énumération spatiale sur les bus dans les librairies sur les écrans crée un effet de saturation visuelle. L'utilisation du pronom indéfini et impersonnel l'autre pour désigner le rival montre comment ce dernier s'est déshumanisé pour devenir une entité monstrueuse et envahissante qui abolit la notion même de refuge.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-orange-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">👨‍👦</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 3</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">La destruction du père</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-orange-50 border border-orange-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Un aspect du livre m'a particulièrement touché c'est l'impact dévastateur de l'échec sur la cellule familiale. Foenkinos décrit avec beaucoup de finesse le mécanisme de la projection parentale. Le père de Martin qui a toujours occupé des emplois subalternes dans le cinéma se met soudain à vivre son propre rêve de gloire et de revanche sociale par procuration à travers son fils. Lorsque la porte se referme le père s'effondre de manière bien plus pathétique que l'enfant. La véritable tragédie de Martin n'est peut être pas tant d'avoir perdu un rôle au cinéma mais d'avoir perdu l'amour et la présence de son père dont la déception insurmontable le conduit à l'alcoolisme et à l'abandon.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-orange-500 shadow-sm">
+                                    <strong>L'attitude du père :</strong><br>
+                                    Dans les yeux de son père il ne lisait plus l'amour mais le reflet de sa propre défaite.
+                                </div>
+                                <div class="bg-orange-100 p-2 rounded-lg text-xs mt-2 font-medium text-orange-900">
+                                    <strong>Analyse littéraire :</strong> L'antithèse cruelle entre le sentiment attendu l'amour et la réalité perçue le reflet de la défaite illustre la réification de l'enfant. Aux yeux du père Martin n'est plus un être humain digne d'affection il est devenu le miroir insupportable d'un échec social global détruisant le lien filial de base.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-purple-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🏥</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 4</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le mal psychosomatique</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-purple-50 border border-purple-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">L'auteur excelle à montrer comment la souffrance psychologique pure finit par s'imprimer directement dans la chair. Martin est incapable de verbaliser sa déception ou sa colère face à l'injustice de la situation. C'est donc son corps qui se met à parler pour lui. Le développement de ses troubles physiques ses crises d'angoisse ses maladies inexpliquées lors des périodes de sortie des films sont le signe clinique d'un traumatisme enfoui. Le corps de l'adolescent devient le champ de bataille de sa douleur muette prouvant que l'échec n'est pas qu'une idée abstraite mais une véritable pathologie qui ronge la vitalité de l'individu de l'intérieur.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-purple-600 shadow-sm">
+                                    <strong>La douleur physique :</strong><br>
+                                    Son corps entier semblait se rétracter refuser de grandir pour ne pas avoir à affronter cet avenir qu'on lui avait volé.
+                                </div>
+                                <div class="bg-purple-100 p-2 rounded-lg text-xs mt-2 font-medium text-purple-900">
+                                    <strong>Analyse littéraire :</strong> L'accumulation des verbes de rejet se rétracter refuser illustre un mécanisme de défense organique de régression. Le corps lui même se met en grève de la vie s'opposant au concept d'avenir parce que celui ci est ressenti comme un territoire usurpé par un autre.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-yellow-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🎭</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 5</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le mélange réalité et fiction</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-yellow-50 border border-yellow-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Le procédé littéraire utilisé par Foenkinos est redoutablement efficace. En ancrant son roman dans une réalité historique que tout le lecteur connaît la création de la saga au cinéma il crée une illusion de vérité totale. L'intégration de personnes réelles existantes la romancière britannique les producteurs le jeune acteur vedette aux côtés du personnage purement fictif de Martin Hill produit un effet de miroir troublant. Ce réalisme documentaire permet au lecteur de s'investir émotionnellement de façon beaucoup plus forte car l'angoisse de Martin s'appuie sur des références culturelles qui ont bercé notre propre enfance abolissant la frontière rassurante de la pure fiction.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-yellow-500 shadow-sm">
+                                    <strong>Le procédé du narrateur :</strong><br>
+                                    L'insertion de faits réels de l'histoire du casting mondial au milieu des pensées intimes et de l'angoisse fictive du jeune héros.
+                                </div>
+                                <div class="bg-yellow-100 p-2 rounded-lg text-xs mt-2 font-medium text-yellow-900">
+                                    <strong>Analyse littéraire :</strong> L'utilisation de l'illusion référentielle est ici poussée à son paroxysme. En saturant le texte d'informations vraies et universellement partagées par la pop culture l'auteur force le lecteur à accepter implicitement la souffrance inventée de Martin comme un fait historique indéniable et bouleversant.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-pink-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🕊️</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 6</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">L'anonymat comme salut</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-pink-50 border border-pink-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai adoré la leçon philosophique qui émerge lentement dans la dernière partie de l'œuvre. Alors que toute la société occidentale nous vend la célébrité la reconnaissance publique et le succès comme l'unique but de la vie Foenkinos prend le parti d'en faire l'apologie inverse. La guérison de Martin ne passe pas par une revanche éclatante ou une célébrité tardive dans un autre domaine. Elle passe par l'acceptation humble de sa condition d'homme ordinaire. En trouvant un emploi modeste dans l'ombre et le silence des gardiens de musée il découvre que la véritable liberté consiste paradoxalement à n'être regardé par personne à être affranchi du jugement permanent du grand public.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-pink-500 shadow-sm">
+                                    <strong>L'apaisement :</strong><br>
+                                    Il réalisa que le plus grand des luxes n'était pas d'être vu de tous mais de pouvoir exister sans être regardé.
+                                </div>
+                                <div class="bg-pink-100 p-2 rounded-lg text-xs mt-2 font-medium text-pink-900">
+                                    <strong>Analyse littéraire :</strong> Le chiasme intellectuel sur la valeur du regard transforme la perception de la défaite. Le terme économique "le plus grand des luxes" est appliqué à l'anonymat subvertissant ainsi totalement les échelles de valeurs capitalistes et mondaines pour promouvoir une sagesse stoïcienne et intériorisée.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-gray-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">⚖️</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 7</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le renversement des destins</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-gray-50 border border-gray-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Le dénouement du roman est pour moi l'un des moments les plus forts de la narration grâce à son ironie bienveillante. Lors de sa rencontre furtive et totalement silencieuse avec son ancien rival désormais adulte Martin observe un acteur planétaire rongé par la fatigue traqué par les paparazzis et privé de la moindre liberté de mouvement. Ce face à face muet fige le renversement métaphysique de la situation. Le grand gagnant est en réalité l'esclave d'un personnage de fiction tandis que le grand perdant est devenu le seul maître de sa vie réelle et intime. Ce constat final déconstruit merveilleusement notre jalousie humaine naturelle face au triomphe des autres.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-gray-600 shadow-sm">
+                                    <strong>La rencontre finale :</strong><br>
+                                    L'homme célèbre baissa les yeux fatigué sous le poids de son propre visage. Martin sourit enfin.
+                                </div>
+                                <div class="bg-gray-200 p-2 rounded-lg text-xs mt-2 font-medium text-gray-800">
+                                    <strong>Analyse littéraire :</strong> L'opposition des postures physiques résume l'issue de la longue bataille psychologique. L'acteur triomphant est décrit dans l'abaissement le regard fuyant et l'écrasement physique sous son mythe tandis que l'éternel second redresse la tête s'appropriant enfin l'expression du bonheur et du soulagement le sourire.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 8 (LIEN MANON LESCAUT) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🔗</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Manon Lescaut 1</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">La Marginalité subie</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Le rapprochement avec Manon Lescaut de l'Abbé Prévost m'a semblé très fructueux pour aborder la thématique de la marginalité. Dans les deux œuvres la marginalité des personnages n'est pas un choix militant de rébellion mais une conséquence cruelle d'une exclusion sociale. Martin Hill est poussé dans les marges de la société parce qu'il a été brutalement exclu du cercle extrêmement fermé de la gloire et de la réussite de la même manière que Manon et le Chevalier des Grieux sont violemment exclus de la haute société parisienne respectueuse et finissent rejetés dans la misère l'infamie et l'exil en Amérique. Tous sont des exilés d'un paradis perdu.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Prévost (Manon Lescaut) :</strong><br>
+                                    C'est une fille de mauvaise vie... une créature dont l'unique mérite est la figure.
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> Le mépris mondain qui frappe Manon et la condamne à la périphérie de la morale fait écho au mépris silencieux qui isole Martin. Dans les deux cas le monde brillant refuse de leur accorder une place légitime forçant les héros à exister dans la périphérie douloureuse de l'anonymat ou de la honte.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 9 (LIEN MANON LESCAUT) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">💥</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Manon Lescaut 2</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">Le basculement irréversible</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Une structure dramatique très puissante unit les deux romans c'est le pouvoir absolu et destructeur d'un seul instant ponctuel qui fait dérailler une vie entière. Le destin tragique du Chevalier des Grieux est entièrement scellé par l'instant foudroyant de sa rencontre avec Manon sur la place publique d'Amiens annulant d'un seul coup toutes ses promesses d'avenir brillant dans l'église. De façon remarquablement similaire la vie de Martin bascule définitivement à la minute précise où il reçoit l'appel téléphonique de refus du casting. Ces deux instants minuscules sur lesquels ils n'ont aucune emprise agissent comme des couperets qui viennent guillotiner leur trajectoire initiale.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Prévost (Manon Lescaut) :</strong><br>
+                                    Elle me parut si charmante que moi... je me trouvai enflammé tout d'un coup jusqu'au transport.
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> La locution temporelle tout d'un coup chez Prévost traduit la même stupeur de la violence du sort que le verdict du réalisateur chez Foenkinos. Les deux personnages subissent un choc émotionnel externe qui vient aliéner totalement leur capacité de choix pour le reste de leur jeunesse.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 10 (LIEN MANON LESCAUT) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">💀</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Manon Lescaut 3</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">Le deuil de l'Idéal et la survie</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Les deux œuvres se rejoignent fondamentalement dans leur amère conclusion sur la condition humaine la difficulté inouïe de devoir survivre à la perte de son idéal absolu. Après la mort misérable de Manon dans le désert Des Grieux survit physiquement mais reste un homme moralement brisé amputé de sa raison de vivre passant son existence à ressasser le fantôme de son amour perdu. Martin Hill connaît une agonie similaire durant de longues années hanté par le fantôme de la réussite qu'il n'a pas eue. Heureusement le roman contemporain se montre légèrement plus clément en autorisant finalement une vraie résilience alors que le héros du dix huitième siècle demeure irrémédiablement figé dans la souffrance d'un deuil éternel.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Prévost (Manon Lescaut) :</strong><br>
+                                    Mon âme ne suivit pas la sienne. (Des Grieux)
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> La survie du corps après l'effondrement de l'âme. La dissociation tragique exprimée par Des Grieux illustre la même dissociation pathologique vécue par le jeune Martin qui continue de respirer et de grandir biologiquement alors que son être intérieur est resté paralysé et mort le jour du casting perdu.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= ONGLET 4: QUESTIONS DU JURY ================= -->
+        <section id="questions" class="tab-content">
+            
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-black text-blue-900 mb-4 uppercase">Entretien avec le Jury (3 min)</h2>
+                <p class="text-lg text-slate-600 max-w-4xl mx-auto">
+                    Voici 20 questions réactives (sous forme de flashcards) que le jury pourrait vous poser en fonction de l'exposé que vous venez de faire. Cliquez pour voir la réponse.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 perspective-1000">
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">1. Pourquoi le titre "Numéro deux" ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Le titre résume toute la cruauté du drame. Dans notre société obsédée par les vainqueurs être le numéro deux n'est pas vu comme un accomplissement d'avoir été meilleur que des millions d'autres mais comme l'échec absolu d'avoir raté la première place de justesse devenant le premier des perdants.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">2. Le personnage de Martin Hill a t il vraiment existé ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Non Martin Hill est un personnage de fiction purement inventé par Foenkinos. Cependant l'auteur s'est basé sur un fait réel il y a bien eu un jeune acteur qui s'est retrouvé en duel final face à Daniel Radcliffe lors des auditions de 1999 mais dont l'identité est restée secrète.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">3. Pourquoi l'auteur a t il choisi l'univers de ce film de magie précisément ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est le plus grand phénomène culturel du siècle. Son omniprésence dans le monde réel les affiches les parcs d'attraction les produits dérivés crée le dispositif infernal de la torture de Martin. S'il avait raté un film d'auteur banal il aurait pu l'oublier mais ce film là l'a traqué partout où il allait.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">4. Quel rôle joue l'auteure britannique des romans dans cette tragédie intime ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Elle incarne littéralement la figure de la destinée. C'est elle qui détient le pouvoir absolu de vie ou de mort sociale sur le casting final. En déclarant simplement Je choisis Daniel elle agit comme une divinité antique qui condamne un mortel sans appel possible.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">5. Vous parlez de projection paternelle pouvez vous préciser ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Le père de Martin est un homme frustré par son travail modeste dans le cinéma. Lorsqu'il voit son fils approcher de la gloire il transfert ses propres espoirs brisés sur lui. Quand l'échec survient ce n'est pas seulement la déception de l'enfant qui détruit la relation mais le désespoir égoïste du père qui s'effondre.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">6. Martin est il responsable de son propre isolement ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            En grande partie oui. Rongé par la honte et persuadé d'être un moins que rien parce qu'il a échoué il s'interdit d'être heureux. Il repousse les opportunités amoureuses ou amicales par peur de devoir avouer son passé développant un puissant sentiment d'illégitimité le syndrome de l'imposteur à l'envers.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">7. Comment l'auteur montre t il la douleur psychologique physiquement ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Par la maladie psychosomatique. Le corps de Martin devient le haut parleur de sa douleur muette. L'angoisse de voir le film ou les affiches provoque chez lui des attaques de panique violentes des allergies des malaises prouvant que le rejet n'est pas qu'un concept c'est une véritable agression organique.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">8. Quel est le rôle de la mère de Martin qui vit en France ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Elle incarne le refuge le retour à une normalité protectrice. Elle est géographiquement et mentalement éloignée de la frénésie du casting londonien. C'est chez elle à Paris que Martin trouve l'asile nécessaire pour se cacher fuir la pression médiatique britannique et entamer sa lente convalescence.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">9. Foenkinos critique t il la pop culture à travers ce livre ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Il ne critique pas l'œuvre de fiction en elle même mais plutôt la mécanique monstrueuse de l'industrie du divertissement. Il dénonce l'hystérie des médias le merchandising féroce et la façon dont la société de consommation écrase l'intimité et l'humanité des individus pour fabriquer des icônes rentables.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">10. Pourquoi le métier de gardien de musée au Louvre est il essentiel dans sa reconstruction ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Le Louvre est le temple du passé de l'immobilité et du silence tout l'inverse de la frénésie criarde du cinéma moderne. Gardien est un métier de l'ombre qui consiste à veiller sur les créations des autres sans chercher la lumière. Cette humilité volontaire permet à Martin de se soigner psychologiquement.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">11. Quel est le sens de la rencontre finale silencieuse avec son rival acteur ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est le renversement magistral de l'intrigue. En voyant le jeune acteur mondialement connu le regard vide épuisé et traqué Martin réalise que le succès absolu est peut être la pire des prisons. Le perdant a finalement gagné la liberté de se promener incognito et l'apaisement.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">12. L'auteur a t il une vision fataliste de l'existence ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Il a une vision stoïcienne. La fatalité du hasard existe (le refus de casting) et l'on ne peut rien y faire. Mais le roman démontre que si l'on ne choisit pas son destin on peut choisir la façon dont on y réagit. La résilience de Martin prouve que la guérison est toujours possible avec le temps.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">13. Dans votre rapprochement avec Manon Lescaut pourquoi parlez vous d'exclusion sociale ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Parce que les héros des deux œuvres ne choisissent pas la marge par pure rébellion poétique ils y sont jetés de force. Des Grieux est déclassé par la noblesse à cause de sa passion illégitime et Martin est déclassé du monde lumineux du cinéma par une simple préférence de casting. L'ostracisme est subi.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">14. La différence d'époque entre Prévost et Foenkinos modifie t elle la nature de la tragédie ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Oui au 18e siècle la tragédie est liée à la morale religieuse et aux conventions d'honneur nobiliaire. Dans notre société ultra contemporaine laïcisée la nouvelle tragédie est médiatique. L'enfer n'est plus l'exil en Amérique c'est l'omniprésence étouffante des images et de la publicité qui empêchent l'oubli.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">15. Pensez vous que ce livre soit une réflexion sur la dépression ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Tout à fait il décrit avec une justesse impressionnante les mécanismes de la dépression et de l'isolement chez l'adolescent et le jeune adulte. Le dégoût de soi la sensation de rater toutes les étapes de la vie l'incapacité à s'exprimer sont les symptômes cliniques d'une dépression post traumatique sévère.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">16. Pourquoi l'aveu final de son secret à la femme qu'il rencontre est il salvateur ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Toute sa vie Martin a eu honte de son passé s'efforçant de le cacher comme une maladie contagieuse. Le verbaliser devant une autre personne qui l'accepte avec bienveillance permet de désamorcer le pouvoir toxique du secret. L'acceptation passe obligatoirement par la mise en mots de la blessure originelle.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">17. Y a t il une part d'humour ou de légèreté dans ce roman malgré le thème difficile ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Oui le style de David Foenkinos est réputé pour sa délicatesse et son ironie douce. Il sait parsemer son récit tragique de réflexions cocasses sur la folie du monde du spectacle les comportements irrationnels des fans ou les petits hasards absurdes du quotidien ce qui évite au roman d'être larmoyant.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">18. Le livre critique t il indirectement les parents qui projettent leurs rêves sur leurs enfants ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est l'un des messages majeurs. Le père de Martin bien qu'affectueux est inconsciemment toxique. En poussant son fils dans l'arène du casting non pas pour l'enfant mais pour réparer ses propres échecs professionnels il devient le premier responsable de la pression et du traumatisme lorsque le rêve s'effondre.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">19. Qu'avez vous retenu personnellement de cette lecture ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Elle m'a appris l'immense beauté du lâcher prise. Le roman nous rassure en prouvant que rater une occasion apparemment unique n'est pas la fin d'une vie et que le bonheur se trouve souvent dans la simplicité et l'acceptation de soi loin de la compétition permanente imposée par le monde moderne.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">20. En quoi Martin est il à l'opposé exact de Des Grieux dans Manon Lescaut à la fin du roman ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Des Grieux est incapable de résilience. De retour d'Amérique il reste figé dans la complainte pleurant éternellement la perte de son idéal amoureux il survit mais ne vit plus. Martin au contraire parvient au stade supérieur du deuil il enterre son passé douloureux et réussit véritablement à renaître et à sourire à l'avenir.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Scripts pour l'interactivité -->
+    <script>
+        // Gestion des Onglets
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('button[id^="nav-"]').forEach(btn => {
+                btn.classList.remove('border-emerald-600', 'text-emerald-600', 'bg-emerald-50');
+                btn.classList.add('border-transparent', 'text-slate-500');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            
+            const activeBtn = document.getElementById('nav-' + tabId);
+            activeBtn.classList.remove('border-transparent', 'text-slate-500');
+            activeBtn.classList.add('border-emerald-600', 'text-emerald-600', 'bg-emerald-50');
+        }
+
+        // Gestion de l'Accordéon du Résumé
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.innerText = '-';
+            } else {
+                content.classList.add('hidden');
+                icon.innerText = '+';
+            }
+        }
+
+        // Graphique Chart.js (Stratégie & Temps)
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('timingChart').getContext('2d');
+            const data = {
+                labels: ['Présentation (1 min)', 'Résumé (2 min)', 'Motivations & Arguments (2 min)', 'Entretien / Questions (3 min)'],
+                datasets: [{
+                    data: [1, 2, 2, 3],
+                    backgroundColor: [
+                        '#1e293b', // slate-800
+                        '#34d399', // emerald-400
+                        '#047857', // emerald-700
+                        '#3b82f6'  // blue-500
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    hoverOffset: 6
+                }]
+            };
+
+            const config = {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            align: 'start',
+                            labels: {
+                                font: { family: "sans-serif" },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) { label = label.split(' (')[0]; }
+                                    return label + ' : ~' + context.raw + ' min';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            };
+
+            new Chart(ctx, config);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EAF - Oral : Madame Bovary de Flaubert</title>
+    <!-- Tailwind et Chart.js -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+
+        .chart-container { position: relative; width: 100%; max-width: 350px; margin: 0 auto; height: 300px; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
+
+        /* Styles pour les Flashcards (Motivations & Questions) */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .card-inner { transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
+        .flipped .card-inner { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- En-tête -->
+    <header class="bg-emerald-800 text-white p-6 shadow-md flex items-center justify-between shrink-0 sticky top-0 z-50">
+        <a href="../oral.html#cursive" class="text-white hover:text-emerald-200 font-bold text-lg transition-transform hover:-translate-x-1">&larr; Retour à l'Oral</a>
+        <div class="text-center">
+            <h1 class="text-2xl md:text-3xl font-black uppercase tracking-widest">Madame Bovary <span class="font-normal italic text-emerald-300">de Flaubert</span></h1>
+        </div>
+        <div class="hidden md:flex gap-3">
+            <span class="px-3 py-1 bg-emerald-900 rounded-full text-xs font-bold border border-emerald-700">⏱️ ~8 min</span>
+            <span class="px-3 py-1 bg-emerald-900 rounded-full text-xs font-bold border border-emerald-700">🔄 Lien : Manon Lescaut</span>
+        </div>
+    </header>
+
+    <!-- Navigation des Onglets -->
+    <div class="bg-white border-b-2 border-slate-200 px-6 shrink-0 sticky top-[88px] z-40 shadow-sm">
+        <div class="flex overflow-x-auto custom-scroll w-full max-w-6xl mx-auto">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex-1 py-4 px-4 font-black text-emerald-600 border-b-4 border-emerald-600 bg-emerald-50 text-sm uppercase tracking-tighter transition-all whitespace-nowrap">📊 Stratégie & Temps</button>
+            <button onclick="switchTab('resume')" id="nav-resume" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">📖 Résumé Détaillé</button>
+            <button onclick="switchTab('oral')" id="nav-oral" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">🗣️ Mes Fiches Oral</button>
+            <button onclick="switchTab('questions')" id="nav-questions" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">❓ Questions du Jury</button>
+        </div>
+    </div>
+
+    <!-- Contenu Principal -->
+    <main class="flex-grow max-w-6xl mx-auto w-full p-6 md:p-10 pb-20">
+
+        <!-- ================= ONGLET 1: DASHBOARD ================= -->
+        <section id="dashboard" class="tab-content active">
+            <div class="mb-8 text-center">
+                <h2 class="text-3xl font-black text-emerald-900 mb-4 uppercase">La Stratégie de l'Oral</h2>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto">
+                    L'épreuve orale se divise en deux temps : votre exposé continu (environ 5 minutes), suivi de l'entretien avec le jury (environ 3 minutes). Cliquez sur les étapes ci-dessous pour accéder directement à vos fiches.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-slate-100">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-800 mb-6 border-l-8 border-emerald-500 pl-4">Répartition Chronométrique</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-presentation').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-slate-800 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Présentation (1 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'auteur, le contexte d'écriture et l'invention du réalisme cruel.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-resume').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-emerald-400 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Résumé de l'œuvre (2 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'intrigue, le mariage, les amants, la ruine et le suicide.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-motivations').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-emerald-700 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Motivations (2 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'analyse de 2 arguments forts et le lien avec Manon Lescaut.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('questions');">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-blue-500 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-blue-600 transition-colors">Questions du Jury (3 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'entretien réactif basé sur votre exposé.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="chart-container">
+                    <canvas id="timingChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ONGLET 2: RESUME DETAILLÉ ================= -->
+        <section id="resume" class="tab-content">
+            <div class="mb-8 bg-indigo-50 p-8 rounded-3xl border border-indigo-100 shadow-sm">
+                <h2 class="text-3xl font-black text-indigo-900 mb-4 uppercase tracking-wide">Résumé Partie par Partie</h2>
+                <p class="text-lg text-indigo-800 opacity-90">
+                    Le roman est divisé en trois grandes parties qui marquent la dégradation inéluctable de l'héroïne, de l'illusion romantique jusqu'à la mort poisseuse. Cliquez sur chaque Partie pour en découvrir les enjeux.
+                </p>
+            </div>
+
+            <div class="space-y-4" id="accordion-container">
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie1')">
+                        <span>Partie I : Le Mariage et l'Ennui à Tostes</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie1">+</span>
+                    </button>
+                    <div id="partie1" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-slate-50 rounded-xl border-l-4 border-slate-400">
+                            <strong>Une éducation fatale :</strong> Le roman s'ouvre curieusement sur l'enfance de Charles Bovary, un garçon lourd, médiocre et sans ambition qui devient officier de santé. Devenu médecin de campagne, il soigne un jour la jambe du père Rouault, un riche paysan. C'est là qu'il rencontre Emma, la fille de son patient. Emma a été élevée au couvent où elle s'est gavée de romans à l'eau de rose, rêvant de princes, de passions brûlantes et de châteaux. Elle voit en Charles une promesse d'échapper à la ferme. Ils se marient, mais la désillusion est immédiate. Charles est plat, ses conversations sont pauvres et la passion est inexistante. Emma sombre dans une profonde mélancolie à Tostes.
+                        </div>
+                        <div class="p-5 bg-emerald-50 rounded-xl border-l-4 border-emerald-500">
+                            <strong>Le bal de la Vaubyessard :</strong> L'événement déclencheur de la folie d'Emma est une invitation exceptionnelle à un bal donné par le marquis d'Andervilliers. Pendant une nuit, Emma vit son rêve : elle danse avec un vicomte, goûte au luxe, aux glaces, et respire le parfum de la haute noblesse. Le retour à la réalité crasseuse de sa maison provinciale le lendemain agit comme un poison. Ce bal devient une obsession maladive. Elle passe ses journées à regarder la carte de Paris, délaisse son foyer, tombe physiquement malade d'ennui. Face à la détérioration de sa santé, Charles, ignorant la cause psychologique du mal, décide de déménager dans une plus grande bourgade : Yonville-l'Abbaye. Emma est alors enceinte de leur premier enfant.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie2')">
+                        <span>Partie II : Yonville, la Faute et l'Illusion</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie2">+</span>
+                    </button>
+                    <div id="partie2" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-blue-50 rounded-xl border-l-4 border-blue-500">
+                            <strong>Léon et l'amour platonique :</strong> À Yonville, le couple rencontre les notables du village, notamment le pharmacien Homais, incarnation absolue de la bêtise bourgeoise arrogante, et Léon Dupuis, un jeune clerc de notaire rêveur. Emma et Léon se découvrent les mêmes goûts littéraires romantiques. Un amour platonique s'installe, mais par timidité mutuelle et résidu de vertu, il ne se concrétise pas. Lassé et ambitieux, Léon part étudier le droit à Paris. Emma accouche d'une fille, Berthe, qu'elle délaisse cruellement car elle aurait préféré un garçon (synonyme de liberté). La frustration de sa vie s'accentue.
+                        </div>
+                        <div class="p-5 bg-orange-50 rounded-xl border-l-4 border-orange-500">
+                            <strong>Rodolphe, les Comices et la Chute :</strong> Flaubert orchestre magistralement la chute d'Emma lors des Comices agricoles. Alors que le maire débite des discours politiques ennuyeux en contrebas, Emma est séduite au premier étage par Rodolphe Boulanger, un noble libertin local, cynique et expérimenté. Il lui sert tous les clichés romantiques qu'elle attend. Emma devient sa maîtresse avec enthousiasme, persuadée de vivre enfin un grand roman. Mais elle devient vite envahissante et réclame une fuite à cheval à l'étranger. Rodolphe, lâche et lassé, lui écrit une fausse lettre de rupture pathétique cachée au fond d'un panier d'abricots. Emma subit un choc si violent qu'elle manque de se suicider par défenestration et tombe dans une longue léthargie proche de la mort, dont Charles la soigne avec dévouement.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('partie3')">
+                        <span>Partie III : La Double Ruine (Morale et Financière)</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-partie3">+</span>
+                    </button>
+                    <div id="partie3" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-purple-50 rounded-xl border-l-4 border-purple-500">
+                            <strong>L'adultère citadin et Lheureux :</strong> Pour la distraire de sa convalescence, Charles l'emmène à l'Opéra de Rouen. Par hasard, ils y recroisent Léon, devenu un bourgeois cynique et sûr de lui. Emma reprend immédiatement une liaison avec lui. Sous prétexte de leçons de piano, elle se rend chaque semaine à Rouen, vivant une folie charnelle et luxueuse dans les hôtels de la ville. Pour entretenir cette vie d'illusions, combler Léon de cadeaux et embellir sa maison, elle s'endette aveuglément auprès de Monsieur Lheureux, un ignoble marchand usurier local qui manipule ses dettes et l'enserre dans un piège financier inextricable.
+                        </div>
+                        <div class="p-5 bg-red-50 rounded-xl border-l-4 border-red-500">
+                            <strong>Le suicide et la fin désolante :</strong> Le piège de Lheureux se referme : une saisie légale des meubles de la maison Bovary est affichée publiquement. Prise de panique face à la honte et à l'effondrement de son théâtre d'illusions, Emma court demander de l'argent à Léon, puis à Rodolphe. Tous deux se défilent lâchement. Acculée, elle se rend chez le pharmacien Homais, force la porte du laboratoire, s'empare d'un bocal d'arsenic et l'avale à pleines poignées. Elle espérait une mort douce et romantique, mais Flaubert décrit une agonie atroce, vomitive et monstrueuse. Après sa mort, Charles découvre par hasard les lettres de ses amants. Brisé par la douleur, il meurt à son tour d'une crise cardiaque, dans le jardin, laissant la petite Berthe orpheline et obligée d'aller travailler dans une filature de coton. Le roman se ferme sur la Légion d'honneur accordée au pharmacien Homais, consacrant le triomphe de la bourgeoisie idiote.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ONGLET 3: FICHES ORAL ================= -->
+        <section id="oral" class="tab-content">
+            
+            <!-- PRÉSENTATION -->
+            <div id="oral-presentation" class="mb-12 bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-8 border-b border-slate-100 pb-4">
+                    <span class="bg-slate-800 text-white font-black px-4 py-2 rounded-xl text-2xl">1</span>
+                    <h3 class="text-3xl font-black text-slate-800">Présentation <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">1 min</span></h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 1</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Je vais vous présenter Madame Bovary, l'immense chef-d'œuvre de Gustave Flaubert publié en 1857. C'est un roman qui marque une rupture colossale dans l'histoire de la littérature car il signe l'arrêt de mort du mouvement romantique et installe le réalisme objectif. Flaubert a mis plus de cinq ans à écrire ce livre, travaillant chaque phrase jusqu'à l'épuisement total pour atteindre une perfection formelle absolue. À sa sortie, le livre a fait l'effet d'une bombe et l'auteur a même dû affronter un procès pour outrage à la morale religieuse et aux bonnes mœurs. J'ai choisi de vous parler de ce roman car il dresse un portrait impitoyable de la bêtise humaine et du pouvoir de l'argent. Flaubert n'y idéalise rien : il prend l'histoire banale d'une femme de province adultère et ruinée pour en faire une autopsie cruelle des désillusions de toute une génération écrasée par la société bourgeoise du dix-neuvième siècle.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 2</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">L'œuvre que j'ai décidé de vous présenter aujourd'hui est Madame Bovary, écrite par Gustave Flaubert en 1857. Ce roman réaliste a profondément bouleversé l'approche de l'écriture en France. Flaubert y a inventé le concept médical et psychologique du bovarysme, ce sentiment de profonde insatisfaction face au réel, cette fuite en avant vers des illusions romanesques inatteignables. Ce qui m'a profondément intéressé tout au long de ma lecture, c'est l'extrême froideur de l'auteur face à ses personnages. Flaubert agit comme un chirurgien qui dissèque l'âme de son héroïne sans jamais manifester la moindre pitié ou la moindre leçon de morale explicite. Il nous force à observer le décalage tragique et souvent ridicule entre les rêves grandioses d'une femme nourrie de lectures sentimentales et la crasse poisseuse de son petit village normand. C'est la beauté du style de l'auteur qui transforme cette misère du quotidien en œuvre d'art immortelle.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 3</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Mon choix s'est porté sur Madame Bovary de Gustave Flaubert, un roman réaliste majeur paru en 1857. J'ai été fasciné par ce livre car il peut véritablement se lire comme un réquisitoire acerbe contre la bourgeoisie et la société de consommation naissante de la fin du dix-neuvième siècle. À travers le destin tragique d'Emma Bovary, Flaubert nous dépeint la mécanique implacable de la ruine financière et morale causée par la frustration. L'héroïne, piégée dans un mariage ennuyeux, tente de s'acheter une identité et un bonheur factices en s'endettant auprès d'un usurier cupide. Sa chute révèle la toute-puissance de l'argent et la lâcheté des hommes qui l'entourent, qu'il s'agisse de ses amants opportunistes ou des notables arrogants de son village. Flaubert démontre brillamment que la bêtise humaine est la véritable grande force victorieuse de notre monde moderne.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 4</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Je souhaite vous parler de Madame Bovary, de Gustave Flaubert, publié en 1857. J'ai choisi cette œuvre car elle détruit méthodiquement tous les stéréotypes romanesques traditionnels. Dans ce livre, la passion ne sauve personne, la nature n'est qu'un décor boueux, et le suicide amoureux, loin d'être un acte noble et esthétique, se transforme en une agonie organique terrifiante. Flaubert a pour ambition de ne faire entendre que la réalité brute, et pour cela, il utilise massivement la technique du discours indirect libre. Grâce à ce procédé, il s'infiltre dans l'esprit médiocre de ses personnages pour nous faire entendre directement la bêtise de leurs pensées sans même avoir besoin de les commenter. C'est un grand roman sur le pouvoir d'aliénation de la lecture, car Emma n'est finalement victime que des livres trompeurs qu'elle a consommés sans aucun recul critique dans sa jeunesse au couvent.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RÉSUMÉ EXPRESS -->
+            <div id="oral-resume" class="mb-12 bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-8 border-b border-slate-100 pb-4">
+                    <span class="bg-emerald-400 text-white font-black px-4 py-2 rounded-xl text-2xl">2</span>
+                    <h3 class="text-3xl font-black text-slate-800">Résumé Express <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">2 min</span></h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 1</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">Le roman relate l'itinéraire d'une désillusion totale. Emma Rouault, une jeune femme élevée au couvent et passionnée par les lectures à l'eau de rose, accepte d'épouser Charles Bovary, un médecin de campagne honnête mais profondément médiocre et morne. L'élément déclencheur du drame est son invitation inespérée à un bal aristocratique dans un château. Emma y découvre l'espace d'une nuit tout le luxe, la noblesse et le faste dont elle rêve. Le retour à sa petite vie rurale devient alors un supplice physique et psychologique insoutenable. Elle tombe gravement malade d'ennui, ce qui pousse le couple à déménager dans le village de Yonville dans l'espoir de la soigner.<br><br>À Yonville, l'engrenage fatal s'accélère. Poussée par sa soif inépuisable de vivre un grand roman d'amour, Emma plonge d'abord dans une passion cynique avec Rodolphe, un hobereau libertin qui l'abandonne lâchement le jour même où ils devaient s'enfuir ensemble. Brisée, elle finit par retrouver un amour de jeunesse, Léon, avec qui elle vit une liaison passionnelle à Rouen. Pour entretenir l'illusion d'une vie parisienne fastueuse, faire des cadeaux à son amant et décorer sa maison, elle commence à emprunter frénétiquement de l'argent à un marchand usurier diabolique, Monsieur Lheureux.<br><br>Le dernier acte est celui de la saisie. Écrasée par un endettement faramineux que Lheureux exige soudainement, Emma est acculée. Elle supplie ses anciens amants de lui prêter de l'argent, mais tous se défilent de manière pathétique. Devant la ruine et l'humiliation publique imminente de son mari qui ignore tout, l'héroïne commet l'irréparable. Elle se procure de l'arsenic dans le laboratoire du pharmacien Homais et s'empoisonne, espérant un sommeil éternel. Mais son agonie est un calvaire horrible et vomitif. Après son enterrement, Charles découvre les preuves des trahisons de sa femme et meurt de chagrin. L'œuvre se conclut par le triomphe révoltant du pharmacien Homais, l'incarnation même de la bêtise de son temps, qui reçoit la Légion d'honneur.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 2</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">La structure narrative de Flaubert est une brillante démonstration clinique de l'échec. L'auteur nous présente d'abord Charles Bovary, un homme bon mais dépourvu de la moindre étincelle intellectuelle, qui épouse Emma. Celle-ci, atteinte de ce que l'on nommera le bovarysme, est empoisonnée par un idéalisme naïf hérité de ses mauvaises lectures de jeunesse. Elle attend que le mariage lui apporte la félicité et la passion des romans. L'évidence de la médiocrité de son mari et la crasse de son quotidien normand la précipitent dans une lente dépression nerveuse, à peine retardée par la naissance d'une fille qu'elle rejette par manque d'instinct maternel.<br><br>Face à ce vide existentiel, Emma cherche par tous les moyens à forcer le destin pour vivre ses rêves. Le drame s'organise autour de ses transgressions morales. Elle s'offre d'abord à Rodolphe, un séducteur cynique qui utilise des phrases toutes faites pour la manipuler lors des célèbres Comices agricoles, avant de la jeter sans remords. Puis, lors d'un séjour à l'Opéra de Rouen, elle renoue avec Léon. Leur amour est décrit comme frénétique et toxique. Mais Flaubert montre que la véritable perte d'Emma n'est pas l'adultère charnel, c'est l'argent. Elle compense son vide spirituel par des achats compulsifs de tapis, de tentures et de bibelots, devenant la proie idéale du commerçant Lheureux, qui agit comme l'araignée du système capitaliste provincial.<br><br>Le dénouement est la sanction implacable de cette quête d'illusions. Le surendettement d'Emma est dévoilé au grand jour par les huissiers. Découvrant que ses amants prétendument héroïques sont en réalité radins et lâches lorsqu'elle leur demande un prêt pour la sauver, son monde artificiel s'effondre. Son suicide à l'arsenic n'est pas une rébellion courageuse, mais le geste désespéré d'un animal traqué. L'agonie est décrite avec une froideur médicale qui détruit toute beauté romantique de la mort. Charles meurt peu de temps après avoir pardonné au cadavre de sa femme, laissant la petite Berthe sombrer dans la misère ouvrière la plus totale, marquant la faillite définitive du monde paysan et médical face à la bourgeoisie marchande naissante.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 3</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">Le roman de Flaubert s'articule comme le procès impitoyable de la futilité humaine. Le récit suit la dégradation psychologique et sociale d'Emma Bovary, une paysanne instruite qui se croit destinée à une vie exceptionnelle. Son mariage avec le médecin falot Charles Bovary est le premier faux pas d'une existence vouée à la déception. Le bal aristocratique de la Vaubyessard lui donne un aperçu fugace d'un bonheur doré qui la rendra malade de frustration tout le reste de sa vie. Déménagée dans la bourgade de Yonville, entourée de figures d'une vacuité consternante comme l'apothicaire Homais ou le curé Bournisien, l'héroïne étouffe littéralement.<br><br>Pour fuir cette prison provinciale, Emma choisit la transgression et l'adultère, non pas par soif de vice, mais par désir de grandeur. Elle se jette dans les bras de Rodolphe Boulanger, croyant rencontrer un héros shakespearien. Lorsqu'il l'abandonne honteusement par une simple lettre, elle frôle la mort. Quelques années plus tard, elle tente à nouveau de s'inventer un destin romanesque dans les bras de Léon, dans les chambres d'hôtels de Rouen. Mais Flaubert met en évidence un schéma répétitif et fatal : l'adultère finit inévitablement par s'enliser dans la même fadeur et la même routine que le mariage qu'elle fuyait.<br><br>La tragédie finale naît de l'addiction financière. Pour masquer l'échec de ses amours et s'offrir l'illusion du luxe, Emma a signé d'innombrables traites au marchand usurier Lheureux. Face à la faillite intégrale de la maison, elle est contrainte de se suicider pour échapper à l'infamie sociale. Le moment le plus glaçant du roman survient lors de son agonie, alors qu'elle entend chanter à l'extérieur un mendiant aveugle aux chansons grivoises, symbolisant la laideur absolue du monde réel venant cracher sur ses rêves. La fin de l'œuvre scelle la disparition des Bovary, ruinés et morts, cédant toute la place à l'arrogance stupide du pharmacien, l'homme de la nouvelle époque.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 4</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">Madame Bovary est l'autopsie littéraire parfaite de la médiocrité de la Restauration française. Flaubert y raconte l'aliénation d'Emma Rouault, une femme dont l'esprit a été corrompu par la lecture effrénée de poésie romantique et d'histoires de preux chevaliers. Convaincue d'être une héroïne méconnue, elle se retrouve mariée à Charles Bovary, un homme dont l'insignifiance est le seul trait marquant. Le contraste entre ses chimères chevaleresques et son morne quotidien rythmé par la boue de la campagne normande déclenche chez elle une maladie psychologique que l'on appelle désormais le bovarysme.<br><br>Emma va déployer une énergie phénoménale pour tenter de transformer sa vie minable en un roman d'aventures. Cette énergie la pousse dans des comportements transgressifs et mortifères. Elle devient d'abord la maîtresse d'un bourgeois manipulateur, Rodolphe, qui profite de sa naïveté avant de la rejeter avec un mépris cynique inouï. Puis, s'accrochant à une dernière bouée, elle corrompt le jeune Léon, l'entraînant dans une débauche matérielle à Rouen. Mais la véritable mécanique destructrice de la seconde moitié du roman est orchestrée par le perfide Lheureux, un négociant qui l'abreuve de crédits toxiques pour la plumer.<br><br>L'effondrement d'Emma est d'une grande noirceur matérialiste. Le jour où les huissiers arrivent, elle découvre que le romantisme n'existe pas : ses amants sont des êtres lâches qui refusent de l'aider financièrement, ne voyant en elle qu'un divertissement physique. Face au mur du réalisme, elle avale de l'arsenic. L'art de Flaubert éclate dans la description interminable et clinique des convulsions de son héroïne. Le suicide n'offre aucune gloire, juste une mort laide et sale. Le décès de son mari loyal et la ruine totale de sa famille clôturent ce roman où l'idéalisme est systématiquement broyé et puni par la laideur du monde moderne et ses appétits financiers.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MOTIVATIONS -->
+            <div id="oral-motivations" class="mb-12">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="bg-emerald-700 text-white font-black px-4 py-2 rounded-xl text-2xl">3</span>
+                    <h3 class="text-3xl font-black text-slate-800">Mes 10 Arguments (Motivations) <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">2 min au total</span></h3>
+                </div>
+                <p class="text-sm text-slate-500 mb-8 font-bold">Cliquez sur les fiches pour les retourner et mémorisez l'analyse (2 fiches suffisent pour tenir les 2 minutes). Les 3 dernières fiches vous permettent de tisser le lien avec « Manon Lescaut ».</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 perspective-1000">
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-emerald-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🧱</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 1</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">L'ennui poisseux de la Province</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-emerald-50 border border-emerald-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai été subjugué par la capacité de Flaubert à rendre l'ennui lui-même dramatique. Le plus grand ennemi d'Emma n'est pas un être humain, c'est l'espace vide de la province, la routine mortifère des jours qui se répètent exactement de la même manière à Tostes puis à Yonville. Flaubert utilise des descriptions d'une lenteur exaspérante pour nous faire ressentir physiquement cet étouffement moral. Cet enfermement géographique justifie psychologiquement la fuite en avant de l'héroïne vers les chimères de l'adultère et du luxe, qui sont pour elle les seules fenêtres ouvertes vers la survie.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-emerald-600 shadow-sm">
+                                    <strong>Partie I, chapitre 9 :</strong><br>
+                                    Mais l'avenir était un corridor tout noir, et qui avait au fond sa porte bien fermée.
+                                </div>
+                                <div class="bg-emerald-100 p-2 rounded-lg text-xs mt-2 font-medium text-emerald-900">
+                                    <strong>Analyse littéraire :</strong> La métaphore architecturale du "corridor tout noir" matérialise l'angoisse temporelle d'Emma de façon terriblement oppressive. La fermeture catégorique symbolisée par la "porte bien fermée" traduit le déterminisme social absolu de Flaubert : il n'y a aucune échappatoire possible dans ce monde réaliste, l'horizon est bouché.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-red-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">📖</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 2</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le mal de la lecture romantique</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-red-50 border border-red-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Ce roman est un livre sur le danger absolu des livres. Flaubert montre que le cerveau d'Emma a été littéralement empoisonné et formaté dès son adolescence au couvent par la lecture de romans sentimentaux de mauvaise qualité. Persuadée que les grands mots ronflants de ces histoires (félicité, passion, ivresse) existent dans la réalité de manière pure, elle passe son temps à chercher une correspondance impossible entre la littérature romantique de fiction et la pauvreté des relations humaines concrètes, ce qui engendre une frustration perpétuelle et mortelle.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-red-600 shadow-sm">
+                                    <strong>Partie I, chapitre 5 :</strong><br>
+                                    Elle cherchait à savoir ce qu'on entendait au juste dans la vie par les mots de félicité, de passion et d'ivresse, qui lui avaient paru si beaux dans les livres.
+                                </div>
+                                <div class="bg-red-100 p-2 rounded-lg text-xs mt-2 font-medium text-red-900">
+                                    <strong>Analyse littéraire :</strong> La gradation rythmique des mots abstraits ("félicité", "passion", "ivresse") souligne l'idéalisme pathologique d'Emma. Le décalage ironique mis en place par le narrateur entre ce qui est beau "dans les livres" et ce qui se trouve "dans la vie" résume tout le processus de désillusion du réalisme flaubertien.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-orange-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🎭</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 3</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le cynisme de la séduction</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-orange-50 border border-orange-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai été très marqué par la lucidité glaçante avec laquelle Flaubert décrit les rapports amoureux, loin de toute noblesse. La scène des Comices agricoles avec Rodolphe est un chef-d'œuvre de cynisme. Rodolphe n'est pas un héros romantique souffrant, c'est un prédateur bourgeois calculateur. Il sait exactement quels clichés verbaux utiliser pour faire céder l'imagination naïve d'Emma. Le roman démystifie totalement l'amour : pour les hommes, il ne s'agit que d'un banal loisir charnel égoïste, tandis que pour Emma, c'est un absolu vital dont elle sera la dindon de la farce.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-orange-500 shadow-sm">
+                                    <strong>Partie II, chapitre 7 (Rodolphe face à Emma) :</strong><br>
+                                    Il se disait : Elle est très gentille... Ça sera tendre, ce sera charmant... Seulement, comment s'en débarrasser ensuite ?
+                                </div>
+                                <div class="bg-orange-100 p-2 rounded-lg text-xs mt-2 font-medium text-orange-900">
+                                    <strong>Analyse littéraire :</strong> L'utilisation virtuose du discours indirect libre donne accès à l'intériorité méprisable du séducteur. L'adjectif creux "gentille" et la prévision glaçante de la rupture immédiate ("comment s'en débarrasser") détruisent toute la beauté de la passion promise, soulignant la lâcheté masculine récurrente du roman.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-purple-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🥇</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 4</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le triomphe insolent de la bêtise</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-purple-50 border border-purple-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Une des dimensions les plus sombres de ce roman est la place accordée à l'apothicaire Homais. Ce personnage est la caricature absolue de la bêtise bourgeoise arrogante, nourri de grands principes prétendument scientifiques et philosophiques du siècle des Lumières, mais qu'il ne comprend pas et qu'il rabâche bêtement. La plus grande violence du roman n'est pas la mort d'Emma, c'est que l'œuvre se termine sur la consécration sociale et la Légion d'honneur accordée à ce pharmacien ignare, alors que les romantiques sont morts. C'est le triomphe absolu de la médiocrité moderne sur les ruines des idéaux.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-purple-600 shadow-sm">
+                                    <strong>Partie III, chapitre 11 (Dernière phrase du roman) :</strong><br>
+                                    Il vient de recevoir la croix d'honneur.
+                                </div>
+                                <div class="bg-purple-100 p-2 rounded-lg text-xs mt-2 font-medium text-purple-900">
+                                    <strong>Analyse littéraire :</strong> C'est la chute de l'œuvre. En refermant ce monumental drame humain sur une phrase aussi plate, sèche, factuelle, déclarant l'ascension sociale de l'imbécile de service (Homais), Flaubert signe une charge profondément ironique et désespérée contre les fausses valeurs de la société de Napoléon III.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-yellow-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">☠️</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 5</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">L'agonie hideuse et anti-romantique</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-yellow-50 border border-yellow-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">La description de la mort d'Emma est selon moi le sommet esthétique du roman, car elle détruit définitivement tout le vernis du Romantisme. Emma s'empoisonne en espérant s'endormir de manière tragique et belle, comme Juliette dans Shakespeare. Mais Flaubert se comporte en médecin légiste impitoyable : il décrit des convulsions organiques, des taches bleues, des vomissements noirs et des hurlements de douleur physiologique atroce. Le suicide cesse d'être un geste noble et romanesque pour redevenir une réalité matérielle monstrueuse et prosaïque, enlevant toute dignité finale à la fausse héroïne.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-yellow-500 shadow-sm">
+                                    <strong>Partie III, chapitre 8 (L'empoisonnement) :</strong><br>
+                                    C'était un goût d'encre qu'elle avait dans la bouche.
+                                </div>
+                                <div class="bg-yellow-100 p-2 rounded-lg text-xs mt-2 font-medium text-yellow-900">
+                                    <strong>Analyse littéraire :</strong> L'irruption de la synesthésie triviale (le goût de l'encre) pour décrire l'ingestion du poison démythifie l'acte fatal. De plus, métaphoriquement, cette "encre" qu'elle avale et qui la tue renvoie très exactement à la mauvaise encre des romans à l'eau de rose qui ont empoisonné sa cervelle pendant toute sa vie.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-pink-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">👁️</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 6</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">L'impersonnalité du Narrateur</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-pink-50 border border-pink-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">C'est la révolution majeure apportée par Flaubert : la froideur totale de la narration. Contrairement à Balzac ou Victor Hugo qui intervenaient sans cesse dans leurs romans pour juger leurs personnages ou exprimer de la compassion, Flaubert s'efface complètement. Il compare le romancier à Dieu dans son œuvre : présent partout, visible nulle part. Le récit reste collé à une objectivité chirurgicale qui crée un immense malaise chez le lecteur. Cette focalisation externe ou tournante nous oblige à juger nous-mêmes la médiocrité du drame, augmentant considérablement le sentiment de cruauté ironique du livre.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-pink-500 shadow-sm">
+                                    <strong>Partie III, chapitre 9 (Après la mort) :</strong><br>
+                                    Charles était là... Il la regardait... et rien ne se passait.
+                                </div>
+                                <div class="bg-pink-100 p-2 rounded-lg text-xs mt-2 font-medium text-pink-900">
+                                    <strong>Analyse littéraire :</strong> La parataxe froide et constative du narrateur face à l'effondrement émotionnel du mari éploré. La litote tragique "et rien ne se passait" illustre l'indifférence cruelle et totale de l'univers matériel face à la mort et aux souffrances individuelles humaines.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-gray-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">💰</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 7</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le Pouvoir Écrasant de l'Argent</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-gray-50 border border-gray-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Une seconde dimension sociologique donne au roman sa force réaliste : l'étude de l'endettement. Flaubert a très bien saisi que l'amour ne pouvait exister sans base matérielle. Pour acheter l'illusion de la passion avec Léon (les chambres d'hôtel chic, les cadeaux somptueux pour son amant), Emma a dû s'aliéner. Le marchand usurier Lheureux est l'allégorie féroce du système bancaire et capitaliste. Il repère la vulnérabilité d'Emma et l'enserre patiemment dans des toiles d'emprunts toxiques. Ce n'est pas le chagrin d'amour qui tue Emma à la fin, c'est bien la menace de l'huissier et la ruine financière inévitable.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-gray-600 shadow-sm">
+                                    <strong>Partie III, chapitre 7 :</strong><br>
+                                    M. Lheureux... la tenait maintenant dans ses griffes.
+                                </div>
+                                <div class="bg-gray-200 p-2 rounded-lg text-xs mt-2 font-medium text-gray-800">
+                                    <strong>Analyse littéraire :</strong> L'animalisation péjorative de l'usurier ("griffes") transforme le commerçant moderne en un monstre prédateur impitoyable de la jungle provinciale. L'adverbe temporel "maintenant" signe le moment irréversible où le piège du crédit s'est refermé mortellement sur la consommatrice névrosée.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 8 (LIEN MANON LESCAUT) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🔗</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Manon Lescaut 1</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">La fascination vénale pour le Luxe</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Il est extrêmement pertinent de relier Madame Bovary à Manon Lescaut, particulièrement sur la thématique de la cupidité et de la superficialité. Les deux héroïnes partagent la même phobie panique de la pauvreté et de la médiocrité. Pour Manon comme pour Emma, l'amour pur ne suffit jamais s'il n'est pas sublimé par la richesse matérielle. Manon prostitue allégrement son amant ou son corps pour accéder aux salons luxueux de Paris, tandis qu'Emma accumule l'argenterie, les calèches privées et la soie à crédit pour simuler le faste aristocratique qu'elle a entraperçu lors du bal, sacrifiant leurs vies à cet autel.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Prévost (Manon Lescaut) :</strong><br>
+                                    Nous sommes faits l'un pour l'autre, mais nous mourrons de faim si nous ne faisons de l'argent.
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> Le constat pragmatique et cynique de Manon résonne exactement avec l'addiction dépensière d'Emma à Rouen. La passion (les désirs de l'âme) est perpétuellement rabaissée, chez l'Abbé Prévost comme chez Flaubert, aux contraintes vulgaires de la faim, du rang et de l'argent (le corps).
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 9 (LIEN MANON LESCAUT) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">💔</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Manon Lescaut 2</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">La Femme fatale et la destruction de l'homme</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Les deux œuvres se rejoignent fondamentalement dans le rôle de la femme comme agent destructeur involontaire de l'équilibre patriarcal. Emma n'est pas machiavélique, pas plus que Manon ne l'est sciemment, mais leur soif d'échapper à la norme détruit méthodiquement la droiture des hommes qui les idolâtrent. Des Grieux, un chevalier promis au séminaire, se transforme en voleur, tueur et bagnard pour les beaux yeux de Manon. Charles Bovary, bien que d'une ignorance bête et aveugle, est un homme droit, qui finira trompé, renié publiquement, financièrement saisi de tous ses meubles, avant de mourir physiquement foudroyé par la honte laissée par sa défunte épouse.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Prévost (Manon Lescaut) :</strong><br>
+                                    Je lui trouvais un cœur droit et une conduite honteuse.
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> L'antithèse absolue posée par des Grieux illustre l'exact aveuglement de Charles Bovary. Les amants masculins des deux romans érigent une forme d'idolâtrie (voir "un cœur droit" derrière le mensonge), devenant eux-mêmes complices actifs de leur propre ruine tragique.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARG 10 (LIEN MANON LESCAUT) -->
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">💀</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Manon Lescaut 3</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">Le Dénouement Tragique dans la misère</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Le parallélisme de la clôture des deux romans est d'une grande cruauté naturaliste. Flaubert comme l'Abbé Prévost refusent formellement le sublime du suicide romantique par amour. Emma espérait un trépas doux et théâtral, mais subit une lente agonie vomitive et dégradante à cause de l'arsenic. Manon Lescaut, la courtisane parisienne toujours couverte de soie, s'éteint misérablement d'épuisement de faim et de fatigue, le visage brûlé par le sable du désert inhospitalier de la Louisiane américaine. Dans les deux cas, la transgression des règles sociales est violemment sanctionnée par une mort qui dépouille les héroïnes de toute leur séduction et de leur prestige matériel.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Prévost (Manon Lescaut) :</strong><br>
+                                    Je rompis mon épée, pour m'en servir à creuser...
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> Comme l'enterrement primitif de Manon (creusé avec une épée brisée) qui acte le dénuement ultime du libertinage, l'enterrement d'Emma est perturbé par le pragmatisme morbide de l'épisode du Mendiant aveugle chantant la boue. La passion ne laisse que de la terre prosaïque.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= ONGLET 4: QUESTIONS DU JURY ================= -->
+        <section id="questions" class="tab-content">
+            
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-black text-blue-900 mb-4 uppercase">Entretien avec le Jury (3 min)</h2>
+                <p class="text-lg text-slate-600 max-w-4xl mx-auto">
+                    Voici 20 questions réactives (sous forme de flashcards) que le jury pourrait vous poser en fonction de l'exposé que vous venez de faire. Cliquez pour voir la réponse.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 perspective-1000">
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">1. Vous avez utilisé le terme "bovarysme". Quelle en est la définition exacte aujourd'hui ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Le bovarysme est devenu un terme de psychologie. Il désigne un état d'insatisfaction chronique, une inadaptation à la réalité provoquée par la fuite dans des rêveries romanesques inatteignables, poussant l'individu à refuser sa propre existence médiocre.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">2. Quel est l'enjeu du célèbre bal à la Vaubyessard ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est l'élément perturbateur de l'intrigue psychologique. Emma y touche du doigt, pour une nuit unique, le luxe aristocratique dont elle rêve. Cet événement agit comme un poison : en lui montrant que cet Idéal existe vraiment, Flaubert rend son retour à la réalité rurale insupportable.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">3. Pourquoi Flaubert a-t-il été traîné en justice lors de la publication de 1857 ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Le procureur Pinard l'accusait "d'outrage à la morale publique et religieuse". La justice ne lui reprochait pas tant de peindre l'adultère, mais surtout l'absence de narrateur moralisateur pour condamner explicitement les fautes d'Emma, et la froideur presque complaisante des scènes charnelles (le fiacre). Flaubert a finalement été acquitté.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">4. Qu'est-ce que le "discours indirect libre" et à quoi sert-il ici ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est la fusion des paroles/pensées d'un personnage avec le récit du narrateur (sans guillemets ni verbe introducteur). Cela permet à Flaubert de nous faire glisser sournoisement dans la conscience médiocre de ses personnages, exposant leur bêtise de l'intérieur, avec une grande ironie.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">5. Vous parlez de l'apothicaire Homais. Quelle classe sociale représente-t-il ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Il incarne l'émergence d'une bourgeoisie voltairienne de province du XIXe siècle. Il vénère le progrès aveugle, les fausses sciences, se prétend athée et républicain, mais n'est qu'un condensé de bêtise vaniteuse, obnubilé par l'argent et la reconnaissance sociale (la croix d'honneur).
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">6. Est-il juste de dire que Charles Bovary est le seul personnage réellement pur du roman ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est le paradoxe cruel du livre. Charles est fondamentalement gentil, droit et dévoué à sa femme jusqu'à la mort. Mais dans l'univers flaubertien, sa bêtise incommensurable, sa fadeur ("sa conversation était plate comme un trottoir") et son aveuglement obstiné le rendent pathétique et presque complice involontaire de la folie de sa femme.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">7. Comment s'organise l'ironie dans la célèbre scène des Comices agricoles ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est un montage quasi cinématographique. Flaubert alterne les clichés pompeux du discours politique des notables sur l'engrais et l'agriculture (au rez-de-chaussée), avec les tirades faussement romantiques et manipulatrices de Rodolphe séduisant Emma (au premier étage). Leurs mensonges respectifs se contaminent et se ridiculisent mutuellement.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">8. Quel rôle l'usurier Lheureux joue-t-il dans la tragédie ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Il est le diable matérialiste et tentateur. Lheureux exploite le vide intérieur d'Emma en lui proposant d'acheter du luxe à crédit pour compenser ses déceptions amoureuses. Il représente la société de consommation impitoyable qui s'apprête à broyer l'idéalisme romantique sous les dettes et la saisie.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">9. L'écrivain s'est fameusement exclamé "Madame Bovary, c'est moi". Que voulait-il dire ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Bien qu'il méprise la bêtise de son héroïne, Flaubert partage sa mélancolie et son exaspération face à l'ennui rance de la bourgeoisie de province. Comme elle, il a été nourri des illusions romantiques de sa jeunesse, mais lui choisit l'art et l'ascétisme littéraire pour y échapper, tandis qu'Emma s'autodétruit.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">10. Pourquoi la mort de l'héroïne est-elle qualifiée d'anti-romantique ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Emma s'attendait à une mort théâtrale et douce. Flaubert choisit délibérément l'arsenic pour peindre une agonie hideuse, cruelle et purement organique (les sueurs, les hurlements, la soif noire). Le corps matériel reprend brutalement le dessus, punissant esthétiquement ses rêves d'évasion.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">11. Quel est le sens tragique du personnage de l'Aveugle qui chante sous la fenêtre d'Emma lors de son agonie ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            L'Aveugle, avec son visage rongé par la maladie et sa ritournelle grivoise et vulgaire, est l'allégorie de la mort, du destin implacable et de la laideur du monde réel. Il surgit au moment de la mort d'Emma comme un ricanement du Destin crachant sur ses ultimes illusions de pureté.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">12. Vous associez Flaubert au Réalisme. Pourtant, ne conserve-t-il pas des traits romantiques ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Absolument. Flaubert qualifiait son style d'"objectif", mais son obsession pour la perfection musicale de la phrase (le gueuloir) et son dégoût pour la modernité et l'argent sont de pures névroses romantiques. Il s'agit d'un romantisme qui aurait dévoré ses propres idoles par l'ironie.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">13. Y a-t-il un espoir pour la jeune génération, incarnée par la fille d'Emma, Berthe ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Aucun. La fin de la petite Berthe est misérable. Abandonnée, elle est envoyée travailler dans une filature de coton (le bagne industriel du XIXe siècle) pour survivre. Le livre acte un désespoir social absolu, sans perspective d'élévation, à l'opposé des sagas de Victor Hugo.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">14. Quel est le sens de la fameuse chevauchée dans le "fiacre" à Rouen avec Léon ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Cette scène, qui a scandalisé la censure, montre le fiacre errant aveuglément dans toute la ville, fenêtres fermées. Flaubert y parodie l'extase amoureuse sans la montrer : l'amour devient un mouvement frénétique, mécanique et sans but, qui enferme les amants plutôt que de les élever.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">15. Dans votre rapprochement avec Manon Lescaut, considérez-vous Emma comme une manipulatrice ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Non, Emma ment mal et avec maladresse, elle est naïve. À la différence de Manon qui prostitue sans vergogne son amour pour survivre financièrement à Paris, Emma se ruine financièrement parce qu'elle achète bêtement des objets luxueux pour s'auto-persuader de la grandeur de son amour.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">16. Rodolphe Boulanger ressent-il des sentiments sincères pour l'héroïne ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Presque jamais. Rodolphe est un aristocrate local, expert en séduction prédatrice. Il trouve Emma mignonne et distrayante. Lorsqu'elle devient trop collante, exigeant un amour idéal fusionnel qu'il est incapable de concevoir, il rompt sans l'ombre d'une culpabilité morale ("Seulement, comment s'en débarrasser ?").
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">17. Flaubert offre-t-il une rédemption quelconque à l'Église ou à la religion dans l'œuvre ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Aucune. Le curé Bournisien, représentant de l'Église locale, est peint comme un glouton sot et matérialiste, incapable d'écouter la détresse spirituelle d'Emma et préoccupé uniquement par le cidre ou les gamins dissipés. La religion est aussi vide que les discours scientifiques du pharmacien.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">18. La laideur est-elle le vrai sujet de l'œuvre selon vous ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Flaubert s'était fixé le défi fou "d'écrire un livre sur rien", un livre qui tiendrait uniquement par la force interne de son propre style. Oui, l'histoire est minable et les personnages laids, mais l'architecture de ses paragraphes et la perfection musicale de ses descriptions subliment cette misère au rang de l'art.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">19. Peut-on imputer l'échec de la vie d'Emma à la seule condition féminine de son siècle ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est un élément incontournable. Les hommes voyagent, travaillent ou séduisent librement (Rodolphe, Léon). Emma, recluse, exprime la frustration colossale des femmes bourgeoises cantonnées au brodage et aux tâches ménagères, empêchées de poursuivre la moindre ambition propre au XIXe siècle.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">20. Comment Flaubert utilise-t-il le paysage dans le roman par rapport à Victor Hugo par exemple ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Chez Hugo, la nature est spectaculaire, elle pleure ou compatit avec le héros (lyrisme/panthéisme). Chez Flaubert, le paysage normand est obstinément plat, pluvieux et indifférent. La boue sous les sabots n'est là que pour rappeler à Emma la trivialité poisseuse de sa prison géographique.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Scripts pour l'interactivité -->
+    <script>
+        // Gestion des Onglets
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('button[id^="nav-"]').forEach(btn => {
+                btn.classList.remove('border-emerald-600', 'text-emerald-600', 'bg-emerald-50');
+                btn.classList.add('border-transparent', 'text-slate-500');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            
+            const activeBtn = document.getElementById('nav-' + tabId);
+            activeBtn.classList.remove('border-transparent', 'text-slate-500');
+            activeBtn.classList.add('border-emerald-600', 'text-emerald-600', 'bg-emerald-50');
+        }
+
+        // Gestion de l'Accordéon du Résumé
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.innerText = '-';
+            } else {
+                content.classList.add('hidden');
+                icon.innerText = '+';
+            }
+        }
+
+        // Graphique Chart.js (Stratégie & Temps)
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('timingChart').getContext('2d');
+            const data = {
+                labels: ['Présentation (1 min)', 'Résumé (2 min)', 'Motivations & Arguments (2 min)', 'Entretien / Questions (3 min)'],
+                datasets: [{
+                    data: [1, 2, 2, 3],
+                    backgroundColor: [
+                        '#1e293b', // slate-800
+                        '#34d399', // emerald-400
+                        '#047857', // emerald-700
+                        '#3b82f6'  // blue-500
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    hoverOffset: 6
+                }]
+            };
+
+            const config = {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            align: 'start',
+                            labels: {
+                                font: { family: "sans-serif" },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) { label = label.split(' (')[0]; }
+                                    return label + ' : ~' + context.raw + ' min';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            };
+
+            new Chart(ctx, config);
+        });
+    </script>
+</body>
+</html>

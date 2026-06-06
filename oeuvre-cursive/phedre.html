@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EAF - Oral : Phèdre de Racine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+
+        .chart-container { position: relative; width: 100%; max-width: 350px; margin: 0 auto; height: 300px; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
+
+        /* Styles pour les Flashcards (Motivations & Questions) */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .card-inner { transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
+        .flipped .card-inner { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <header class="bg-emerald-800 text-white p-6 shadow-md flex items-center justify-between shrink-0 sticky top-0 z-50">
+        <a href="../oral.html#cursive" class="text-white hover:text-emerald-200 font-bold text-lg transition-transform hover:-translate-x-1">&larr; Retour à la Lecture Cursive</a>
+        <div class="text-center">
+            <h1 class="text-2xl md:text-3xl font-black uppercase tracking-widest">Phèdre <span class="font-normal italic text-emerald-300">de Racine</span></h1>
+        </div>
+        <div class="hidden md:flex gap-3">
+            <span class="px-3 py-1 bg-emerald-900 rounded-full text-xs font-bold border border-emerald-700">⏱️ ~8 min</span>
+            <span class="px-3 py-1 bg-emerald-900 rounded-full text-xs font-bold border border-emerald-700">🔄 Lien : Musset</span>
+        </div>
+    </header>
+
+    <div class="bg-white border-b-2 border-slate-200 px-6 shrink-0 sticky top-[88px] z-40 shadow-sm">
+        <div class="flex overflow-x-auto custom-scroll w-full max-w-6xl mx-auto">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex-1 py-4 px-4 font-black text-emerald-600 border-b-4 border-emerald-600 bg-emerald-50 text-sm uppercase tracking-tighter transition-all whitespace-nowrap">📊 Stratégie & Temps</button>
+            <button onclick="switchTab('resume')" id="nav-resume" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">📖 Résumé Détaillé</button>
+            <button onclick="switchTab('oral')" id="nav-oral" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">🗣️ Mes Fiches Oral</button>
+            <button onclick="switchTab('questions')" id="nav-questions" class="flex-1 py-4 px-4 font-black text-slate-500 border-b-4 border-transparent hover:text-emerald-600 transition-all text-sm uppercase tracking-tighter whitespace-nowrap">❓ Questions du Jury</button>
+        </div>
+    </div>
+
+    <main class="flex-grow max-w-6xl mx-auto w-full p-6 md:p-10 pb-20">
+
+        <section id="dashboard" class="tab-content active">
+            <div class="mb-8 text-center">
+                <h2 class="text-3xl font-black text-emerald-900 mb-4 uppercase">La Stratégie de l'Oral</h2>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto">
+                    L'épreuve orale se divise en deux temps : votre exposé continu (environ 5 minutes), suivi de l'entretien avec le jury (environ 3 minutes).
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-slate-100">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-800 mb-6 border-l-8 border-emerald-500 pl-4">Répartition Chronométrique</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-presentation').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-slate-800 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Présentation (1 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'auteur, le contexte d'écriture et le genre littéraire.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-resume').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-emerald-400 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Résumé (2 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'intrigue, l'élément perturbateur et le dénouement.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('oral'); setTimeout(() => document.getElementById('oral-motivations').scrollIntoView({behavior:'smooth', block:'start'}), 100);">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-emerald-700 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-emerald-600 transition-colors">Motivations (2 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'analyse de 2 arguments forts et le lien avec l'œuvre au programme.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition" onclick="switchTab('questions');">
+                            <div class="w-6 h-6 mt-1 rounded-full bg-blue-500 shrink-0"></div>
+                            <div>
+                                <strong class="block text-xl text-slate-900 group-hover:text-blue-600 transition-colors">Questions du Jury (3 min)</strong>
+                                <span class="text-slate-500 leading-relaxed block mt-1 text-sm">L'entretien réactif basé sur votre exposé.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="chart-container">
+                    <canvas id="timingChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="resume" class="tab-content">
+            <div class="mb-8 bg-indigo-50 p-8 rounded-3xl border border-indigo-100 shadow-sm">
+                <h2 class="text-3xl font-black text-indigo-900 mb-4 uppercase tracking-wide">Résumé Scène par Scène</h2>
+            </div>
+
+            <div class="space-y-4" id="accordion-container">
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('acte1')">
+                        <span>ACTE I : L'Exposition et les Aveux</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-acte1">+</span>
+                    </button>
+                    <div id="acte1" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-slate-50 rounded-xl border-l-4 border-slate-400">
+                            <strong>Scène 1 :</strong> La pièce s'ouvre sur un départ imminent. Hippolyte, le fils de Thésée et de la reine des Amazones, annonce à son fidèle gouverneur Théramène son intention de quitter la ville de Trézène. Officiellement, il justifie ce départ par le besoin urgent de retrouver son père Thésée, disparu depuis plus de six mois lors de l'un de ses voyages héroïques et dangereux. Cependant, pressé de questions par Théramène, Hippolyte avoue la véritable raison de sa fuite : il éprouve une passion interdite pour Aricie, la princesse captive et seule survivante du clan des ennemis jurés de Thésée. Thésée a formellement interdit qu'Aricie se marie. Hippolyte se sent coupable de cette faiblesse.
+                        </div>
+                        <div class="p-5 bg-red-50 rounded-xl border-l-4 border-red-500">
+                            <strong>Scène 3 :</strong> C'est la première apparition de Phèdre sur scène. Elle est physiquement affaiblie, au bord de la mort, cherchant la lumière du soleil une dernière fois. Elle est accompagnée de sa nourrice Oenone, qui la harcèle de questions pour comprendre ce mal. Poussée à bout, effrayée par les supplications d'Oenone, Phèdre craque. Elle avoue l'inavouable : elle est dévorée par une passion incestueuse pour son beau-fils, Hippolyte. Elle explique que ce mal est une malédiction directe envoyée par Vénus pour punir sa lignée. Elle a décidé de se laisser mourir de faim pour emporter son secret dans la tombe.
+                        </div>
+                        <div class="p-5 bg-blue-50 rounded-xl border-l-4 border-blue-500">
+                            <strong>Scène 4 & 5 :</strong> Un coup de théâtre bouleverse l'ordre des choses : Panope apporte la nouvelle de la mort du roi Thésée. Ce décès politique change radicalement la dimension morale de la situation. Phèdre n'est techniquement plus une femme adultère. De plus, la mort du roi pose un problème de succession. Oenone saisit cette opportunité. Elle convainc Phèdre qu'elle doit vivre pour protéger son jeune fils, et que pour cela, elle doit s'allier politiquement avec Hippolyte.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('acte2')">
+                        <span>ACTE II : Les Déclarations d'Amour</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-acte2">+</span>
+                    </button>
+                    <div id="acte2" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-emerald-50 rounded-xl border-l-4 border-emerald-500">
+                            <strong>Scène 1 & 2 :</strong> Hippolyte s'entretient avec Aricie pour lui annoncer officiellement qu'avec la mort de Thésée, il la libère de ses chaînes. Mais l'entretien politique bascule très vite dans l'intimité. Submergé par l'émotion, Hippolyte perd sa fierté et lui avoue sincèrement son amour. Aricie, ravie, lui fait comprendre à demi-mot que ses sentiments sont partagés.
+                        </div>
+                        <div class="p-5 bg-red-50 rounded-xl border-l-4 border-red-600">
+                            <strong>Scène 5 :</strong> Phèdre vient rencontrer Hippolyte, officiellement pour lui confier la garde de son jeune fils. Mais la présence du jeune homme la fait vaciller. Son discours dérape progressivement. Elle commence par faire l'éloge de Thésée, mais décrit en réalité Hippolyte, s'imaginant à la place d'Ariane dans le Labyrinthe avec lui. Constatant qu'elle a été percée à jour, Phèdre bascule dans une crise de folie lucide. Elle se déclare ouvertement, assume sa monstruosité et, rongée par la haine d'elle-même, s'empare de l'épée d'Hippolyte pour se transpercer le cœur. Oenone s'interpose in extremis. Hippolyte est muet d'horreur.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('acte3')">
+                        <span>ACTE III : Le Retour du Refoulé</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-acte3">+</span>
+                    </button>
+                    <div id="acte3" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-purple-50 rounded-xl border-l-4 border-purple-500">
+                            <strong>Scène 1 à 3 :</strong> Le drame absolu survient : la rumeur de la mort du roi était fausse. Thésée débarque au port de Trézène. Pour Phèdre, c'est l'anéantissement. Elle a avoué sa passion au fils de son mari. Elle se sait condamnée, persuadée qu'Hippolyte ira tout raconter à son père.
+                        </div>
+                        <div class="p-5 bg-orange-50 rounded-xl border-l-4 border-orange-500">
+                            <strong>Scène 3 (Fin) :</strong> Oenone, prête à tout pour sauver la vie et l'honneur de sa maîtresse, propose un plan machiavélique : frapper la première. Elle suggère d'accuser Hippolyte d'avoir tenté d'abuser de Phèdre, utilisant l'épée que le jeune homme a laissée tomber comme preuve. Écrasée par la panique, Phèdre accepte lâchement.
+                        </div>
+                        <div class="p-5 bg-slate-50 rounded-xl border-l-4 border-slate-500">
+                            <strong>Scènes 4 & 5 :</strong> Thésée entre en scène, heureux de retrouver sa famille. Mais l'accueil qu'il reçoit est glaçant. Phèdre fuit, Hippolyte balbutie et annonce son souhait de quitter la cour. Thésée est laissé seul, stupéfait face à cette froideur.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('acte4')">
+                        <span>ACTE IV : Calomnie et Malédiction</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-acte4">+</span>
+                    </button>
+                    <div id="acte4" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-red-100 rounded-xl border-l-4 border-red-600">
+                            <strong>Scène 1 & 2 :</strong> Oenone exécute son plan vénéneux. Elle raconte à Thésée qu'Hippolyte a tenté de violenter Phèdre. Thésée confronte son fils. Hippolyte, par respect filial, refuse de trahir sa belle-mère et d'avouer la vérité. Pour se défendre, il révèle seulement son amour pour Aricie. Thésée voit dans cet aveu un simple mensonge grossier, bannit son fils et invoque le dieu Neptune pour qu'il le détruise.
+                        </div>
+                        <div class="p-5 bg-yellow-50 rounded-xl border-l-4 border-yellow-500">
+                            <strong>Scènes 4, 5 & 6 (Tournant Tragique) :</strong> Phèdre, torturée par le remords, vient trouver Thésée pour sauver Hippolyte. Mais Thésée lâche avec mépris l'excuse qu'Hippolyte a invoquée : il prétend aimer Aricie. Phèdre est foudroyée. La jalousie anéantit sa compassion. Comprenant que les refus d'Hippolyte étaient dictés par son amour pour une autre, elle refuse de l'innocenter. Dans un monologue halluciné, elle maudit Oenone et la chasse brutalement.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-2 border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:border-emerald-400 transition-colors">
+                    <button class="w-full px-8 py-6 text-left font-black text-xl text-slate-800 bg-slate-50 hover:bg-slate-100 transition flex justify-between items-center" onclick="toggleAccordion('acte5')">
+                        <span>ACTE V : La Catastrophe</span>
+                        <span class="text-emerald-600 text-3xl font-normal" id="icon-acte5">+</span>
+                    </button>
+                    <div id="acte5" class="hidden px-8 py-6 space-y-5 border-t-2 border-slate-100">
+                        <div class="p-5 bg-slate-100 rounded-xl border-l-4 border-slate-600">
+                            <strong>Scènes 1 à 4 :</strong> Aricie tente vainement d'ouvrir les yeux de Thésée. La nouvelle du suicide d'Oenone (qui s'est jetée dans les flots) sème un doute terrible dans l'esprit du roi. Il prie Neptune de suspendre sa malédiction, mais les dieux ont déjà agi.
+                        </div>
+                        <div class="p-5 bg-red-100 rounded-xl border-l-4 border-red-700">
+                            <strong>Scène 6 :</strong> Le gouverneur Théramène arrive en larmes. Il prononce le célèbre "Récit de Théramène". Il raconte que les flots se sont soulevés pour recracher un monstre marin gigantesque. Les chevaux du prince se sont emballés et le char s'est fracassé, traînant le jeune homme innocent à une mort atroce.
+                        </div>
+                        <div class="p-5 bg-gray-200 rounded-xl border-l-4 border-gray-800">
+                            <strong>Scène 7 :</strong> Phèdre entre en scène lentement, s'étant injectée un poison foudroyant. Dans son ultime souffle de lucidité, elle confesse publiquement son crime à Thésée, innocente totalement la mémoire d'Hippolyte. Elle affirme que son trépas purifie la lumière du jour. Thésée, ravagé, promet d'adopter Aricie.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="oral" class="tab-content">
+            
+            <div id="oral-presentation" class="mb-12 bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-8 border-b border-slate-100 pb-4">
+                    <span class="bg-slate-800 text-white font-black px-4 py-2 rounded-xl text-2xl">1</span>
+                    <h3 class="text-3xl font-black text-slate-800">Présentation <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">1 min</span></h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 1</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Je vais vous présenter Phèdre, le chef-d'œuvre incontesté de Jean Racine, représenté pour la première fois en 1677. Cette tragédie s'inscrit au cœur du classicisme français, un mouvement qui prône l'ordre, la clarté et le respect des trois unités. L'œuvre puise ses sources dans l'Antiquité, s'inspirant d'Euripide et de Sénèque. Elle met en scène la passion incestueuse et dévastatrice que la reine Phèdre éprouve pour son beau-fils, Hippolyte. J'ai choisi cette œuvre car elle illustre parfaitement la vision janséniste de l'auteur : l'être humain y est présenté comme un jouet pitoyable entre les mains d'une fatalité divine écrasante, condamné au péché malgré ses efforts désespérés pour rester pur et vertueux.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 2</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Aujourd'hui, j'ai décidé de vous parler de Phèdre de Jean Racine, tragédie en cinq actes et en alexandrins créée en 1677, considérée comme le sommet absolu de l'esthétique classique. À travers l'histoire étouffante de la cour de Trézène, Racine dissèque avec une précision chirurgicale les ravages de la jalousie et le poids des passions refoulées. Ce qui m'a profondément marqué dans cette lecture, c'est le contraste fascinant voulu par l'auteur. D'un côté, il nous dépeint les pulsions humaines les plus monstrueuses, cruelles et inavouables, et de l'autre, il encadre cette sauvagerie par une poésie et une musicalité d'une pureté mathématique inouïe. C'est cette tension entre la violence du fond et la beauté de la forme qui rend la pièce immortelle.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 3</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">Je vais vous présenter la tragédie Phèdre, écrite par Jean Racine en 1677. Mon choix s'est porté sur cette œuvre car elle est avant tout une immense réflexion sur la prédestination et l'hérédité au XVIIe siècle. Racine nous présente une héroïne littéralement écrasée par le sang de ses ancêtres. Petite-fille du Soleil, elle aspire à la lumière, mais elle est aussi la fille de Pasiphaé, maudite pour avoir aimé un taureau. Le génie de la pièce réside dans l'extrême lucidité de Phèdre. Contrairement aux monstres aveugles, elle a une conscience aiguë de son péché. Elle voit le mal qui la ronge, tente de lutter contre lui de toutes ses forces, mais ne peut s'empêcher d'y succomber, créant un sentiment de pitié immense chez le spectateur.</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 hover:border-emerald-400 transition">
+                        <h4 class="font-bold text-emerald-700 mb-3 uppercase tracking-wide">Option 4</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm">L'œuvre dont je souhaite vous parler est Phèdre, écrite par Racine en 1677. J'ai été captivé par cette pièce car elle propose une exploration vertigineuse du côté sombre et incontrôlable de la psyché humaine, bien avant l'invention de la psychanalyse. Sous la rigueur stricte des vers classiques, Racine met à nu les instincts les plus archaïques : le désir interdit de la belle-mère, la haine de soi, la manipulation politique et la violence vengeresse. Phèdre est une œuvre d'une étonnante modernité parce qu'elle nous montre que l'homme, sous le vernis de la civilisation, de la royauté et de la politesse, reste un être fondamentalement vulnérable et démuni face à la puissance destructrice de ses propres émotions intimes.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="oral-resume" class="mb-12 bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-8 border-b border-slate-100 pb-4">
+                    <span class="bg-emerald-400 text-white font-black px-4 py-2 rounded-xl text-2xl">2</span>
+                    <h3 class="text-3xl font-black text-slate-800">Résumé <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">2 min</span></h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 1</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">L'action se concentre à Trézène, où la reine Phèdre dépérit d'un mal mystérieux. Après de longues hésitations, elle finit par avouer à sa nourrice Oenone qu'elle est rongée par une passion incestueuse pour son beau-fils, Hippolyte. À ce moment précis, la rumeur annonce la mort de son époux, le roi Thésée. Libérée momentanément de l'interdit de l'adultère, Phèdre trouve le courage de confesser son amour fou à Hippolyte lui-même. Cependant, le jeune homme, qui est secrètement épris de la princesse captive Aricie, la repousse avec un effroi absolu.<br><br>Le véritable drame éclate à l'Acte trois lorsque Thésée revient subitement dans son royaume, bien vivant. La panique s'empare de Phèdre. Pour protéger sa reine, Oenone prend l'initiative d'accuser faussement Hippolyte de tentative de viol, utilisant l'épée du jeune homme comme preuve irréfutable. Thésée, rendu aveugle par la fureur et son orgueil de monarque, refuse d'écouter les justifications de son fils. Il le bannit de la cité et demande solennellement au dieu Neptune de le tuer sans pitié.<br><br>Rongée par le remords, Phèdre s'apprête d'abord à innocenter le jeune homme. Mais lorsqu'elle apprend de la bouche même de Thésée qu'Hippolyte aime secrètement Aricie, elle est instantanément paralysée par une violente jalousie amoureuse. Refusant de sauver celui qui en aime une autre, elle se tait lâchement. La fatalité s'accomplit : Hippolyte meurt broyé de manière atroce par un monstre marin surgi des flots. Le désespoir envahit alors la cour. Oenone se noie pour fuir la colère de Phèdre, et la reine décide de s'empoisonner. Dans un ultime geste de rédemption, elle se traîne devant Thésée pour révéler l'innocence de son fils et la vérité de son crime, avant de mourir sur scène, laissant un roi totalement dévasté par son erreur.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 2</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">La tragédie de Racine fonctionne comme un huis clos psychologique étouffant, entièrement construit sur la violence des non-dits. Dès l'ouverture, nous découvrons une Phèdre malade, obsédée par un désir interdit pour son beau-fils Hippolyte, et cherchant la mort comme unique remède à sa honte profonde. L'élément perturbateur majeur, à savoir la fausse annonce de la mort de son mari Thésée, vient faire sauter tous ses verrous moraux et politiques. Poussée par le faux espoir de pouvoir s'allier à lui légitimement, elle se rend auprès d'Hippolyte et lui avoue son amour dans une crise de délire hallucinatoire. Hippolyte, représentant d'une grande pureté morale, la rejette avec une froideur glaciale.<br><br>Quand Thésée réapparaît miraculeusement d'entre les morts à l'Acte trois, la honte morale se transforme en véritable terreur d'État pour Phèdre. L'honneur de la couronne est menacé. C'est alors que la nourrice Oenone, croyant bien faire par amour maternel, invente un mensonge mortel et accuse le prince Hippolyte d'avoir agressé sa belle-mère. Le roi Thésée se sent outragé et maudit immédiatement son fils, appelant sur lui la vengeance divine de Neptune, sans lui laisser la moindre chance de s'expliquer.<br><br>Le point de non-retour, l'acmé tragique, intervient à l'Acte 4. Phèdre, prise de pitié, s'approche pour sauver Hippolyte en disant la vérité, mais elle découvre soudainement l'existence d'une rivale, Aricie. La douleur de la jalousie submerge totalement sa raison et sa compassion. Elle décide de laisser mourir Hippolyte face à la colère divine. Ce n'est qu'après la destruction charnelle du jeune prince par un monstre marin gigantesque que Phèdre, écrasée par le poids incommensurable de ses actes, boit un poison foudroyant. Elle vient confesser ses crimes à son époux épouvanté, expiant ainsi le désordre qu'elle a semé dans le monde par sa seule existence.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 3</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">Cette pièce raconte l'histoire d'un désastre familial et politique déclenché par la disparition prolongée de l'autorité patriarcale. Thésée, le roi de Trézène, est absent depuis de longs mois. En son absence, l'équilibre de la cité se fissure. Son fils Hippolyte, qui a pourtant reçu l'ordre d'étouffer la lignée ennemie, tombe secrètement amoureux de la captive Aricie. De son côté, la reine Phèdre cache une passion inavouable pour ce même Hippolyte. Lorsque l'on annonce officiellement, mais à tort, la mort de Thésée, le chaos éclate : le pouvoir est vacant. Phèdre en profite pour offrir la couronne d'Athènes et son propre cœur à Hippolyte, qui, révulsé par cette proposition monstrueuse, la repousse brutalement.<br><br>L'élément de surprise tragique réside dans le retour imprévu de Thésée. Le roi retrouve son royaume dans un état de glaciation incompréhensible, où sa femme et son fils cherchent ostensiblement à le fuir. Pour protéger Phèdre de la colère royale, sa servante Oenone manipule perfidement la situation en dénonçant Hippolyte comme un criminel ayant tenté de violer la reine. Hippolyte, par une extrême noblesse d'âme et un respect absolu envers son père, refuse de trahir le secret intime de Phèdre. Il paie ce noble silence au prix fort, car son père le maudit et invoque la fureur aveugle des océans contre lui.<br><br>La fin de la pièce prend la forme d'une descente aux enfers inévitable et rythmée. Phèdre, qui aurait eu le pouvoir d'arrêter la machination meurtrière, choisit de se taire par pure jalousie amoureuse, incapable de supporter l'idée qu'Hippolyte puisse aimer Aricie à sa place. Ce silence lâche condamne le prince à une mort à la fois héroïque et atroce face à un monstre mythologique surgi de la mer. Ayant causé la destruction de toute innocence autour d'elle, Phèdre s'empoisonne avec le venin de Médée pour mettre un terme définitif à la malédiction de sa lignée, avouant son péché devant un Thésée désormais brisé et sans héritier.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 mb-3 uppercase tracking-wide">Option 4</h4>
+                        <p class="text-emerald-900 leading-relaxed text-sm">La tragédie de Racine illustre la mécanique implacable d'une machination où tous les personnages sont condamnés d'avance, quels que soient leurs efforts. La reine Phèdre est torturée par un désir incestueux pour Hippolyte, le fils du premier mariage de son époux. Croyant son mari mort en héros de guerre, elle se libère soudainement du silence et expose ses sentiments à Hippolyte dans une scène d'une violence psychologique inouïe, où elle finit par lui demander de la transpercer avec son épée. Le rejet catégorique et horrifié du prince la plonge dans une honte absolue et un désespoir profond.<br><br>La machine tragique s'accélère vertigineusement avec le retour inopiné de Thésée. Devant la paralysie de Phèdre, c'est Oenone, sa nourrice dévouée, qui prend les rênes du drame pour la sauver. Croyant bien faire, elle forge une calomnie destructrice en inversant les rôles et en accusant Hippolyte des intentions criminelles de Phèdre. Thésée, qui incarne le pouvoir martial impulsif et irréfléchi, se laisse totalement aveugler par la colère blessée de son honneur. Il prononce une condamnation à mort contre son propre fils en mobilisant les forces divines de Neptune.<br><br>Dès lors, toutes les tentatives pour faire marche arrière sont systématiquement empêchées par la fierté ou les passions humaines. Phèdre tente de plaider la cause d'Hippolyte auprès du roi, mais l'annonce de l'amour du jeune homme pour Aricie transforme sa pitié en une haine féroce et paralysante. Oenone, se voyant rejetée et maudite par sa maîtresse, se jette dans la mer. Hippolyte, dans sa tentative désespérée de fuite, affronte courageusement un monstre marin mais meurt dans un carnage spectaculaire relaté par son gouverneur. Enfin, Phèdre vient se donner la mort au pied du trône, avouant avec lucidité la noirceur de son âme, laissant le roi Thésée seul pour mesurer l'étendue irréparable de son aveuglement.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="oral-motivations" class="mb-12">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="bg-emerald-700 text-white font-black px-4 py-2 rounded-xl text-2xl">3</span>
+                    <h3 class="text-3xl font-black text-slate-800">Mes 10 Arguments (Motivations) <span class="text-sm font-bold text-slate-400 ml-3 bg-slate-100 px-3 py-1 rounded-full">2 min au total</span></h3>
+                </div>
+                <p class="text-sm text-slate-500 mb-8 font-bold">Cliquez sur les fiches pour les retourner et mémorisez l'analyse (2 fiches suffisent pour tenir les 2 minutes). Les 3 dernières fiches vous permettent de tisser le lien avec « On ne badine pas avec l'amour » de Musset.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 perspective-1000">
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-emerald-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">⚡</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 1</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">La Fatalité Divine</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-emerald-50 border border-emerald-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Ce qui m'a profondément fasciné dans cette tragédie classique, c'est de réaliser que l'héroïne, Phèdre, malgré l'horreur de ses pensées incestueuses, n'est pas fondamentalement responsable. La grandeur tragique de Racine repose sur le fait que l'amour n'y est jamais présenté comme un choix romantique joyeux, mais comme une véritable maladie physique et vengeresse imposée par la déesse Vénus pour punir la lignée entière du Soleil. L'humain est dépourvu de tout libre arbitre ; il est un simple jouet, écrasé par la toute-puissance cruelle des Dieux mythologiques. Toute la beauté dramatique réside dans l'incroyable lucidité de Phèdre, qui voit le mal la consumer intérieurement sans jamais pouvoir l'arrêter par sa seule volonté morale.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-emerald-600 shadow-sm">
+                                    <strong>Acte I, scène 3 :</strong><br>
+                                    C'est Vénus toute entière à sa proie attachée.
+                                </div>
+                                <div class="bg-emerald-100 p-2 rounded-lg text-xs mt-2 font-medium text-emerald-900">
+                                    <strong>Analyse :</strong> L'hyperbole "toute entière" souligne la disproportion totale du combat entre la divinité et la mortelle. La métaphore finale de la "proie" animalise la situation : Phèdre est dépouillée de son statut royal pour être réduite à l'état de victime passive lors d'une chasse cosmique inéluctable.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-red-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🗣️</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 2</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">L'aveu comme acte meurtrier</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-red-50 border border-red-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai compris à travers la lecture de cette pièce la nature même de la théâtralité tragique du XVIIe siècle : la parole y agit comme une véritable arme de destruction massive, bien plus puissante qu'une épée. Tant que Phèdre garde son secret monstrueux et choisit le silence, la tragédie reste en sommeil. Mais dès l'instant où elle relâche sa maîtrise et laisse le mot fatal franchir ses lèvres devant Hippolyte, elle enclenche une mécanique mortelle totalement irréversible. L'aveu de Phèdre m'a particulièrement touché par son intensité dramatique vertigineuse. Ce n'est plus une simple confidence amoureuse, c'est l'explosion violente d'une folie refoulée depuis des années, qui finit par salir, maudire et condamner physiquement tous ceux qui ont le malheur de l'entendre.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-red-600 shadow-sm">
+                                    <strong>Acte II, scène 5 :</strong><br>
+                                    Connais donc Phèdre et toute sa fureur. J'aime. Ne pense pas qu'au moment que je t'aime / Innocente à mes yeux je m'approuve moi-même.
+                                </div>
+                                <div class="bg-red-100 p-2 rounded-lg text-xs mt-2 font-medium text-red-900">
+                                    <strong>Analyse :</strong> L'injonction à l'impératif "Connais donc" brise toute retenue. Le choc paratactique (la phrase ultra-courte "J'aime" au milieu du vers) marque l'abandon de la raison. Elle assume sa "fureur" (folie) tout en manifestant sa conscience janséniste du péché ("je ne m'approuve pas").
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-orange-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">👁️</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 3</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">La Jalousie féroce</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-orange-50 border border-orange-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Ce qui rend le personnage de Phèdre si riche, ambivalent et profondément humain à mes yeux, c'est sa fragilité pitoyable lors du quatrième acte. Alors qu'elle était sur le point de commettre un acte noble et héroïque en allant sauver Hippolyte de la malédiction de son père, elle apprend qu'il aime la jeune Aricie. Instantanément, le noble élan de compassion est annihilé. Racine nous peint ici la jalousie non pas comme un simple défaut de caractère, mais comme une véritable torture physique, un choc acide et insoutenable. Cette jalousie efface immédiatement la grandeur de la reine, l'abaisse au rang de femme blessée, et la conduit à la lâcheté ultime : elle décide consciemment de laisser mourir l'homme qu'elle aime.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-orange-500 shadow-sm">
+                                    <strong>Acte IV, scène 6 :</strong><br>
+                                    Ils s'aimeront toujours ! Au moment que je parle, ah, mortelle pensée ! / Ils bravent la fureur d'une amante insensée.
+                                </div>
+                                <div class="bg-orange-100 p-2 rounded-lg text-xs mt-2 font-medium text-orange-900">
+                                    <strong>Analyse :</strong> L'exclamation initiale au futur de l'indicatif ("s'aimeront toujours") projette l'idée d'une éternité amoureuse heureuse dont Phèdre est exclue. Le champ lexical de la souffrance aiguë ("mortelle", "fureur", "insensée") s'oppose tragiquement à l'harmonie du jeune couple.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-purple-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🐉</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 4</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le Monstrueux sublimé</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-purple-50 border border-purple-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">J'ai été subjugué par l'écriture poétique de Racine lorsqu'il s'agit de décrire l'horreur pure. Pour respecter scrupuleusement la règle des bienséances du classicisme français, la mort effroyable et sanglante d'Hippolyte ne peut pas être montrée directement sur la scène. Racine choisit donc de la raconter à travers le long et magistral récit du gouverneur Théramène. L'absence de représentation visuelle est largement compensée par une force évocatrice et suggestive incroyable. C'est selon moi le sommet de l'art classique : l'auteur réussit la prouesse absolue de peindre un chaos mythologique, un monstre repoussant et un charnier, tout en conservant une musicalité et une symétrie de l'alexandrin époustouflantes.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-purple-600 shadow-sm">
+                                    <strong>Acte V, scène 6 :</strong><br>
+                                    L'onde approche, se brise, et vomit à nos yeux, / Parmi des flots d'écume, un monstre furieux.
+                                </div>
+                                <div class="bg-purple-100 p-2 rounded-lg text-xs mt-2 font-medium text-purple-900">
+                                    <strong>Analyse :</strong> L'utilisation magistrale de l'hypotypose. La gradation trinaire des verbes d'action ("approche, se brise, et vomit") mime physiquement le déferlement de la vague. L'enjambement spectaculaire fait surgir le monstre au centre du vers suivant, provoquant un choc esthétique.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-yellow-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">⚖️</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 5</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">La Loi du Silence (Hippolyte)</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-yellow-50 border border-yellow-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">L'attitude morale du prince Hippolyte m'a profondément marqué au cours de l'Acte IV. Alors qu'il se retrouve accusé à tort des pires atrocités incestueuses par la nourrice Oenone devant le roi, il possède pourtant tous les moyens de se défendre. Il lui suffirait de dire la vérité pour être sauvé. Cependant, par un immense respect filial pour son père et par une pudeur aristocratique inébranlable, il refuse catégoriquement de salir l'honneur de sa famille en dénonçant l'infamie de sa belle-mère. C'est paradoxalement ce silence noble, stoïque et pur qui cause sa perte. Sa mort n'est pas un banal accident, c'est le sacrifice christique d'un jeune homme de principes broyé par une cour fondée sur le mensonge.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-yellow-500 shadow-sm">
+                                    <strong>Acte IV, scène 2 :</strong><br>
+                                    Je me tais. Et crois que ce m'est beaucoup d'avoir osé le dire [son amour pour Aricie].
+                                </div>
+                                <div class="bg-yellow-100 p-2 rounded-lg text-xs mt-2 font-medium text-yellow-900">
+                                    <strong>Analyse :</strong> La litote vertueuse et la parataxe courte "Je me tais" soulignent une éthique héroïque absolue. Ce choix du mutisme s'oppose radicalement à l'incontinence verbale maladive de Phèdre. L'innocence est condamnée à s'effacer.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-pink-500 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🩸</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 6</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le poison purificateur</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-pink-50 border border-pink-100 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">La conclusion spectaculaire de la pièce et la lente agonie de Phèdre sur scène m'ont paru grandioses du point de vue métaphysique. Dans la structure de la tragédie classique, la résolution des conflits passe inévitablement par l'anéantissement physique de l'élément perturbateur. En s'empoisonnant, Phèdre ne cherche pas lâchement à fuir la justice des hommes, elle accomplit un acte sacré de restauration morale et cosmique. Racine utilise le poison légendaire (issu de la magicienne Médée) non pas comme une vulgaire arme de destruction, mais paradoxalement comme un agent chimique de purification, le seul remède capable de ramener la vérité et la clarté dans l'univers souillé du palais.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-pink-500 shadow-sm">
+                                    <strong>Acte V, scène 7 :</strong><br>
+                                    Et la mort, à mes yeux dérobant la clarté, / Rend au jour, qu'ils souillaient, toute sa pureté.
+                                </div>
+                                <div class="bg-pink-100 p-2 rounded-lg text-xs mt-2 font-medium text-pink-900">
+                                    <strong>Analyse :</strong> Racine déploie un chiasme métaphorique majeur basé sur l'allégorie de la lumière. La mort (l'obscurité) permet le retour de la clarté solaire. Le verbe "souillaient" marque la tache originelle du péché. L'expiation rétablit l'équilibre universel.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-white border-t-8 border-gray-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🧬</span>
+                                <h4 class="font-black text-2xl mb-2 text-slate-800">Argument 7</h4>
+                                <p class="text-slate-600 font-bold uppercase tracking-widest text-sm">Le poids de l'Hérédité</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-gray-50 border border-gray-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">La dimension mythologique profonde de l'œuvre m'a beaucoup interpellé, tout particulièrement l'importance écrasante du sang et de la filiation chez Racine. L'héroïne est littéralement maintenue prisonnière des crimes de sa propre généalogie. Phèdre est un être profondément hybride et tiraillé d'un bout à l'autre : elle est la descendante directe du Soleil, ce qui lui donne soif de vertu, mais elle est surtout la fille de Pasiphaé, la femme maudite qui conçut une passion contre nature pour un taureau. La tragédie de Phèdre est donc génétique avant d'être morale. Elle porte la monstruosité dans son ADN, ce qui rend son combat intérieur d'autant plus pathétique.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-gray-600 shadow-sm">
+                                    <strong>Acte I, scène 3 :</strong><br>
+                                    O haine de Vénus ! O fatale colère ! / Dans quels égarements l'amour jeta ma mère !
+                                </div>
+                                <div class="bg-gray-200 p-2 rounded-lg text-xs mt-2 font-medium text-gray-800">
+                                    <strong>Analyse :</strong> L'anaphore plaintive ("O haine... O fatale") marque le registre élégiaque. La périphrase mythologique permet d'enraciner la névrose intime de la femme du XVIIe siècle dans une malédiction antique lointaine, faisant d'elle le dernier maillon inévitable d'une chaîne de l'interdit.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🔗</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Musset 1</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">La Culpabilité des Conseilleurs</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Il m'a semblé très pertinent d'établir un parallèle saisissant entre la nourrice Oenone chez Racine et l'entourage de Camille dans "On ne badine pas avec l'amour" de Musset. Dans ces deux pièces majeures, ce sont bien souvent les confidents extérieurs qui précipitent le drame par leurs interventions. Mue par un amour quasi maternel mais aveugle, Oenone suggère le mensonge dévastateur à Phèdre pour tenter de la sauver politiquement, ce qui provoque la mort du fils innocent. De manière très similaire chez Musset, la sœur religieuse invisible (Louise) empoisonne méthodiquement l'esprit de Camille par de mauvais conseils dogmatiques sur la méchanceté supposée des hommes, la poussant à un orgueil aveugle qui condamne à mort la paysanne Rosette.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Racine (Acte III, sc. 3) :</strong><br>
+                                    J'oserai l'accuser [Hippolyte] la première. (Oenone)
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> Parallélisme strict des fonctions dramatiques. L'adjuvant (le personnage qui est censé aider le héros) se transforme par excès de zèle ou dogmatisme en un véritable opposant tragique, devenant l'agent déclencheur de la malédiction et isolant l'héroïne.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">🎭</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Musset 2</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">Fatalité Divine VS Orgueil Humain</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">L'opposition philosophique sur la conception même de l'origine du malheur tragique est totale entre la période du XVIIe siècle et celle du XIXe siècle. Dans l'univers implacable du classicisme de Phèdre, la tragédie est extérieure et verticale : ce sont les Dieux qui châtient les pauvres hommes impuissants depuis les cieux. À l'inverse, chez le dramaturge romantique Musset, la vision devient horizontale : l'homme moderne est dramatiquement livré à lui-même dans une société vide. C'est le propre orgueil intellectuel de Perdican et de Camille, couplé à leur badinage cruel et vaniteux, qui crée de toutes pièces la tragédie sans qu'il y ait besoin d'une quelconque intervention divine extérieure pour punir.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Musset (Acte III, sc. 8) :</strong><br>
+                                    Elle est morte. Adieu, Perdican.
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> Évolution fondamentale des codes du genre théâtral. Le drame romantique rompt définitivement avec la fatalité mythologique pour installer la source de la souffrance au cœur de la vanité humaine, remplaçant la colère de Neptune par le cynisme psychologique.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[400px] cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative transform-style-3d shadow-sm hover:shadow-md rounded-2xl transition-all duration-500">
+                            <div class="absolute w-full h-full backface-hidden bg-blue-50 border-t-8 border-blue-600 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                                <span class="text-5xl mb-4">💬</span>
+                                <h4 class="font-black text-2xl mb-2 text-blue-900">Lien Musset 3</h4>
+                                <p class="text-blue-700 font-bold uppercase tracking-widest text-sm">Le pouvoir mortel du langage</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex flex-col overflow-y-auto custom-scroll">
+                                <p class="text-sm text-slate-800 flex-grow leading-relaxed">Dans ces deux œuvres dramatiques séparées par plusieurs siècles, la "Parole" en elle-même agit véritablement comme l'arme la plus létale qui soit. Chez Jean Racine, la reine Phèdre condamne virtuellement à mort l'innocence d'Hippolyte dès l'instant précis où elle brise le tabou de la bienséance en prononçant son aveu interdit à haute voix. La situation est étonnamment analogue chez Musset : ce ne sont pas des épées, mais bien les répliques cyniques et le badinage arrogant d'un Perdican qui finissent par assassiner le cœur pur de Rosette en coulisses. L'enseignement profond est commun aux deux dramaturges : sur la scène théâtrale comme dans la vie, le langage n'est jamais inoffensif.</p>
+                                <div class="bg-white p-3 rounded-lg text-xs mt-3 border-l-4 border-blue-600 shadow-sm">
+                                    <strong>Musset (Acte III, sc. 8) :</strong><br>
+                                    On ne badine pas avec l'amour.
+                                </div>
+                                <div class="bg-blue-100 p-2 rounded-lg text-xs mt-2 font-medium text-blue-900">
+                                    <strong>Analyse comparée :</strong> Le langage y est toujours perçu comme le mécanisme invisible du destin. Dans la grande tirade classique comme dans le bavardage mondain romantique, dès que les frontières du respect sont transgressées par les mots, la mort s'ensuit.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <section id="questions" class="tab-content">
+            
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-black text-blue-900 mb-4 uppercase">Entretien avec le Jury (3 min)</h2>
+                <p class="text-lg text-slate-600 max-w-4xl mx-auto">
+                    Voici 20 questions réactives (sous forme de flashcards) que le jury pourrait vous poser en fonction de l'exposé que vous venez de faire. Cliquez pour voir la réponse.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 perspective-1000">
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">1. Vous parlez de tragédie classique. Quelles sont les fameuses « règles » que Racine respecte ici ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Racine respecte la règle des trois unités (un seul jour, un seul lieu : Trézène, une seule intrigue principale : l'amour de Phèdre). Il respecte aussi la bienséance (pas de sang sur scène, d'où le récit de Théramène pour la mort d'Hippolyte) et la vraisemblance.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">2. Quel est le rôle exact d'Aricie dans cette pièce par rapport au mythe d'origine ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Racine l'a inventée/rajoutée (elle n'était pas chez Euripide) pour donner à Hippolyte une "faiblesse" amoureuse. Mais surtout, elle sert à déclencher la terrible jalousie de Phèdre à l'Acte IV, qui est le moteur de sa perte définitive.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">3. Pourquoi dîtes-vous que la passion de Phèdre est "incestueuse" ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Hippolyte n'est pas le fils biologique de Phèdre (il est le fils de Thésée et d'Antiope l'Amazone). Cependant, aux yeux de la loi et de la morale religieuse du XVIIe siècle, aimer le fils de son époux vivant est considéré comme un inceste impardonnable.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">4. Vous avez mentionné le Jansénisme. Pouvez-vous expliquer ce terme ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est un courant sévère du catholicisme (Port-Royal) qui a éduqué Racine. Il prône l'idée de "prédestination" : l'homme est fondamentalement pécheur depuis la chute d'Adam, et seule la grâce de Dieu (qu'on ne peut pas choisir) peut le sauver. Phèdre incarne cette impuissance humaine sans la grâce.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">5. Pourquoi Oenone calomnie-t-elle Hippolyte au lieu de Phèdre ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Oenone agit par un amour quasi maternel et déraisonnable pour sa reine. Pour sauver la vie de Phèdre (qui veut se suicider à cause de la honte de l'aveu et du retour de Thésée), elle sacrifie l'innocent en inversant les rôles, pensant protéger l'État.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">6. Pourquoi Phèdre ne se tue-t-elle pas dès le premier acte ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Elle en avait la ferme intention (se laissant mourir de faim). Mais l'annonce de la mort de Thésée lui donne un espoir politique et amoureux (l'inceste n'en est plus vraiment un). Cet espoir illusoire relance la tragédie.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">7. Quelle est l'importance du Soleil dans la pièce ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Le Soleil est l'ancêtre divin de Phèdre. Il représente la pureté et la lumière divine qui juge. Tout au long de la pièce, Phèdre cherche à le fuir car elle a honte de sa part d'ombre, mais elle finit par mourir pour lui rendre sa pureté ("Rend au jour qu'ils souillaient...").
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">8. Hippolyte est souvent vu comme innocent, mais a-t-il commis une faute ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Dans la morale racinienne, sa faute est son orgueil et sa rébellion politique : il a osé tomber amoureux d'Aricie, la captive politique dont son père, le roi, avait formellement interdit la descendance.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">9. Vous comparez Phèdre à Camille chez Musset. Quelles sont leurs différences majeures ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Phèdre subit la fatalité divine (Vénus), elle est victime de son propre sang et se hait. Camille, au contraire, est victime de la société (le couvent) et de son propre orgueil intellectuel. Elle est actrice de son propre drame.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">10. Pourquoi Thésée condamne-t-il son fils si rapidement ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Thésée représente l'autorité royale absolue et précipitée. Il est aveuglé par son orgueil blessé et l'habileté manipulatrice d'Oenone (qui fournit l'épée comme preuve). Son erreur de jugement est la définition même de "l'aveuglement tragique".
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">11. Quel est le sens symbolique du monstre marin qui tue Hippolyte ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Le monstre (mi-taureau) rappelle le Minotaure, le propre demi-frère de Phèdre. Il symbolise la remontée physique du refoulé, des passions monstrueuses et honteuses de la lignée de Phèdre, qui viennent littéralement broyer l'innocence d'Hippolyte.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">12. Phèdre est-elle un "monstre" selon vous ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Non, et c'est tout le génie de Racine ("ni tout à fait coupable, ni tout à fait innocente"). Elle a des désirs monstrueux, mais sa conscience morale est pure car elle les abhorre. La vraie tragédie réside dans son extrême lucidité sur sa propre déchéance.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">13. Pourquoi Phèdre choisit-elle le poison plutôt qu'une arme blanche pour se suicider ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Elle tente de prendre l'épée à l'Acte II mais on l'en empêche. Le poison (venin de Médée) est symbolique : son mal était dans son sang (l'hérédité), elle détruit donc chimiquement son sang corrompu de l'intérieur pour purifier le monde.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">14. En quoi l'aveu de Phèdre est-il l'élément moteur de la pièce ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            La parole a une valeur d'acte au théâtre classique. Tant que la passion reste muette, elle ne détruit que Phèdre. En la formulant à haute voix, elle rend l'inceste réel et oblige les autres personnages à réagir, déclenchant la catastrophe.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">15. Quel rôle joue l'ironie tragique dans le drame d'Hippolyte ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            L'ironie tragique culmine lorsque Thésée, père supposé protecteur, utilise un vœu divin accordé par Neptune pour faire assassiner son propre fils, et ce, pour punir un crime qu'Hippolyte n'a justement jamais commis.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">16. Pourquoi avez-vous relié Oenone à Dame Pluche / Blazius de Musset ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Ce sont des adjuvants (confidents/éducateurs) qui dysfonctionnent. Chez Racine, l'amour d'Oenone provoque la faute. Chez Musset, la bêtise de l'entourage empêche le dialogue. Dans les deux cas, le système de confiance adulte précipite la chute des jeunes.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">17. Aricie est-elle vraiment innocente ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Elle incarne l'amour pur face à l'amour souillé de Phèdre. Cependant, elle avoue elle-même sa fierté presque orgueilleuse d'avoir réussi à séduire Hippolyte le "sauvage" invaincu, montrant une ambition plus subtile que la simple innocence.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">18. Que nous apprend la conclusion de la pièce avec l'adoption d'Aricie par Thésée ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            C'est un dénouement cathartique. La mort de Phèdre a purgé la cité du vice, et Thésée, repentant, rétablit un semblant d'ordre et de paix en épargnant la lignée qu'il persécutait, même s'il est brisé en tant que père.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">19. Si vous deviez retenir une seule qualité esthétique de cette pièce, quelle serait-elle ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            L'incroyable musicalité des alexandrins. Racine utilise les assonances et les allitérations (les "s" sifflants, les "i" de douleur) non pas comme décoration, mais pour nous faire entendre physiquement l'agonie et la monstruosité de la psychologie humaine.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full h-48 cursor-pointer group card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner w-full h-full relative transform-style-3d shadow-sm rounded-xl transition-all duration-500">
+                        <div class="absolute w-full h-full backface-hidden bg-white border-l-8 border-blue-500 rounded-xl p-5 flex items-center justify-center text-center">
+                            <h4 class="font-bold text-lg text-slate-800">20. Par rapport à Musset, comment analysez-vous le temps de l'action dans les deux œuvres ?</h4>
+                        </div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-center text-sm text-slate-800 overflow-y-auto">
+                            Racine respecte l'unité de temps : tout explose en 24h, ce qui crée une tension d'urgence insoutenable (la fatalité s'abat). Musset éclate cette règle au XIXe siècle pour montrer la lente dégradation et la durée du jeu cruel de ses personnages (le temps de l'orgueil).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        // Gestion des Onglets
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('button[id^="nav-"]').forEach(btn => {
+                btn.classList.remove('border-emerald-600', 'text-emerald-600', 'bg-emerald-50');
+                btn.classList.add('border-transparent', 'text-slate-500');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            
+            const activeBtn = document.getElementById('nav-' + tabId);
+            activeBtn.classList.remove('border-transparent', 'text-slate-500');
+            activeBtn.classList.add('border-emerald-600', 'text-emerald-600', 'bg-emerald-50');
+        }
+
+        // Gestion de l'Accordéon du Résumé
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.innerText = '-';
+            } else {
+                content.classList.add('hidden');
+                icon.innerText = '+';
+            }
+        }
+
+        // Graphique Chart.js (Stratégie & Temps)
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('timingChart').getContext('2d');
+            const data = {
+                labels: ['Présentation (1 min)', 'Résumé (2 min)  ', 'Motivations & Arguments (2 min)', 'Entretien / Questions (3 min)'],
+                datasets: [{
+                    data: [1, 2, 2, 3],
+                    backgroundColor: [
+                        '#1e293b', // slate-800
+                        '#34d399', // emerald-400
+                        '#047857', // emerald-700
+                        '#3b82f6'  // blue-500
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    hoverOffset: 6
+                }]
+            };
+
+            const config = {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { family: "sans-serif" },
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) { label = label.split(' (')[0]; }
+                                    return label + ' : ~' + context.raw + ' min';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            };
+
+            new Chart(ctx, config);
+        });
+    </script>
+</body>
+</html>
