@@ -7,83 +7,29 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
-    <header class="bg-blue-900 text-white p-4 md:p-6 shadow-md">
-        <h1 class="text-2xl md:text-3xl font-black uppercase tracking-widest text-center">Bac de Français</h1>
+<body data-page="index" class="font-sans min-h-screen flex flex-col">
+    
+    <header class="editorial-header p-6 md:p-8 flex justify-center items-center">
+        <h1 class="text-3xl md:text-4xl font-serif italic tracking-wide">Baccalauréat de Français</h1>
     </header>
 
-    <main class="flex-grow flex items-center justify-center p-6 md:p-10 fade-in">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 w-full max-w-5xl">
-            <a href="ecrit.html" class="flex flex-col items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold p-12 md:p-20 rounded-3xl shadow-xl transition transform hover:-translate-y-2 text-xl md:text-3xl text-center">
-                <span class="text-5xl md:text-6xl mb-4">✍️</span>
-                <span>ÉPREUVE ÉCRITE</span>
+    <main class="flex-grow flex items-center justify-center p-6 md:p-12 fade-in">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 w-full max-w-5xl">
+            
+            <a href="ecrit.html" class="theme-card p-12 md:p-16 rounded-2xl flex flex-col items-center justify-center text-center group cursor-pointer">
+                <span class="text-5xl mb-6 opacity-80 group-hover:scale-110 transition-transform duration-300">✒️</span>
+                <h2 class="text-2xl md:text-3xl font-serif mb-4">L'Épreuve Écrite</h2>
+                <p class="text-sm uppercase tracking-widest opacity-60 font-semibold">Dissertation & Commentaire</p>
             </a>
-            <a href="oral.html" class="flex flex-col items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white font-bold p-12 md:p-20 rounded-3xl shadow-xl transition transform hover:-translate-y-2 text-xl md:text-3xl text-center">
-                <span class="text-5xl md:text-6xl mb-4">🗣️</span>
-                <span>ÉPREUVE ORALE</span>
+
+            <a href="oral.html" class="theme-card p-12 md:p-16 rounded-2xl flex flex-col items-center justify-center text-center group cursor-pointer">
+                <span class="text-5xl mb-6 opacity-80 group-hover:scale-110 transition-transform duration-300">🗣️</span>
+                <h2 class="text-2xl md:text-3xl font-serif mb-4">L'Épreuve Orale</h2>
+                <p class="text-sm uppercase tracking-widest opacity-60 font-semibold">Textes & Entretien</p>
             </a>
+
         </div>
     </main>
-</body>
-<script type="module">
-    // Importation depuis les serveurs de Google
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-
-    // VOTRE configuration Firebase personnelle
-    const firebaseConfig = {
-      apiKey: "AIzaSyDb3-AiJWbDFVIdsC8CA9WLZS52n2sNykk",
-      authDomain: "bac-fr-eebcc.firebaseapp.com",
-      projectId: "bac-fr-eebcc",
-      storageBucket: "bac-fr-eebcc.firebasestorage.app",
-      messagingSenderId: "1001895742616",
-      appId: "1:1001895742616:web:5812018c0296ac7f8114ed"
-    };
-
-    // Initialisation
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-
-    // Ciblage des éléments HTML
-    const btnLogin = document.getElementById('btn-login');
-    const btnLogout = document.getElementById('btn-logout');
-    const userProfile = document.getElementById('user-profile');
-    const userName = document.getElementById('user-name');
-    const userAvatar = document.getElementById('user-avatar');
-
-    // Détection de l'état de connexion
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // Utilisateur connecté
-            btnLogin.classList.add('hidden');
-            userProfile.classList.remove('hidden');
-            userName.textContent = user.displayName;
-            userAvatar.src = user.photoURL;
-            localStorage.setItem('isLoggedIn', 'true'); // Stockage du statut pour l'onglet Oral
-        } else {
-            // Utilisateur déconnecté
-            btnLogin.classList.remove('hidden');
-            userProfile.classList.add('hidden');
-            localStorage.setItem('isLoggedIn', 'false');
-        }
-    });
-
-    // Actions au clic
-    btnLogin.addEventListener('click', async () => {
-        try {
-            await signInWithPopup(auth, provider);
-        } catch (error) {
-            console.error("Erreur de connexion :", error);
-        }
-    });
-
-    btnLogout.addEventListener('click', async () => {
-        try {
-            await signOut(auth);
-        } catch (error) {
-            console.error("Erreur de déconnexion :", error);
-        }
-    });
-</script>
+    
+    </body>
 </html>

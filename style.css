@@ -1,27 +1,167 @@
 /* style.css */
-body { margin: 0; padding: 0; background-color: #f8fafc; }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,700;1,500;1,700&display=swap');
 
-.fade-in { animation: fadeIn 0.4s ease-in-out; }
+:root {
+    /* Palette par défaut (Index) : Gris/Bleu Ardoise */
+    --c-1: #F5F6F7; /* Fond de page */
+    --c-2: #D9DDE1; /* Bordures et tags */
+    --c-3: #B0B6BE; /* Textes secondaires */
+    --c-4: #6B737D; /* Textes principaux */
+    --c-5: #2A2F35; /* Titres et accents forts */
+    
+    --font-sans: 'Inter', sans-serif;
+    --font-serif: 'Playfair Display', serif;
+}
+
+/* =========================================
+   AFFECTATION DES PALETTES MONOCHROMES
+========================================= */
+
+/* Page Écrit : Bleu Doux */
+body[data-page="ecrit"] {
+    --c-1: #F1F5F8; --c-2: #D0DEE7; --c-3: #A1B8C9; --c-4: #6D8EA6; --c-5: #2E4555;
+}
+
+/* Page Dissertation : Bleu Royal */
+body[data-page="dissert"] {
+    --c-1: #EEF3FF; --c-2: #C7D6FF; --c-3: #839FFF; --c-4: #2E5BFF; --c-5: #0B1B4D;
+}
+
+/* Commentaire - Mouvements : Or/Sépia */
+body[data-theme="mouvements"] {
+    --c-1: #FFF7DF; --c-2: #F1E0A9; --c-3: #D9C46B; --c-4: #B3912A; --c-5: #4A3609;
+}
+
+/* Commentaire - Auteurs : Bleu Acier */
+body[data-theme="auteurs"] {
+    --c-1: #E8EDF5; --c-2: #BFCBE0; --c-3: #879BBF; --c-4: #3E5C8A; --c-5: #0F2343;
+}
+
+/* Commentaire - Oeuvres : Vert Sauge */
+body[data-theme="oeuvres"] {
+    --c-1: #EAF3ED; --c-2: #C6DDCC; --c-3: #8FB79A; --c-4: #4F7F5E; --c-5: #1E3A28;
+}
+
+/* Commentaire - Procédés : Améthyste */
+body[data-theme="procedes"] {
+    --c-1: #F4F0FA; --c-2: #D9CFF0; --c-3: #B7A1DD; --c-4: #7B5FB3; --c-5: #3A1F66;
+}
+
+/* Page Oral : Vert Sauge / Forêt */
+body[data-page="oral"] {
+    --c-1: #EAF3ED; --c-2: #C6DDCC; --c-3: #8FB79A; --c-4: #4F7F5E; --c-5: #1E3A28;
+}
+
+/* Page Grammaire : Tons Argile / Terre */
+body[data-page="grammaire"] {
+    --c-1: #F3ECE6; --c-2: #D9C7BA; --c-3: #A98B79; --c-4: #6B4A3B; --c-5: #24140E;
+}
+
+/* =========================================
+   RÈGLES DE BASE ET TYPOGRAPHIE
+========================================= */
+body {
+    font-family: var(--font-sans);
+    background-color: var(--c-1);
+    color: var(--c-4);
+    transition: background-color 0.5s ease, color 0.5s ease;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, .font-serif {
+    font-family: var(--font-serif);
+    color: var(--c-5);
+    letter-spacing: -0.02em;
+}
+
+/* =========================================
+   DESIGN ÉDITORIAL (COMPOSANTS)
+========================================= */
+
+/* Le Header pro et épuré */
+.editorial-header {
+    background-color: #FFFFFF;
+    border-bottom: 1px solid var(--c-2);
+    color: var(--c-5);
+}
+
+.editorial-header a {
+    color: var(--c-4);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+}
+
+.editorial-header a:hover { color: var(--c-5); }
+
+/* Cartes claires et luxueuses */
+.theme-card {
+    background-color: #FFFFFF;
+    border: 1px solid var(--c-2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border-top: 3px solid var(--c-4);
+}
+
+.theme-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06);
+    border-color: var(--c-3);
+}
+
+/* Petites pilules pour les tags */
+.theme-pill {
+    background-color: var(--c-1);
+    color: var(--c-5);
+    border: 1px solid var(--c-2);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.35rem 0.8rem;
+    border-radius: 9999px;
+    display: inline-block;
+}
+
+/* Classes utilitaires branchées sur les variables */
+.theme-text-accent { color: var(--c-5) !important; }
+.theme-text-primary { color: var(--c-4) !important; }
+.theme-bg-soft { background-color: var(--c-1) !important; }
+.theme-border { border-color: var(--c-2) !important; }
+
+/* =========================================
+   MENUS ET ONGLETS COMMENTAIRE
+========================================= */
+.tab-active {
+    color: var(--c-5) !important;
+    border-bottom: 2px solid var(--c-5) !important;
+    font-weight: 600;
+    opacity: 1 !important;
+}
+
+.subtab-active {
+    background-color: var(--c-5) !important;
+    color: #FFFFFF !important;
+    border-color: var(--c-5) !important;
+}
+
+/* =========================================
+   ANIMATIONS & SCROLLBAR
+========================================= */
+.fade-in { animation: fadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
 }
-/* test */
-.custom-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
-.custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
-.custom-scroll::-webkit-scrollbar-thumb { background: #93c5fd; border-radius: 10px; }
-.custom-scroll::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
 
-.tab-active {
-    color: #1e40af !important;
-    border-bottom: 4px solid #2563eb !important;
-    background-color: #eff6ff;
-}
-.subtab-active {
-    background-color: #2563eb !important;
-    color: white !important;
-    border-color: #2563eb !important;
+.highlight-flash { animation: flashHighlight 1.5s ease; }
+@keyframes flashHighlight {
+    0% { box-shadow: 0 0 0 4px var(--c-2); transform: scale(1.01); }
+    100% { box-shadow: 0 0 0 0px transparent; transform: scale(1); }
 }
 
-.nav-link { transition: all 0.2s; }
-.nav-link:hover { transform: translateX(5px); }
+.custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
+.custom-scroll::-webkit-scrollbar-track { background: transparent; }
+.custom-scroll::-webkit-scrollbar-thumb { background: var(--c-2); border-radius: 10px; }
+.custom-scroll::-webkit-scrollbar-thumb:hover { background: var(--c-3); }
